@@ -1,55 +1,65 @@
+<?php
+require_once 'helper/db.php';
+
+// Mengambil pasangan yang belum diproses
+$check_sql = "SELECT * FROM matches WHERE session_completed = 0";
+$check_result = $conn->query($check_sql);
+
+$unprocessed_matches = [];
+
+if ($check_result->num_rows > 0) {
+    // Ada pasangan yang belum diproses, ambil detailnya
+    while ($row = $check_result->fetch_assoc()) {
+        $male_user_id = $row['male_user_id'];
+        $female_user_id = $row['female_user_id'];
+
+        // Ambil data pengguna pria
+        $male_sql = "SELECT * FROM users WHERE id = $male_user_id";
+        $male_result = $conn->query($male_sql);
+        $male = $male_result->fetch_assoc();
+
+        // Ambil data pengguna wanita
+        $female_sql = "SELECT * FROM users WHERE id = $female_user_id";
+        $female_result = $conn->query($female_sql);
+        $female = $female_result->fetch_assoc();
+
+        // Masukkan pasangan yang belum diproses ke dalam array
+        $unprocessed_matches[] = [
+            'male_username' => $male['username'],
+            'female_username' => $female['username'],
+            'male_user_id' => $male_user_id,
+            'female_user_id' => $female_user_id,
+        ];
+    }
+}
+
+// Menutup koneksi
+$conn->close();
+?>
+
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SSE Demo</title>
-    <style>
-        #messages {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            min-height: 50px;
-            background-color: #f9f9f9;
-        }
-        .message {
-            padding: 5px;
-            border-bottom: 1px solid #ddd;
-        }
-    </style>
+    <title>Pasangan yang Belum Diproses</title>
 </head>
 <body>
-    <h1>Server-Sent Events (SSE) - Status Pasangan</h1>
-    
-    <!-- Tempat untuk menampilkan pesan dari server -->
-    <div id="messages"></div>
-
-    <script>
-        // Membuat koneksi ke SSE
-        const eventSource = new EventSource('sse.php');
-        
-        // Menerima pesan dari server
-        eventSource.onmessage = function(event) {
-            const messageDiv = document.getElementById('messages');
-            
-            // Menampilkan pesan ke dalam div
-            const newMessage = document.createElement('div');
-            newMessage.classList.add('message');
-            newMessage.textContent = event.data;
-            messageDiv.appendChild(newMessage);
-            
-            // Scroll ke bagian bawah agar pesan terbaru terlihat
-            messageDiv.scrollTop = messageDiv.scrollHeight;
-        };
-
-        // Menangani error SSE
-        eventSource.onerror = function() {
-            console.log('Error dalam koneksi SSE');
-            eventSource.close();
-        };
-    </script>
+    <h1>Pasangan yang Belum Diproses</h1>
+    <?php if (count($unprocessed_matches) > 0): ?>
+        <ul>
+            <?php foreach ($unprocessed_matches as $match): ?>
+                <li>
+                    <strong>Pasangan:</strong> <?= $match['male_username'] ?> dan <?= $match['female_username'] ?><br>
+                    <strong>ID Pria:</strong> <?= $match['male_user_id'] ?><br>
+                    <strong>ID Wanita:</strong> <?= $match['female_user_id'] ?><br>
+                    <hr>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php else: ?>
+        <p>Tidak ada pasangan yang belum diproses.</p>
+    <?php endif; ?>
 </body>
 </html>
