@@ -1,8 +1,11 @@
 <?php
 include('helper/db.php');
 
-// Ambil daftar laki-laki
-$sql = "SELECT id, username FROM users WHERE gender = 'male' ORDER BY RAND() LIMIT 5"; // Ambil 5 laki-laki secara acak
+// Ambil pengguna laki-laki yang belum menyelesaikan sesi voting (session_completed = FALSE)
+$sql = "SELECT u.id, u.username 
+        FROM users u
+        LEFT JOIN matches m ON u.id = m.male_user_id 
+        WHERE m.female_user_id = 1 AND (m.session_completed = FALSE OR m.session_completed IS NULL)"; // Ganti 1 dengan ID pengguna female yang sedang login
 $result = $conn->query($sql);
 
 ?>
@@ -29,41 +32,43 @@ $result = $conn->query($sql);
     </form>
 
     <?php
-    // Proses vote like
+    // Proses vote
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['vote_like'])) {
-            $maleId = $_POST['vote_like'];
-            $femaleId = 1; // ID pengguna female yang sedang login (misalnya ID 1)
+        $maleId = $_POST['vote_like'] ?? $_POST['vote_dislike'];
+        $vote = isset($_POST['vote_like']) ? 'like' : 'dislike';
+        $femaleId = 1; // ID pengguna female yang sedang login (ganti dengan ID yang sesuai)
 
-            // Update vote female
-            $stmt = $conn->prepare("INSERT INTO matches (male_user_id, female_user_id, female_vote) VALUES (?, ?, 'like') ON DUPLICATE KEY UPDATE female_vote = 'like'");
-            $stmt->bind_param("ii", $maleId, $femaleId);
+        // Pastikan tidak ada sesi voting yang sudah selesai
+        $stmt = $conn->prepare("SELECT * FROM matches WHERE female_user_id = ? AND male_user_id = ? AND session_completed = FALSE");
+        $stmt->bind_param("ii", $femaleId, $maleId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // Jika ada data yang belum selesai sesi votingnya
+            // Update vote perempuan
+            $stmt = $conn->prepare("INSERT INTO matches (male_user_id, female_user_id, female_vote) 
+                                    VALUES (?, ?, ?) 
+                                    ON DUPLICATE KEY UPDATE female_vote = ?");
+            $stmt->bind_param("iiss", $maleId, $femaleId, $vote, $vote);
             $stmt->execute();
 
-            // Cek jika pasangan male juga like
-            $checkMatch = $conn->prepare("SELECT male_vote FROM matches WHERE male_user_id = ? AND female_user_id = ?");
-            $checkMatch->bind_param("ii", $maleId, $femaleId);
-            $checkMatch->execute();
-            $result = $checkMatch->get_result();
+            // Cek jika pasangan juga sudah melakukan vote
+            $stmt = $conn->prepare("SELECT male_vote FROM matches WHERE female_user_id = ? AND male_user_id = ?");
+            $stmt->bind_param("ii", $femaleId, $maleId);
+            $stmt->execute();
+            $result = $stmt->get_result();
             $data = $result->fetch_assoc();
 
-            if ($data['male_vote'] == 'like') {
-                // Tandai sebagai match
-                $updateMatch = $conn->prepare("UPDATE matches SET is_match = TRUE WHERE male_user_id = ? AND female_user_id = ?");
-                $updateMatch->bind_param("ii", $maleId, $femaleId);
-                $updateMatch->execute();
+            if ($data['male_vote'] != 'dislike') {
+                // Jika pasangan laki-laki juga like, tandai sebagai match
+                $stmt = $conn->prepare("UPDATE matches SET is_match = TRUE, session_completed = TRUE WHERE female_user_id = ? AND male_user_id = ?");
+                $stmt->bind_param("ii", $femaleId, $maleId);
+                $stmt->execute();
                 echo "<p>It's a match!</p>";
             }
-        }
-
-        if (isset($_POST['vote_dislike'])) {
-            $maleId = $_POST['vote_dislike'];
-            $femaleId = 1; // ID pengguna female yang sedang login (misalnya ID 1)
-
-            // Update vote female
-            $stmt = $conn->prepare("INSERT INTO matches (male_user_id, female_user_id, female_vote) VALUES (?, ?, 'dislike') ON DUPLICATE KEY UPDATE female_vote = 'dislike'");
-            $stmt->bind_param("ii", $maleId, $femaleId);
-            $stmt->execute();
+        } else {
+            echo "<p>Anda sudah memberi vote untuk pasangan ini atau sesi voting telah selesai.</p>";
         }
     }
 
