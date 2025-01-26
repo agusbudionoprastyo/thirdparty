@@ -1,13 +1,21 @@
 <?php
-session_start();
 include('helper/db.php');
 
-// Ambil ID pengguna perempuan yang aktif dari session
-$femaleId = $_SESSION['user_id'];  // ID pengguna perempuan yang aktif
-
-// Ambil pasangan laki-laki yang belum memberi vote
-$sql = "SELECT id, username FROM users WHERE gender = 'male' AND session_completed = FALSE";
+// Ambil ID perempuan secara acak dari tabel users yang gender-nya perempuan dan belum selesai voting
+$sql = "SELECT id FROM users WHERE gender = 'female' AND session_completed = FALSE ORDER BY RAND() LIMIT 1";
 $result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $femaleId = $result->fetch_assoc()['id']; // Ambil ID perempuan yang dipilih secara acak
+} else {
+    // Jika tidak ada pengguna perempuan yang tersedia, tampilkan pesan atau lakukan hal lain
+    echo "Tidak ada pengguna perempuan yang tersedia.";
+    exit;
+}
+
+// Ambil pasangan laki-laki yang belum memberi vote (session_completed = FALSE)
+$sql_male = "SELECT id, username FROM users WHERE gender = 'male' AND session_completed = FALSE";
+$result_male = $conn->query($sql_male);
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +29,10 @@ $result = $conn->query($sql);
     <h1>Vote untuk Laki-laki</h1>
     <form method="POST">
         <ul>
-            <?php while ($row = $result->fetch_assoc()): ?>
+            <?php while($row = $result_male->fetch_assoc()): ?>
                 <li>
                     <?php echo $row['username']; ?>
+                    <!-- Tombol vote untuk laki-laki -->
                     <button type="submit" name="vote_like" value="<?php echo $row['id']; ?>">Like</button>
                     <button type="submit" name="vote_dislike" value="<?php echo $row['id']; ?>">Dislike</button>
                 </li>
