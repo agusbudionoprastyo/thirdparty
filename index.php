@@ -27,8 +27,9 @@
                 messagesContainer.innerHTML = '';
 
                 // Buat elemen pesan baru
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('message');
+                // const messageElement = document.createElement('div');
+                // messageElement.classList.add('message');
+                const messageElement = document.getElementById('messages');
                 messageElement.innerHTML = `
                 <div class="profile-card">
                     <div class="image">
