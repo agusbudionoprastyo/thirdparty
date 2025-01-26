@@ -20,86 +20,67 @@ while (true) {
     $check_result = $conn->query($check_sql);
 
     if ($check_result->num_rows > 0) {
-        // Ada pasangan yang belum selesai, kirimkan detailnya
-        while ($match = $check_result->fetch_assoc()) {
-            $male_user_id = $match['male_user_id'];
-            $female_user_id = $match['female_user_id'];
+        // Ada pasangan yang belum selesai, tunggu pemrosesan lebih lanjut
+        sendMessage("Ada pasangan yang belum diproses, menunggu untuk diproses.");
+    } else {
+        // Ambil 1 pengguna pria yang belum dipasangkan dan belum ada di pasangan yang sudah match
+        $male_sql = "
+            SELECT * FROM users 
+            WHERE gender = 'male' 
+            AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1)
+            ORDER BY RAND()
+            LIMIT 1
+        ";
+        $male_result = $conn->query($male_sql);
 
+        // Ambil 1 pengguna wanita yang belum dipasangkan dan belum ada di pasangan yang sudah match
+        $female_sql = "
+            SELECT * FROM users 
+            WHERE gender = 'female' 
+            AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1)
+            ORDER BY RAND()
+            LIMIT 1
+        ";
+        $female_result = $conn->query($female_sql);
+
+        // Jika ada pasangan pria dan wanita yang belum dipasangkan
+        if ($male_result->num_rows > 0 && $female_result->num_rows > 0) {
             // Ambil data pengguna pria
-            $male_sql = "SELECT * FROM users WHERE id = $male_user_id";
-            $male_result = $conn->query($male_sql);
             $male = $male_result->fetch_assoc();
+            $male_user_id = $male['id'];
 
             // Ambil data pengguna wanita
-            $female_sql = "SELECT * FROM users WHERE id = $female_user_id";
-            $female_result = $conn->query($female_sql);
             $female = $female_result->fetch_assoc();
+            $female_user_id = $female['id'];
 
-            // Kirimkan detail pasangan yang belum diproses
-            $message = "Pasangan belum diproses: ";
-            $message .= "Pria: " . $male['username'] . " (ID: $male_user_id), ";
-            $message .= "Wanita: " . $female['username'] . " (ID: $female_user_id), ";
-            $message .= "Status: Menunggu voting";
-            
-            sendMessage($message);
-        }
-    } else {
-        // Tidak ada pasangan yang belum diproses
-        sendMessage("Tidak ada pasangan yang belum diproses.");
-    }
+            // Tambahkan pengecekan apakah pasangan pria dan wanita sudah pernah dipasangkan dan tidak saling suka
+            $check_existing_sql = "
+                SELECT * FROM matches 
+                WHERE (male_user_id = $male_user_id AND female_user_id = $female_user_id)
+                OR (male_user_id = $female_user_id AND female_user_id = $male_user_id)
+                AND is_match = 0
+                ";
+            $check_existing_result = $conn->query($check_existing_sql);
 
-    // Logika untuk pasangan pria dan wanita yang belum dipasangkan
-    $male_sql = "
-        SELECT * FROM users 
-        WHERE gender = 'male' 
-        AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1)
-        ORDER BY RAND()
-        LIMIT 1
-    ";
-    $male_result = $conn->query($male_sql);
-
-    $female_sql = "
-        SELECT * FROM users 
-        WHERE gender = 'female' 
-        AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1)
-        ORDER BY RAND()
-        LIMIT 1
-    ";
-    $female_result = $conn->query($female_sql);
-
-    // Jika ada pasangan pria dan wanita yang belum dipasangkan
-    if ($male_result->num_rows > 0 && $female_result->num_rows > 0) {
-        // Ambil data pengguna pria dan wanita
-        $male = $male_result->fetch_assoc();
-        $female = $female_result->fetch_assoc();
-
-        // Cek apakah pasangan ini sudah ada dan tidak saling suka
-        $check_existing_sql = "
-            SELECT * FROM matches 
-            WHERE (male_user_id = {$male['id']} AND female_user_id = {$female['id']})
-            OR (male_user_id = {$female['id']} AND female_user_id = {$male['id']})
-            AND is_match = 0
-        ";
-        $check_existing_result = $conn->query($check_existing_sql);
-
-        if ($check_existing_result->num_rows > 0) {
-            // Jika pasangan sudah ada dan tidak saling suka, jangan pasangkan lagi
-            sendMessage("Pasangan ini sudah ada dan tidak saling suka, tidak akan dipasangkan lagi.");
-        } else {
-            // Masukkan pasangan baru ke tabel matches (session_completed = 0 secara default)
-            $insert_sql = "
-                INSERT INTO matches (male_user_id, female_user_id, session_completed) 
-                VALUES ({$male['id']}, {$female['id']}, 0)
-            ";
-
-            if ($conn->query($insert_sql) === TRUE) {
-                sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+            if ($check_existing_result->num_rows > 0) {
+                // Jika pasangan sudah ada dan tidak saling suka, jangan pasangkan lagi
+                sendMessage("Pasangan ini sudah ada dan tidak saling suka, tidak akan dipasangkan lagi.");
             } else {
-                sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+                // Masukkan pasangan ke dalam tabel matches (session_completed = 0 secara default)
+                $insert_sql = "
+                    INSERT INTO matches (male_user_id, female_user_id, session_completed) 
+                    VALUES ($male_user_id, $female_user_id, 0)
+                ";
+
+                if ($conn->query($insert_sql) === TRUE) {
+                    sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+                } else {
+                    sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+                }
             }
+        } else {
+            sendMessage("Tidak ada pasangan pria atau wanita yang tersedia untuk dipasangkan.");
         }
-    } else {
-        sendMessage("Tidak ada pasangan pria atau wanita yang tersedia untuk dipasangkan.");
     }
 
     // Periksa pasangan yang telah dibuat, dan update jika sudah mendapatkan vote
