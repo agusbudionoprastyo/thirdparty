@@ -3,32 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasangan Matchmaking</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #messages {
-            margin-top: 20px;
-        }
-        .message {
-            padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-        }
-        .user-details {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #e9e9e9;
-            border: 1px solid #ddd;
-        }
-    </style>
+    <title>Tinder In Realife</title>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-
-    <h1>Pasangan Matchmaking</h1>
     <div id="messages"></div>
 
     <script>
@@ -53,21 +31,44 @@
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
                 messageElement.innerHTML = `
-                    <strong>Pasangan Baru:</strong><br>
-                    <div class="user-details">
-                        <strong>Pria:</strong><br>
-                        Username: ${male.username}<br>
-                        Gender: ${male.gender}<br>
-                        Age: ${male.age}<br>
-                        City: ${male.city}<br>
+                <div class="profile-card">
+                    <div class="image">
+                        <img src="assets/images/male.jpg" alt="" class="profile-pic">
                     </div>
-                    <div class="user-details">
-                        <strong>Wanita:</strong><br>
-                        Username: ${female.username}<br>
-                        Gender: ${female.gender}<br>
-                        Age: ${female.age}<br>
-                        City: ${female.city}<br>
+                    <div class="data">
+                        <h2>${male.username}</h2>
+                        <span>${male.gender}</span>
                     </div>
+                    <div class="row">
+                        <div class="info">
+                            <h3>Age</h3>
+                            <span>${male.age}</span>
+                        </div>
+                        <div class="info">
+                            <h3>City</h3>
+                            <span>${male.city}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-card">
+                        <div class="image">
+                            <img src="assets/images/female.jpg" alt="" class="profile-pic">
+                        </div>
+                    <div class="data">
+                        <h2>${female.username}</h2>
+                        <span>${female.gender}</span>
+                    </div>
+                    <div class="row">
+                        <div class="info">
+                            <h3>Age</h3>
+                            <span>${female.age}</span>
+                        </div>
+                        <div class="info">
+                            <h3>City</h3>
+                            <span>${female.city}</span>
+                        </div>
+                    </div>
+                </div>
                 `;
                 messagesContainer.appendChild(messageElement);
             }
