@@ -1,6 +1,31 @@
 <?php
-// backend.php sudah mengirimkan data pasangan melalui SSE.
-// Kami ingin agar halaman ini menerima data dan menampilkan form voting.
+require_once 'helper/db.php';
+
+if (isset($_POST['vote'])) {
+    $vote = $_POST['vote']; // 'like' atau 'dislike'
+
+    // Query untuk mengambil pasangan pria dan wanita yang sedang diproses
+    $sql = "SELECT * FROM matches WHERE session_completed = 0 LIMIT 1"; // Mengambil satu pasangan yang sedang diproses
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $match = $result->fetch_assoc();
+        $male_user_id = $match['male_user_id'];
+        $female_user_id = $match['female_user_id'];
+
+        // Update vote untuk pasangan pria (male_vote)
+        if (in_array($vote, ['like', 'dislike'])) {
+            $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+            if ($conn->query($update_sql) === TRUE) {
+                echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+            } else {
+                echo "Error: " . $conn->error;
+            }
+        }
+    }
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
