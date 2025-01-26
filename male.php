@@ -17,6 +17,11 @@ if ($result->num_rows > 0) {
     $female_result = $conn->query($female_sql);
     $female = $female_result->fetch_assoc();
 
+    // Query untuk mengambil data pengguna pria berdasarkan male_user_id
+    $male_sql = "SELECT * FROM users WHERE id = $male_user_id";
+    $male_result = $conn->query($male_sql);
+    $male = $male_result->fetch_assoc();
+
     // Cek jika tombol "Like" atau "Dislike" ditekan
     if (isset($_POST['vote'])) {
         $vote = $_POST['vote']; // 'like' atau 'dislike'
@@ -67,8 +72,15 @@ $conn->close();
     
     <?php if (isset($female)): ?>
         <p>Pasangan yang ditemukan:</p>
-        <p>Laki-laki: <?php echo $male_user_id; ?></p>
-        <p>Perempuan: <?php echo $female['username']; ?> (<?php echo $female['gender']; ?>)</p>
+        <!-- Detail Pengguna Pria -->
+        <p><strong>Laki-laki:</strong> <?php echo $male['username']; ?> (<?php echo $male['gender']; ?>)</p>
+        <p><strong>Usia:</strong> <?php echo $male['age']; ?> tahun</p>
+        <p><strong>Kota:</strong> <?php echo $male['city']; ?></p>
+        
+        <!-- Detail Pengguna Wanita -->
+        <p><strong>Perempuan:</strong> <?php echo $female['username']; ?> (<?php echo $female['gender']; ?>)</p>
+        <p><strong>Usia:</strong> <?php echo $female['age']; ?> tahun</p>
+        <p><strong>Kota:</strong> <?php echo $female['city']; ?></p>
         
         <!-- Tombol untuk memberikan vote -->
         <form method="POST">
