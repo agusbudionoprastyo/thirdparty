@@ -48,7 +48,7 @@ $conn->close();
     </style>
 </head>
 <body>
-    <h1>Vote Pasangan Pria</h1>
+    <h1>Female Vote</h1>
 
     <div id="match-details"></div> <!-- Tempat untuk menampilkan pasangan -->
 
@@ -69,7 +69,7 @@ $conn->close();
                 matchDetails.innerHTML = `
                     <h2>Pasangan yang Ditemukan</h2>
                     <div class="user-details">
-                        <strong>Wanita:</strong><br>
+                        <strong>Male</strong><br>
                         Username: ${male.username}<br>
                         Gender: ${male.gender}<br>
                         Age: ${male.age}<br>
