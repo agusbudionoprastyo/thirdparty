@@ -17,7 +17,7 @@ if (isset($_POST['vote'])) {
         if (in_array($vote, ['like', 'dislike'])) {
             $update_sql = "UPDATE matches SET male_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
             if ($conn->query($update_sql) === TRUE) {
-                echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+                // echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
             } else {
                 echo "Error: " . $conn->error;
             }
@@ -65,7 +65,11 @@ $conn->close();
                     </div>
                     <div class="row">
                         <div class="info">
-                            <h3>${male.age}</h3>
+                            <h3>Age</h3>
+                            <span>${male.age}</span>
+                        </div>
+                        <div class="info">
+                            <h3>City</h3>
                             <span>${male.city}</span>
                         </div>
                     </div>
