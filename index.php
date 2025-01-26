@@ -38,12 +38,18 @@
         // Mendengarkan event dari server
         eventSource.onmessage = function(event) {
             const messageData = JSON.parse(event.data);
-            
+
             if (messageData.status === 'waiting') {
                 const male = messageData.male_user;
                 const female = messageData.female_user;
 
-                // Menampilkan detail pasangan yang sedang menunggu untuk diproses
+                // Ambil elemen untuk menampilkan pesan
+                const messagesContainer = document.getElementById('messages');
+
+                // Bersihkan pesan yang ada sebelumnya
+                messagesContainer.innerHTML = '';
+
+                // Buat elemen pesan baru
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('message');
                 messageElement.innerHTML = `
@@ -63,7 +69,7 @@
                         City: ${female.city}<br>
                     </div>
                 `;
-                document.getElementById('messages').appendChild(messageElement);
+                messagesContainer.appendChild(messageElement);
             }
         };
 
