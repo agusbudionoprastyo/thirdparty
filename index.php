@@ -26,7 +26,7 @@ $result = $conn->query($sql);
         </ul>
     </form>
     <br>
-    <a href="results.php">Lihat Hasil Voting</a>
+    <a href="dashboard.php">Lihat Hasil Voting</a>
 
     <?php
     // Jika tombol vote ditekan
