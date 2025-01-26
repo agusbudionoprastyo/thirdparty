@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <div id="messages"></div>
-
+<section class="main" id="messages"></section>
     <script>
         // Membuka koneksi SSE
         const eventSource = new EventSource('backend.php'); // Ganti dengan path PHP yang sesuai
