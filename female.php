@@ -1,46 +1,28 @@
 <?php
-// Menggunakan file db.php untuk koneksi database
 require_once 'helper/db.php';
 
-// Query untuk mengambil pasangan pria dan wanita berdasarkan session_completed = 0
-$sql = "SELECT * FROM matches WHERE session_completed = 0";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // Ambil data pasangan
-    $match = $result->fetch_assoc();
-    $male_user_id = $match['male_user_id'];
-    $female_user_id = $match['female_user_id'];
-
-    // Query untuk mengambil data pengguna pria berdasarkan male_user_id
-    $male_sql = "SELECT * FROM users WHERE id = $male_user_id";
-    $male_result = $conn->query($male_sql);
-    $male = $male_result->fetch_assoc();
-
-    // Query untuk mengambil data pengguna wanita berdasarkan female_user_id
-    $female_sql = "SELECT * FROM users WHERE id = $female_user_id";
-    $female_result = $conn->query($female_sql);
-    $female = $female_result->fetch_assoc();
-
- // Cek jika tombol "Like" atau "Dislike" ditekan
 if (isset($_POST['vote'])) {
     $vote = $_POST['vote']; // 'like' atau 'dislike'
 
-    // Pastikan hanya like atau dislike yang valid
-    if (in_array($vote, ['like', 'dislike'])) {
-        // Update vote untuk pasangan di tabel matches (wanita memberi vote)
-        $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
-        if ($conn->query($update_sql) === TRUE) {
-            echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
-        } else {
-            echo "Error: " . $conn->error;
+    // Query untuk mengambil pasangan pria dan wanita yang sedang diproses
+    $sql = "SELECT * FROM matches WHERE session_completed = 0 LIMIT 1"; // Mengambil satu pasangan yang sedang diproses
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $match = $result->fetch_assoc();
+        $male_user_id = $match['male_user_id'];
+        $female_user_id = $match['female_user_id'];
+
+        // Update vote untuk pasangan pria (male_vote)
+        if (in_array($vote, ['like', 'dislike'])) {
+            $update_sql = "UPDATE matches SET male_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+            if ($conn->query($update_sql) === TRUE) {
+                echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+            } else {
+                echo "Error: " . $conn->error;
+            }
         }
     }
-}
-
-} else {
-    echo "Tidak ada pasangan wanita yang tersedia untuk diproses.";
-    exit;
 }
 
 $conn->close();
@@ -51,25 +33,66 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote - Female</title>
+    <title>Vote - Male</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .user-details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
-    <h1>Vote Pasangan</h1>
-    
-    <?php if (isset($male)): ?>
-        <p>Pasangan yang ditemukan:</p>        
-        <!-- Detail Pengguna Pria -->
-        <p><strong>Laki-laki:</strong> <?php echo $male['username']; ?> (<?php echo $male['gender']; ?>)</p>
-        <p><strong>Usia:</strong> <?php echo $male['age']; ?> tahun</p>
-        <p><strong>Kota:</strong> <?php echo $male['city']; ?></p>
-        
-        <!-- Detail Pengguna Wanita -->
-        <p><strong>Perempuan:</strong> <?php echo $female['username']; ?> (<?php echo $female['gender']; ?>)</p>
-        <!-- Tombol untuk memberikan vote -->
-        <form method="POST">
-            <button type="submit" name="vote" value="like">Like</button>
-            <button type="submit" name="vote" value="dislike">Dislike</button>
-        </form>
-    <?php endif; ?>
+    <h1>Vote Pasangan Pria</h1>
+
+    <div id="match-details"></div> <!-- Tempat untuk menampilkan pasangan -->
+
+    <script>
+        // Membuka koneksi SSE
+        const eventSource = new EventSource('backend.php'); // Pastikan path sesuai dengan backend SSE yang kamu buat
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            
+            // Pastikan ada data pasangan pria dan wanita
+            if (data.status === 'waiting') {
+                const male = data.male_user;
+                const female = data.female_user;
+
+                // Menampilkan detail pasangan
+                const matchDetails = document.getElementById('match-details');
+                matchDetails.innerHTML = `
+                    <h2>Pasangan yang Ditemukan</h2>
+                    <div class="user-details">
+                        <strong>Wanita:</strong><br>
+                        Username: ${male.username}<br>
+                        Gender: ${male.gender}<br>
+                        Age: ${male.age}<br>
+                        City: ${male.city}<br>
+                    </div>
+                    <div class="user-details">
+                        <strong>Female:</strong><br>
+                        Username: ${female.username}<br>
+                        Gender: ${female.gender}<br>
+                    </div>
+                    <!-- Form untuk memberi vote -->
+                    <form method="POST" action="male.php">
+                        <button type="submit" name="vote" value="like">Like</button>
+                        <button type="submit" name="vote" value="dislike">Dislike</button>
+                    </form>
+                `;
+            }
+        };
+
+        eventSource.onerror = function(error) {
+            console.error("Error occurred:", error);
+        };
+    </script>
+
 </body>
 </html>
