@@ -82,7 +82,7 @@ while (true) {
         $female_vote = $match['female_vote'];
 
         // Jika kedua voting adalah LIKE (misalnya 1)
-        if ($male_vote == 1 && $female_vote == 1) {
+        if ($male_vote == "like" && $female_vote == "like") {
             // Update is_match menjadi 1
             $update_sql = "UPDATE matches SET is_match = 1 WHERE id = $match_id";
             if ($conn->query($update_sql) === TRUE) {
