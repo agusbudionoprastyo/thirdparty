@@ -24,7 +24,22 @@ if ($result->num_rows > 0) {
         // Update vote untuk pasangan di tabel matches
         $update_sql = "UPDATE matches SET male_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
         if ($conn->query($update_sql) === TRUE) {
-            echo "Vote berhasil diberikan: " . ucfirst($vote) . "!";
+            echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+
+            // Cek apakah wanita juga sudah memberikan vote
+            $check_vote_sql = "SELECT * FROM matches WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+            $check_vote_result = $conn->query($check_vote_sql);
+            $check_vote = $check_vote_result->fetch_assoc();
+
+            if ($check_vote['male_vote'] && $check_vote['female_vote']) {
+                // Jika kedua pasangan sudah memberikan vote, ubah session_completed menjadi 1
+                $update_session_sql = "UPDATE matches SET session_completed = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+                if ($conn->query($update_session_sql) === TRUE) {
+                    echo "Sesi pasangan ini telah selesai!";
+                } else {
+                    echo "Error saat mengubah session_completed: " . $conn->error;
+                }
+            }
         } else {
             echo "Error: " . $conn->error;
         }
