@@ -22,36 +22,47 @@ if ($result->num_rows > 0) {
     $female_result = $conn->query($female_sql);
     $female = $female_result->fetch_assoc();
 
-    // Cek jika tombol "Like" atau "Dislike" ditekan
-    if (isset($_POST['vote'])) {
-        $vote = $_POST['vote']; // 'like' atau 'dislike'
+ // Cek jika tombol "Like" atau "Dislike" ditekan
+if (isset($_POST['vote'])) {
+    $vote = $_POST['vote']; // 'like' atau 'dislike'
 
-        // Pastikan hanya like atau dislike yang valid
-        if (in_array($vote, ['like', 'dislike'])) {
-            // Update vote untuk pasangan di tabel matches (wanita memberi vote)
-            $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
-            if ($conn->query($update_sql) === TRUE) {
-                echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+    // Pastikan hanya like atau dislike yang valid
+    if (in_array($vote, ['like', 'dislike'])) {
+        // Update vote untuk pasangan di tabel matches (wanita memberi vote)
+        $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+        if ($conn->query($update_sql) === TRUE) {
+            echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
 
-                // Cek apakah pria sudah memberikan vote
-                $check_vote_sql = "SELECT male_vote, female_vote FROM matches WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
-                $check_vote_result = $conn->query($check_vote_sql);
-                $check_vote = $check_vote_result->fetch_assoc();
+            // Cek apakah pria sudah memberikan vote
+            $check_vote_sql = "SELECT male_vote, female_vote, session_completed FROM matches WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+            $check_vote_result = $conn->query($check_vote_sql);
+            $check_vote = $check_vote_result->fetch_assoc();
 
-                // Jika kedua pasangan sudah memberikan vote dan keduanya 'like', ubah is_match menjadi 1
-                if ($check_vote['male_vote'] == 'like' && $check_vote['female_vote'] == 'like') {
-                    $update_match_sql = "UPDATE matches SET is_match = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
-                    if ($conn->query($update_match_sql) === TRUE) {
-                        echo "Pasangan ini cocok!<br>";
-                    } else {
-                        echo "Error saat mengubah is_match: " . $conn->error;
-                    }
+            // Jika kedua pasangan sudah memberikan vote dan keduanya 'like', ubah is_match menjadi 1
+            if ($check_vote['male_vote'] == 'like' && $check_vote['female_vote'] == 'like') {
+                $update_match_sql = "UPDATE matches SET is_match = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+                if ($conn->query($update_match_sql) === TRUE) {
+                    echo "Pasangan ini cocok!<br>";
+                } else {
+                    echo "Error saat mengubah is_match: " . $conn->error;
                 }
-            } else {
-                echo "Error: " . $conn->error;
             }
+
+            // Jika kedua pasangan sudah memberikan vote, ubah session_completed menjadi 1
+            if ($check_vote['male_vote'] !== null && $check_vote['female_vote'] !== null) {
+                $update_session_sql = "UPDATE matches SET session_completed = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+                if ($conn->query($update_session_sql) === TRUE) {
+                    echo "Sesi pasangan ini telah selesai.<br>";
+                } else {
+                    echo "Error saat mengubah session_completed: " . $conn->error;
+                }
+            }
+        } else {
+            echo "Error: " . $conn->error;
         }
     }
+}
+
 } else {
     echo "Tidak ada pasangan wanita yang tersedia untuk diproses.";
     exit;

@@ -1,5 +1,6 @@
 <?php
 // Menggunakan file db.php untuk koneksi database
+// Menggunakan file db.php untuk koneksi database
 require_once 'helper/db.php';
 
 // Query untuk mengambil pasangan pria dan wanita berdasarkan session_completed = 0
