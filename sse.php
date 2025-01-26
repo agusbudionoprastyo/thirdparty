@@ -27,7 +27,7 @@ while (true) {
         $male_sql = "
             SELECT * FROM users 
             WHERE gender = 'male' 
-            AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1)
+            AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1 and session_completed = 1)
             ORDER BY RAND()
             LIMIT 1
         ";
@@ -37,7 +37,7 @@ while (true) {
         $female_sql = "
             SELECT * FROM users 
             WHERE gender = 'female' 
-            AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1)
+            AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1 and session_completed = 1)
             ORDER BY RAND()
             LIMIT 1
         ";
