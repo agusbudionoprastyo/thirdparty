@@ -1,110 +1,74 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Pasangan - Real-Time</title>
+    <title>Pasangan Matchmaking</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        h1 {
-            text-align: center;
+        #messages {
+            margin-top: 20px;
         }
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-        th, td {
+        .message {
             padding: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-        th {
             background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
         }
-        .no-match {
-            color: red;
-            text-align: center;
-            font-size: 16px;
-        }
-        .matched {
-            color: green;
-            text-align: center;
-            font-size: 16px;
+        .user-details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e9e9e9;
+            border: 1px solid #ddd;
         }
     </style>
 </head>
 <body>
-    <h1>Detail Pasangan yang Belum Diproses</h1>
-    
-    <!-- Tabel untuk menampilkan detail pasangan yang belum diproses -->
-    <table id="matchTable">
-        <thead>
-            <tr>
-                <th>ID Pasangan</th>
-                <th>Pasangan Pria</th>
-                <th>Pasangan Wanita</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data pasangan yang belum diproses akan ditampilkan di sini -->
-        </tbody>
-    </table>
 
-    <p id="statusMessage" class="no-match">Menunggu pasangan yang belum diproses...</p>
+    <h1>Pasangan Matchmaking</h1>
+    <div id="messages"></div>
 
     <script>
-        // Membuat koneksi ke SSE
-        const eventSource = new EventSource('sse.php');
+        // Membuka koneksi SSE
+        const eventSource = new EventSource('backend.php'); // Ganti dengan path PHP yang sesuai
         
-        // Menerima pesan dari server
+        // Mendengarkan event dari server
         eventSource.onmessage = function(event) {
-            const message = event.data;
-            const matchTableBody = document.getElementById('matchTable').getElementsByTagName('tbody')[0];
-            const statusMessage = document.getElementById('statusMessage');
+            const messageData = JSON.parse(event.data);
             
-            // Cek apakah ada pasangan yang belum diproses
-            if (message.includes("Pasangan belum diproses")) {
-                // Menampilkan detail pasangan yang belum diproses dalam tabel
-                const matchDetails = message.split(": ")[1]; // Pisahkan "Pasangan belum diproses" dengan detail
-                const matchParts = matchDetails.split(", ");
+            if (messageData.status === 'waiting') {
+                const male = messageData.male_user;
+                const female = messageData.female_user;
 
-                const male = matchParts[0].split(": ")[1]; // Nama Pria
-                const female = matchParts[1].split(": ")[1]; // Nama Wanita
-                const maleId = matchParts[0].split("(")[1].split(")")[0]; // ID Pria
-                const femaleId = matchParts[1].split("(")[1].split(")")[0]; // ID Wanita
-
-                // Menambahkan baris baru di tabel
-                const newRow = matchTableBody.insertRow();
-                newRow.innerHTML = `
-                    <td>${maleId} - ${femaleId}</td>
-                    <td>${male}</td>
-                    <td>${female}</td>
-                    <td>Menunggu Voting</td>
+                // Menampilkan detail pasangan yang sedang menunggu untuk diproses
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.innerHTML = `
+                    <strong>Pasangan Baru:</strong><br>
+                    <div class="user-details">
+                        <strong>Pria:</strong><br>
+                        Username: ${male.username}<br>
+                        Gender: ${male.gender}<br>
+                        Age: ${male.age}<br>
+                        City: ${male.city}<br>
+                    </div>
+                    <div class="user-details">
+                        <strong>Wanita:</strong><br>
+                        Username: ${female.username}<br>
+                        Gender: ${female.gender}<br>
+                        Age: ${female.age}<br>
+                        City: ${female.city}<br>
+                    </div>
                 `;
-                
-                // Tampilkan status "Pasangan belum diproses"
-                statusMessage.classList.remove("no-match");
-                statusMessage.classList.add("matched");
-                statusMessage.textContent = "Ada pasangan yang belum diproses";
-            } else if (message === "Tidak ada pasangan yang belum diproses.") {
-                // Jika tidak ada pasangan yang belum diproses
-                statusMessage.classList.remove("matched");
-                statusMessage.classList.add("no-match");
-                statusMessage.textContent = "Tidak ada pasangan yang belum diproses.";
-            } else {
-                // Pesan lainnya
-                console.log(message);
+                document.getElementById('messages').appendChild(messageElement);
             }
         };
 
-        // Menangani error SSE
-        eventSource.onerror = function() {
-            console.log('Error dalam koneksi SSE');
-            eventSource.close();
+        eventSource.onerror = function(error) {
+            console.error("Error occurred:", error);
         };
     </script>
 </body>
