@@ -1,86 +1,81 @@
 <?php
-include('helper/db.php');
+// Menggunakan file db.php untuk koneksi database
+require_once 'helper/db.php';
 
-// Ambil ID perempuan yang aktif, misalnya ID = 1
-$femaleId = 1;  // Ganti dengan ID pengguna perempuan yang aktif
-
-// Ambil pasangan laki-laki yang belum memberi vote (session_completed = FALSE)
-$sql = "SELECT id, username FROM users WHERE gender = 'male' AND session_completed = FALSE";
+// Query untuk mengambil pasangan pria dan wanita berdasarkan session_completed = 0
+$sql = "SELECT * FROM matches WHERE session_completed = 0 LIMIT 1";
 $result = $conn->query($sql);
 
+if ($result->num_rows > 0) {
+    // Ambil data pasangan
+    $match = $result->fetch_assoc();
+    $male_user_id = $match['male_user_id'];
+    $female_user_id = $match['female_user_id'];
+
+    // Query untuk mengambil data pengguna pria berdasarkan male_user_id
+    $male_sql = "SELECT * FROM users WHERE id = $male_user_id";
+    $male_result = $conn->query($male_sql);
+    $male = $male_result->fetch_assoc();
+
+    // Jika form vote sudah disubmit
+    if (isset($_POST['vote'])) {
+        $vote = $_POST['vote']; // 'like' atau 'dislike'
+
+        // Update vote untuk pasangan di tabel matches
+        $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+        if ($conn->query($update_sql) === TRUE) {
+            echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+
+            // Cek apakah pria juga sudah memberikan vote
+            $check_vote_sql = "SELECT * FROM matches WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+            $check_vote_result = $conn->query($check_vote_sql);
+            $check_vote = $check_vote_result->fetch_assoc();
+
+            if ($check_vote['male_vote'] && $check_vote['female_vote']) {
+                // Jika kedua pasangan sudah memberikan vote, ubah session_completed menjadi 1
+                $update_session_sql = "UPDATE matches SET session_completed = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+                if ($conn->query($update_session_sql) === TRUE) {
+                    echo "Sesi pasangan ini telah selesai!";
+                } else {
+                    echo "Error saat mengubah session_completed: " . $conn->error;
+                }
+            }
+        } else {
+            echo "Error: " . $conn->error;
+        }
+    }
+} else {
+    echo "Tidak ada pasangan pria yang tersedia untuk diproses.";
+    exit;
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Female - Vote</title>
+    <title>Vote - Female</title>
 </head>
 <body>
-    <h1>Vote untuk Laki-laki</h1>
-    <form method="POST">
-        <ul>
-            <?php while($row = $result->fetch_assoc()): ?>
-                <li>
-                    <?php echo $row['username']; ?>
-                    <button type="submit" name="vote_like" value="<?php echo $row['id']; ?>">Like</button>
-                    <button type="submit" name="vote_dislike" value="<?php echo $row['id']; ?>">Dislike</button>
-                </li>
-            <?php endwhile; ?>
-        </ul>
-    </form>
+    <h1>Vote Pasangan</h1>
+    
+    <?php if (isset($male)): ?>
+        <p>Pasangan yang ditemukan:</p>
+        <p>Perempuan: <?php echo $female_user_id; ?></p>
+        <p>Laki-laki: <?php echo $male['username']; ?> (<?php echo $male['gender']; ?>)</p>
+        
+        <!-- Form untuk memberikan vote -->
+        <form method="POST">
+            <label for="like">Like</label>
+            <input type="radio" name="vote" value="like" required>
+            <label for="dislike">Dislike</label>
+            <input type="radio" name="vote" value="dislike" required>
 
-    <?php
-    // Jika ada vote yang dikirimkan
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $maleId = $_POST['vote_like'] ?? $_POST['vote_dislike'];
-        $vote = isset($_POST['vote_like']) ? 'like' : 'dislike';
-
-        // Cek apakah pasangan ini sudah ada di tabel matches
-        $stmt = $conn->prepare("SELECT * FROM matches WHERE female_user_id = ? AND male_user_id = ?");
-        $stmt->bind_param("ii", $femaleId, $maleId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if ($result->num_rows == 0) {
-            // Jika belum ada, tambahkan entri ke tabel matches
-            $stmt = $conn->prepare("INSERT INTO matches (female_user_id, male_user_id, female_vote) VALUES (?, ?, ?)");
-            $stmt->bind_param("iis", $femaleId, $maleId, $vote);
-            $stmt->execute();
-        } else {
-            // Jika sudah ada, update vote perempuan
-            $stmt = $conn->prepare("UPDATE matches SET female_vote = ? WHERE female_user_id = ? AND male_user_id = ?");
-            $stmt->bind_param("sii", $vote, $femaleId, $maleId);
-            $stmt->execute();
-        }
-
-        // Update session_completed pada pengguna perempuan
-        $stmt = $conn->prepare("UPDATE users SET session_completed = TRUE WHERE id = ?");
-        $stmt->bind_param("i", $femaleId);
-        $stmt->execute();
-
-        // Cek apakah pasangan laki-laki sudah memberikan vote
-        $stmt = $conn->prepare("SELECT male_vote FROM matches WHERE female_user_id = ? AND male_user_id = ?");
-        $stmt->bind_param("ii", $femaleId, $maleId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $data = $result->fetch_assoc();
-
-        // Jika keduanya memberi "like", maka match!
-        if ($data['male_vote'] == 'like' && $vote == 'like') {
-            // Tandai sebagai match
-            $stmt = $conn->prepare("UPDATE matches SET is_match = TRUE WHERE female_user_id = ? AND male_user_id = ?");
-            $stmt->bind_param("ii", $femaleId, $maleId);
-            $stmt->execute();
-
-            echo "<p>It's a match!</p>";
-        }
-
-        echo "<p>Vote telah diberikan! Tunggu sampai pasangan Anda memberikan vote.</p>";
-    }
-
-    $conn->close();
-    ?>
+            <button type="submit">Submit Vote</button>
+        </form>
+    <?php endif; ?>
 </body>
 </html>
