@@ -14,6 +14,17 @@ function sendMessage($message) {
     flush();
 }
 
+// Fungsi untuk mengambil detail pengguna berdasarkan ID
+function getUserDetails($user_id, $conn) {
+    $sql = "SELECT id, username, gender, age, city FROM users WHERE id = $user_id";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc();
+    } else {
+        return null;
+    }
+}
+
 while (true) {
     // Cek apakah ada pasangan dengan session_completed = 0
     $check_sql = "SELECT * FROM matches WHERE session_completed = 0 LIMIT 1";
@@ -24,9 +35,22 @@ while (true) {
         $pending_match = $check_result->fetch_assoc();
         $male_user_id = $pending_match['male_user_id'];
         $female_user_id = $pending_match['female_user_id'];
-    
-        // Kirimkan ID pasangan yang belum diproses ke frontend
-        sendMessage("Ada pasangan yang belum diproses. Male User ID: $male_user_id, Female User ID: $female_user_id");
+
+        // Ambil detail pengguna pria dan wanita
+        $male_details = getUserDetails($male_user_id, $conn);
+        $female_details = getUserDetails($female_user_id, $conn);
+
+        if ($male_details && $female_details) {
+            // Kirimkan detail pasangan yang belum diproses ke frontend dalam format JSON
+            $message = json_encode([
+                'status' => 'waiting',
+                'male_user' => $male_details,
+                'female_user' => $female_details
+            ]);
+            sendMessage($message);
+        } else {
+            sendMessage("Error: Tidak dapat menemukan detail pengguna.");
+        }
     } else {
         // Ambil 1 pengguna pria yang belum dipasangkan dan belum ada di pasangan yang sudah match
         $male_sql = "
@@ -64,7 +88,7 @@ while (true) {
                 WHERE (male_user_id = $male_user_id AND female_user_id = $female_user_id)
                 OR (male_user_id = $female_user_id AND female_user_id = $male_user_id)
                 AND is_match = 0
-                ";
+            ";
             $check_existing_result = $conn->query($check_existing_sql);
 
             if ($check_existing_result->num_rows > 0) {
