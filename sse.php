@@ -60,7 +60,9 @@ while (true) {
             if ($conn->query($insert_sql) === TRUE) {
                 // Kirimkan data pasangan baru ke klien (browser)
                 sendEvent([
-                    'message' => "Pasangan baru berhasil dibuat: {$male['username']} - {$female['username']}"
+                    'message' => "Pasangan baru berhasil dibuat: {$male['username']} - {$female['username']}",
+                    'male_username' => $male['username'],
+                    'female_username' => $female['username']
                 ]);
             } else {
                 sendEvent([

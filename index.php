@@ -16,6 +16,14 @@
             // Tampilkan pesan di halaman
             const messageDiv = document.createElement('div');
             messageDiv.textContent = message;
+
+            // Jika pasangan baru berhasil dibuat, tampilkan pasangan mereka
+            if (data.male_username && data.female_username) {
+                const matchDiv = document.createElement('div');
+                matchDiv.textContent = `${data.male_username} dan ${data.female_username} berhasil dipasangkan!`;
+                document.getElementById('matches').appendChild(matchDiv);
+            }
+
             document.body.appendChild(messageDiv);
         };
 
