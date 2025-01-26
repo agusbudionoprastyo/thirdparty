@@ -75,6 +75,31 @@ while (true) {
                 'message' => "Tidak ada pasangan pria atau wanita yang tersedia untuk dipasangkan."
             ]);
         }
+    } else {
+        // Jika ada pasangan dengan session_completed = 0, kirimkan pasangan tersebut
+        while ($row = $result->fetch_assoc()) {
+            // Ambil data pasangan pria dan wanita
+            $male_user_id = $row['male_user_id'];
+            $female_user_id = $row['female_user_id'];
+
+            // Ambil nama pengguna pria dan wanita
+            $male_sql = "SELECT username FROM users WHERE id = $male_user_id LIMIT 1";
+            $female_sql = "SELECT username FROM users WHERE id = $female_user_id LIMIT 1";
+            $male_result = $conn->query($male_sql);
+            $female_result = $conn->query($female_sql);
+
+            if ($male_result->num_rows > 0 && $female_result->num_rows > 0) {
+                $male = $male_result->fetch_assoc();
+                $female = $female_result->fetch_assoc();
+
+                // Kirimkan pasangan yang sedang dalam proses ke klien (browser)
+                sendEvent([
+                    'message' => "Pasangan dalam proses: {$male['username']} - {$female['username']}",
+                    'male_username' => $male['username'],
+                    'female_username' => $female['username']
+                ]);
+            }
+        }
     }
 
     // Tunggu 3 detik sebelum memeriksa lagi

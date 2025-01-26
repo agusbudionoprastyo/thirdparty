@@ -24,6 +24,13 @@
                 document.getElementById('matches').appendChild(matchDiv);
             }
 
+            // Jika pasangan sedang dalam proses (session_completed = 0), tampilkan mereka
+            if (data.male_username && data.female_username) {
+                const processDiv = document.createElement('div');
+                processDiv.textContent = `${data.male_username} dan ${data.female_username} sedang diproses...`;
+                document.getElementById('matches').appendChild(processDiv);
+            }
+
             document.body.appendChild(messageDiv);
         };
 
