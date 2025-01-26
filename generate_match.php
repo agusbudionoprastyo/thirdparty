@@ -10,7 +10,6 @@ if (isset($_POST['start']) && $_POST['start'] == 1) {
         SELECT * FROM users 
         WHERE gender = 'male' 
         AND id NOT IN (SELECT male_user_id FROM matches WHERE session_completed = 0)
-        AND id NOT IN (SELECT female_user_id FROM matches WHERE session_completed = 0)
         ORDER BY RAND()
     ";
     $male_result = $conn->query($male_sql);
@@ -20,7 +19,6 @@ if (isset($_POST['start']) && $_POST['start'] == 1) {
         SELECT * FROM users 
         WHERE gender = 'female' 
         AND id NOT IN (SELECT female_user_id FROM matches WHERE session_completed = 0)
-        AND id NOT IN (SELECT male_user_id FROM matches WHERE session_completed = 0)
         ORDER BY RAND()
     ";
     $female_result = $conn->query($female_sql);
