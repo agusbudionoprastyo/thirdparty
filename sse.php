@@ -20,8 +20,13 @@ while (true) {
     $check_result = $conn->query($check_sql);
 
     if ($check_result->num_rows > 0) {
-        // Ada pasangan yang belum selesai, tunggu pemrosesan lebih lanjut
-        sendMessage("Ada pasangan yang belum diproses, menunggu untuk diproses.");
+        // Ada pasangan yang belum selesai, ambil ID pasangan yang belum diproses
+        $pending_match = $check_result->fetch_assoc();
+        $male_user_id = $pending_match['male_user_id'];
+        $female_user_id = $pending_match['female_user_id'];
+    
+        // Kirimkan ID pasangan yang belum diproses ke frontend
+        sendMessage("Ada pasangan yang belum diproses. Male User ID: $male_user_id, Female User ID: $female_user_id");
     } else {
         // Ambil 1 pengguna pria yang belum dipasangkan dan belum ada di pasangan yang sudah match
         $male_sql = "
