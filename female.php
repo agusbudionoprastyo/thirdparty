@@ -75,8 +75,8 @@ $conn->close();
                     </div>
                 <form method="POST" action="female.php">
                     <div class="buttons">
-                        <a class="btn" type="submit" name="vote" value="like">LIKE</a>
-                        <a class="btn" type="submit" name="vote" value="dislike">DISLIKE</a>
+                        <button type="submit" name="vote" value="like" class="btn">LIKE</button>
+                        <button type="submit" name="vote" value="dislike" class="btn">DISLIKE</button>
                     </div>
                 </form>
             </div>
