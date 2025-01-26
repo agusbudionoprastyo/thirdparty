@@ -81,7 +81,7 @@ $conn->close();
                         Gender: ${female.gender}<br>
                     </div>
                     <!-- Form untuk memberi vote -->
-                    <form method="POST" action="male.php">
+                    <form method="POST" action="female.php">
                         <button type="submit" name="vote" value="like">Like</button>
                         <button type="submit" name="vote" value="dislike">Dislike</button>
                     </form>
