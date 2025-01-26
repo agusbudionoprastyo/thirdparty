@@ -57,7 +57,7 @@ $conn->close();
                 matchDetails.innerHTML = `
                 <div class="profile-card">
                         <div class="image">
-                            <img src="assets/images/profile.jpg" alt="" class="profile-pic">
+                            <img src="assets/images/male.jpg" alt="" class="profile-pic">
                         </div>
                     <div class="data">
                         <h2>${male.username}</h2>

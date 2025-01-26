@@ -33,24 +33,12 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vote - Male</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .user-details {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-        }
-    </style>
+    <title>Female</title>
+    <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-    <h1>Vote Pasangan Pria</h1>
-
-    <div id="match-details"></div> <!-- Tempat untuk menampilkan pasangan -->
+<!-- <div id="match-details"></div> -->
+<section class="main" id="match-details"></section>
 
     <script>
         // Membuka koneksi SSE
@@ -67,24 +55,31 @@ $conn->close();
                 // Menampilkan detail pasangan
                 const matchDetails = document.getElementById('match-details');
                 matchDetails.innerHTML = `
-                    <h2>Pasangan yang Ditemukan</h2>
-                    <div class="user-details">
-                        <strong>Wanita:</strong><br>
-                        Username: ${female.username}<br>
-                        Gender: ${female.gender}<br>
-                        Age: ${female.age}<br>
-                        City: ${female.city}<br>
+                <div class="profile-card">
+                        <div class="image">
+                            <img src="assets/images/female.jpg" alt="" class="profile-pic">
+                        </div>
+                    <div class="data">
+                        <h2>${female.username}</h2>
+                        <span>${female.gender}</span>
                     </div>
-                    <div class="user-details">
-                        <strong>Pria:</strong><br>
-                        Username: ${male.username}<br>
-                        Gender: ${male.gender}<br>
+                    <div class="row">
+                        <div class="info">
+                            <h3>Age</h3>
+                            <span>${female.age}</span>
+                        </div>
+                        <div class="info">
+                            <h3>City</h3>
+                            <span>${female.city}</span>
+                        </div>
                     </div>
-                    <!-- Form untuk memberi vote -->
                     <form method="POST" action="male.php">
-                        <button type="submit" name="vote" value="like">Like</button>
-                        <button type="submit" name="vote" value="dislike">Dislike</button>
+                        <div class="buttons">
+                            <button class="btn" type="submit" name="vote" value="like">LIKE</a>
+                            <button class="btn" type="submit" name="vote" value="dislike">DISLIKE</a>
+                        </div>
                     </form>
+                </div>
                 `;
             }
         };
@@ -93,6 +88,5 @@ $conn->close();
             console.error("Error occurred:", error);
         };
     </script>
-
 </body>
 </html>
