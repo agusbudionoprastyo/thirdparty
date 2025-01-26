@@ -17,7 +17,7 @@ if (isset($_POST['vote'])) {
         if (in_array($vote, ['like', 'dislike'])) {
             $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
             if ($conn->query($update_sql) === TRUE) {
-                echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
+                // echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
             } else {
                 echo "Error: " . $conn->error;
             }
@@ -33,7 +33,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Female</title>
+    <title>Male</title>
     <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
