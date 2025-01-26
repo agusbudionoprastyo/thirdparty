@@ -1,13 +1,13 @@
 <?php
+session_start();
 include('helper/db.php');
 
-// Ambil ID laki-laki yang aktif, misalnya ID = 1
-$maleId = 1;  // Ganti dengan ID pengguna laki-laki yang aktif
+// Ambil ID pengguna laki-laki yang aktif dari session
+$maleId = $_SESSION['user_id'];  // ID pengguna laki-laki yang aktif
 
-// Ambil pasangan perempuan yang belum memberi vote (session_completed = FALSE)
+// Ambil pasangan perempuan yang belum memberi vote
 $sql = "SELECT id, username FROM users WHERE gender = 'female' AND session_completed = FALSE";
 $result = $conn->query($sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ $result = $conn->query($sql);
     <h1>Vote untuk Perempuan</h1>
     <form method="POST">
         <ul>
-            <?php while($row = $result->fetch_assoc()): ?>
+            <?php while ($row = $result->fetch_assoc()): ?>
                 <li>
                     <?php echo $row['username']; ?>
                     <button type="submit" name="vote_like" value="<?php echo $row['id']; ?>">Like</button>
