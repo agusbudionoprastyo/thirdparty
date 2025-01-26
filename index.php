@@ -1,47 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Pasangan</title>
-    <script>
-        // Membuat koneksi ke server untuk menerima SSE
-        const eventSource = new EventSource('sse.php');
+<?php
+// Menggunakan file db.php untuk koneksi database
+require_once 'helper/db.php';
 
-        // Ketika menerima pesan dari server
-        eventSource.onmessage = function(event) {
-            const data = JSON.parse(event.data);  // Parse data JSON dari server
-            const message = data.message;  // Ambil pesan yang dikirim
+// Variabel untuk menampilkan pesan di index.php
+$message = '';
 
-            // Tampilkan pesan di halaman
-            const messageDiv = document.createElement('div');
-            messageDiv.textContent = message;
+if (isset($_POST['start']) && $_POST['start'] == 1) {
+    
+    // Cek apakah ada entry dengan session_completed = 0
+    $check_sql = "SELECT * FROM matches WHERE session_completed = 0";
+    $check_result = $conn->query($check_sql);
 
-            // Jika pasangan baru berhasil dibuat, tampilkan pasangan mereka
-            if (data.male_username && data.female_username) {
-                const matchDiv = document.createElement('div');
-                matchDiv.textContent = `${data.male_username} dan ${data.female_username} berhasil dipasangkan!`;
-                document.getElementById('matches').appendChild(matchDiv);
-            }
+    // Jika tidak ada pasangan dengan session_completed = 0
+    if ($check_result->num_rows == 0) {
+        // Eksekusi generate_match.php jika tidak ada pasangan dengan session_completed = 0
+        include('generate_match.php');
+        $message = "Tidak ada pasangan dengan session_completed = 0, jadi generate match baru dilakukan.";
+    } else {
+        // Jika ada pasangan dengan session_completed = 0, tampilkan pesan
+        $message = "Ada pasangan dengan session_completed = 0, tidak perlu membuat pasangan baru.";
+    }
+}
 
-            // Jika pasangan sedang dalam proses (session_completed = 0), tampilkan mereka
-            if (data.male_username && data.female_username) {
-                const processDiv = document.createElement('div');
-                processDiv.textContent = `${data.male_username} dan ${data.female_username} sedang diproses...`;
-                document.getElementById('matches').appendChild(processDiv);
-            }
+// Tampilkan pesan jika ada
+if (!empty($message)) {
+    echo "<div class='message'>$message</div>";
+}
 
-            document.body.appendChild(messageDiv);
-        };
+$conn->close();
+?>
 
-        // Menangani error jika koneksi SSE gagal
-        eventSource.onerror = function(event) {
-            console.error("Error with SSE connection:", event);
-        };
-    </script>
-</head>
-<body>
-    <h1>Pasangan Baru</h1>
-    <div id="matches"></div>
-</body>
-</html>
+<!-- Form untuk memulai eksekusi -->
+<form method="post" action="index.php">
+    <input type="hidden" name="start" value="1">
+    <button type="submit">Mulai Proses</button>
+</form>
