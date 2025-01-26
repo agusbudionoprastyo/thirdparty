@@ -53,16 +53,30 @@ while (true) {
             $female = $female_result->fetch_assoc();
             $female_user_id = $female['id'];
 
-            // Masukkan pasangan ke dalam tabel matches (session_completed = 0 secara default)
-            $insert_sql = "
-                INSERT INTO matches (male_user_id, female_user_id, session_completed) 
-                VALUES ($male_user_id, $female_user_id, 0)
-            ";
+            // Tambahkan pengecekan apakah pasangan pria dan wanita sudah pernah dipasangkan dan tidak saling suka
+            $check_existing_sql = "
+                SELECT * FROM matches 
+                WHERE (male_user_id = $male_user_id AND female_user_id = $female_user_id)
+                OR (male_user_id = $female_user_id AND female_user_id = $male_user_id)
+                AND is_match = 0
+                ";
+            $check_existing_result = $conn->query($check_existing_sql);
 
-            if ($conn->query($insert_sql) === TRUE) {
-                sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+            if ($check_existing_result->num_rows > 0) {
+                // Jika pasangan sudah ada dan tidak saling suka, jangan pasangkan lagi
+                sendMessage("Pasangan ini sudah ada dan tidak saling suka, tidak akan dipasangkan lagi.");
             } else {
-                sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+                // Masukkan pasangan ke dalam tabel matches (session_completed = 0 secara default)
+                $insert_sql = "
+                    INSERT INTO matches (male_user_id, female_user_id, session_completed) 
+                    VALUES ($male_user_id, $female_user_id, 0)
+                ";
+
+                if ($conn->query($insert_sql) === TRUE) {
+                    sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+                } else {
+                    sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+                }
             }
         } else {
             sendMessage("Tidak ada pasangan pria atau wanita yang tersedia untuk dipasangkan.");
