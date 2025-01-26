@@ -76,10 +76,10 @@ $conn->close();
                 </div>
                     <form method="POST" action="female.php">
                         <div class="profile-card">
-                            <button class="btn" type="submit" name="vote" value="like">LIKE</button>
+                            <a class="btn" type="submit" name="vote" value="like">LIKE</a>
                         </div>
                         <div class="profile-card">
-                            <button class="btn" type="submit" name="vote" value="dislike">DISLIKE</a>
+                            <a class="btn" type="submit" name="vote" value="dislike">DISLIKE</a>
                         </div>
                     </form>
                 `;
