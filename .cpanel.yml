@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/dafm5634/public_html/thirdparty
+    - /bin/cp -R * $DEPLOYPATH
