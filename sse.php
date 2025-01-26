@@ -51,16 +51,29 @@ while (true) {
             $female = $female_result->fetch_assoc();
             $female_user_id = $female['id'];
 
-            // Masukkan pasangan ke dalam tabel matches (session_completed = 0 secara default)
-            $insert_sql = "
-                INSERT INTO matches (male_user_id, female_user_id, session_completed) 
-                VALUES ($male_user_id, $female_user_id, 0)
+            // Periksa apakah pria dan wanita ini sudah dipasangkan sebelumnya
+            $pair_check_sql = "
+                SELECT * FROM matches
+                WHERE (male_user_id = $male_user_id AND female_user_id = $female_user_id)
+                   OR (male_user_id = $female_user_id AND female_user_id = $male_user_id)
+                LIMIT 1
             ";
+            $pair_check_result = $conn->query($pair_check_sql);
 
-            if ($conn->query($insert_sql) === TRUE) {
-                sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+            if ($pair_check_result->num_rows == 0) {
+                // Masukkan pasangan ke dalam tabel matches (session_completed = 0 secara default)
+                $insert_sql = "
+                    INSERT INTO matches (male_user_id, female_user_id, session_completed) 
+                    VALUES ($male_user_id, $female_user_id, 0)
+                ";
+
+                if ($conn->query($insert_sql) === TRUE) {
+                    sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+                } else {
+                    sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+                }
             } else {
-                sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+                sendMessage("Pasangan ini sudah ada sebelumnya: " . $male['username'] . " - " . $female['username']);
             }
         } else {
             sendMessage("Tidak ada pasangan pria atau wanita yang tersedia untuk dipasangkan.");
@@ -71,4 +84,5 @@ while (true) {
 }
 
 $conn->close();
+
 ?>
