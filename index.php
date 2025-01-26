@@ -70,10 +70,10 @@
             if (message.includes("Pasangan belum diproses")) {
                 // Menampilkan detail pasangan yang belum diproses dalam tabel
                 const matchDetails = message.split(": ")[1]; // Pisahkan "Pasangan belum diproses" dengan detail
-                const matchParts = matchDetails.split("dan");
+                const matchParts = matchDetails.split(", ");
 
-                const male = matchParts[0].split(" ")[1].trim(); // Nama Pria
-                const female = matchParts[1].split(" ")[1].trim(); // Nama Wanita
+                const male = matchParts[0].split(": ")[1]; // Nama Pria
+                const female = matchParts[1].split(": ")[1]; // Nama Wanita
                 const maleId = matchParts[0].split("(")[1].split(")")[0]; // ID Pria
                 const femaleId = matchParts[1].split("(")[1].split(")")[0]; // ID Wanita
 
