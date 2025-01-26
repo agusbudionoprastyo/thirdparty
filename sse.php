@@ -17,13 +17,13 @@ function sendMessage($message) {
 
 // Proses utama untuk memeriksa dan membuat pasangan baru
 while (true) {
-    // Cek apakah ada pasangan dengan session_completed = 0
-    $check_sql = "SELECT * FROM matches WHERE session_completed = 0 LIMIT 1";
+    // Cek apakah ada pasangan yang belum dipasangkan (is_match = 0)
+    $check_sql = "SELECT * FROM matches WHERE is_match = 0 LIMIT 1";
     $check_result = $conn->query($check_sql);
 
-    // Jika ada pasangan yang session_completed = 0, jangan buat pasangan baru
+    // Jika ada pasangan yang belum dipasangkan, jangan buat pasangan baru
     if ($check_result->num_rows > 0) {
-        sendMessage("Ada pasangan dengan session_completed = 0, menunggu untuk selesai.");
+        sendMessage("Ada pasangan yang belum dipasangkan, menunggu untuk diproses.");
     } else {
         // Ambil 1 pengguna pria yang belum dipasangkan
         $male_sql = "
@@ -57,8 +57,8 @@ while (true) {
 
             // Masukkan pasangan ke dalam tabel matches
             $insert_sql = "
-                INSERT INTO matches (male_user_id, female_user_id, is_match, session_completed) 
-                VALUES ($male_user_id, $female_user_id, 0, 0)
+                INSERT INTO matches (male_user_id, female_user_id, is_match) 
+                VALUES ($male_user_id, $female_user_id, 0)
             ";
             
             if ($conn->query($insert_sql) === TRUE) {
