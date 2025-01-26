@@ -68,10 +68,11 @@ $conn->close();
                             <h3>${male.age}</h3>
                             <span>${male.city}</span>
                         </div>
+                    </div>
                     <form method="POST" action="female.php">
                         <div class="buttons">
                             <button class="btn" type="submit" name="vote" value="like">LIKE</a>
-                            <button class="btn" type="submit" name="vote" value="dislike">DISLIKE Me</a>
+                            <button class="btn" type="submit" name="vote" value="dislike">DISLIKE</a>
                         </div>
                     </form>
                 </div>
