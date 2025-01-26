@@ -18,7 +18,7 @@ function sendMessage($message) {
 // Proses utama untuk memeriksa dan membuat pasangan baru
 while (true) {
     // Cek apakah ada pasangan yang belum dipasangkan (is_match = 0)
-    $check_sql = "SELECT * FROM matches WHERE is_match = 0 LIMIT 1";
+    $check_sql = "SELECT * FROM matches WHERE session_completed = 0 LIMIT 1";
     $check_result = $conn->query($check_sql);
 
     // Jika ada pasangan yang belum dipasangkan, jangan buat pasangan baru
@@ -29,7 +29,7 @@ while (true) {
         $male_sql = "
             SELECT * FROM users 
             WHERE gender = 'male' 
-            AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1)
+            AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1 and session_completed = 1)
             ORDER BY RAND()
             LIMIT 1
         ";
@@ -39,7 +39,7 @@ while (true) {
         $female_sql = "
             SELECT * FROM users 
             WHERE gender = 'female' 
-            AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1)
+            AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1 and session_completed = 1)
             ORDER BY RAND()
             LIMIT 1
         ";
@@ -57,8 +57,8 @@ while (true) {
 
             // Masukkan pasangan ke dalam tabel matches
             $insert_sql = "
-                INSERT INTO matches (male_user_id, female_user_id, is_match) 
-                VALUES ($male_user_id, $female_user_id, 0)
+                INSERT INTO matches (male_user_id, female_user_id) 
+                VALUES ($male_user_id, $female_user_id)
             ";
             
             if ($conn->query($insert_sql) === TRUE) {
