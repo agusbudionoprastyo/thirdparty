@@ -73,15 +73,13 @@ $conn->close();
                             <span>${male.city}</span>
                         </div>
                     </div>
-                </div>
                 <form method="POST" action="female.php">
                     <div class="buttons">
-                        <button class="btn" type="submit" name="vote" value="like">LIKE</button>
-                    </div>
-                    <div class="buttons">
-                        <button class="btn" type="submit" name="vote" value="dislike">DISLIKE</button>
+                        <a class="btn" type="submit" name="vote" value="like">LIKE</a>
+                        <a class="btn" type="submit" name="vote" value="dislike">DISLIKE</a>
                     </div>
                 </form>
+            </div>
                 `;
             }
         };
