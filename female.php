@@ -28,23 +28,23 @@ if ($result->num_rows > 0) {
 
         // Pastikan hanya like atau dislike yang valid
         if (in_array($vote, ['like', 'dislike'])) {
-            // Update vote untuk pasangan di tabel matches
+            // Update vote untuk pasangan di tabel matches (wanita memberi vote)
             $update_sql = "UPDATE matches SET female_vote = '$vote' WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
             if ($conn->query($update_sql) === TRUE) {
                 echo "Vote berhasil diberikan: " . ucfirst($vote) . "!<br>";
 
                 // Cek apakah pria sudah memberikan vote
-                $check_vote_sql = "SELECT * FROM matches WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+                $check_vote_sql = "SELECT male_vote, female_vote FROM matches WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
                 $check_vote_result = $conn->query($check_vote_sql);
                 $check_vote = $check_vote_result->fetch_assoc();
 
-                // Jika kedua pasangan sudah memberikan vote, ubah session_completed menjadi 1
-                if ($check_vote['male_vote'] && $check_vote['female_vote']) {
-                    $update_session_sql = "UPDATE matches SET session_completed = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
-                    if ($conn->query($update_session_sql) === TRUE) {
-                        echo "Sesi pasangan ini telah selesai!";
+                // Jika kedua pasangan sudah memberikan vote dan keduanya 'like', ubah is_match menjadi 1
+                if ($check_vote['male_vote'] == 'like' && $check_vote['female_vote'] == 'like') {
+                    $update_match_sql = "UPDATE matches SET is_match = 1 WHERE male_user_id = $male_user_id AND female_user_id = $female_user_id";
+                    if ($conn->query($update_match_sql) === TRUE) {
+                        echo "Pasangan ini cocok!<br>";
                     } else {
-                        echo "Error saat mengubah session_completed: " . $conn->error;
+                        echo "Error saat mengubah is_match: " . $conn->error;
                     }
                 }
             } else {
