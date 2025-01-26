@@ -15,22 +15,54 @@ function sendMessage($message) {
     flush();
 }
 
-// Periksa apakah ada entry dengan session_completed = 0
+// Proses utama untuk memeriksa dan membuat pasangan baru
 while (true) {
-    $check_sql = "SELECT * FROM matches WHERE session_completed = 0";
-    $check_result = $conn->query($check_sql);
+    // Ambil 1 pengguna pria yang belum dipasangkan
+    $male_sql = "
+        SELECT * FROM users 
+        WHERE gender = 'male' 
+        AND id NOT IN (SELECT male_user_id FROM matches WHERE is_match = 1)
+        ORDER BY RAND()
+        LIMIT 1
+    ";
+    $male_result = $conn->query($male_sql);
 
-    if ($check_result->num_rows == 0) {
-        // Jika tidak ada pasangan dengan session_completed = 0, jalankan generate_match.php
-        ob_start();
-        include('generate_match.php');
-        $output = ob_get_clean();
-        sendMessage("Pasangan baru telah dibuat: $output");
+    // Ambil 1 pengguna wanita yang belum dipasangkan
+    $female_sql = "
+        SELECT * FROM users 
+        WHERE gender = 'female' 
+        AND id NOT IN (SELECT female_user_id FROM matches WHERE is_match = 1)
+        ORDER BY RAND()
+        LIMIT 1
+    ";
+    $female_result = $conn->query($female_sql);
+
+    // Jika ada pasangan pria dan wanita yang belum dipasangkan
+    if ($male_result->num_rows > 0 && $female_result->num_rows > 0) {
+        // Ambil data pengguna pria
+        $male = $male_result->fetch_assoc();
+        $male_user_id = $male['id'];
+
+        // Ambil data pengguna wanita
+        $female = $female_result->fetch_assoc();
+        $female_user_id = $female['id'];
+
+        // Masukkan pasangan ke dalam tabel matches
+        $insert_sql = "
+            INSERT INTO matches (male_user_id, female_user_id, is_match, session_completed) 
+            VALUES ($male_user_id, $female_user_id, 0, 0)
+        ";
+        
+        if ($conn->query($insert_sql) === TRUE) {
+            sendMessage("Pasangan berhasil dibuat: " . $male['username'] . " - " . $female['username']);
+        } else {
+            sendMessage("Error: " . $insert_sql . " - " . $conn->error);
+        }
     } else {
-        sendMessage("Ada pasangan dengan session_completed = 0, menunggu untuk generate pasangan baru.");
+        sendMessage("Tidak ada pasangan pria atau wanita yang tersedia untuk dipasangkan.");
     }
 
-    // Tunggu selama 1 detik sebelum melakukan pengecekan lagi
+    // Tunggu selama 1 detik sebelum pengecekan berikutnya
     sleep(1);
 }
 
