@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+  <!-- Menggunakan font lokal -->
+  <style>
+    /* Font Heading Bold */
+    @font-face {
+      font-family: 'HeadingBold';
+      src: url('./assets/fonts/heading-bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    /* Font Helvetica Bold */
+    @font-face {
+      font-family: 'HelveticaBold';
+      src: url('./assets/fonts/Helvetica-Bold.ttf') format('truetype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    /* Font Helvetica Regular */
+    @font-face {
+      font-family: 'Helvetica';
+      src: url('./assets/fonts/Helvetica.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* Pengaturan font pada elemen spesifik */
+    .heading-bold {
+      font-family: 'HeadingBold', sans-serif; /* Font khusus untuk heading */
+    }
+
+    .helvetica-bold {
+      font-family: 'HelveticaBold', sans-serif; /* Font untuk teks tebal khusus */
+    }
+
+    .helvetica {
+      font-family: 'Helvetica', sans-serif; /* Font untuk teks reguler */
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-md mx-auto overflow-hidden">
+    <div class="relative">
+      <img alt="Concert with My Chemical Romance performing on stage with bright lights and smoke effects" class="w-full h-screen-1/2 object-cover" src="./assets/image/flyer.png">
+      <div class="absolute top-0 left-0 p-4">
+        <i class="fas fa-arrow-left text-white text-2xl"></i>
+      </div>
+      <div class="absolute top-0 right-0 p-4">
+        <i class="fas fa-ellipsis-h text-white text-2xl"></i>
+      </div>
+    </div>
+    <div class="p-4">
+      <div class="flex space-x-2 overflow-x-auto pb-2">
+        <img alt="Thumbnail sponsor 1" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 2" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 3" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 4" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 5" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 6" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 7" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 8" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+        <img alt="Thumbnail sponsor 9" class="w-20 h-20 rounded-xl object-cover" src="https://placehold.co/600x400?text=Sponsor">
+      </div>
+      <h2 class="text-2xl font-semibold helvetica">Third Party Effect</h2>
+
+      <div class="flex items-center mt-2">
+        <i class="fas fa-calendar-alt text-blue-500"></i>
+        <p class="ml-2 helvetica text-gray-700">15 Februari 2025 - 20:00 PM</p>
+      </div>
+      <div class="flex items-center mt-2">
+        <i class="fas fa-map-marker-alt text-blue-500"></i>
+        <p class="ml-2 helvetica text-gray-700">Jl. Imam Bonjol No.188, Semarang</p>
+      </div>
+
+        <div class="mt-4">
+            <h3 class="text-lg font-semibold helvetica">About</h3>
+            <p class="helvetica text-gray-700 mt-2">Event third party effect adalah perayaan valentine dg tema modern yg menghadirkan hiburan dari DJ, serta dipandu oleh MC Kondang yg dapat memberikan pengalaman unik dg konsep masqurade hiburan, pesta kostum doorprize menarik, games games seru, hingga lelang makanan dan minuman.</p>
+        </div>
+
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold helvetica">Location</h3>
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.2508286818183!2d110.40941237686833!3d-6.979701993021142!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708b4d0808faa9%3A0x1c54882d293f1937!2sHotel%20Dafam%20Semarang!5e0!3m2!1sen!2sid!4v1737694104499!5m2!1sen!2sid" 
+          class="w-full h-32 max-w-md rounded-[24px] shadow-md" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+
+
+        <div class="bg-white rounded-[24px] shadow-md p-4 flex items-center justify-between w-full h-32 max-w-md mt-4">
+            <div>
+                <p class="helvetica text-gray-400 text-sm">Price start from</p>
+                <p class="helvetica text-blue-600 font-bold">IDR 100k/Person</p>
+            </div>
+            <button class="bg-blue-600 text-white font-semibold py-4 px-8 rounded-full">Register Now</button>
+        </div>
+      
+    </div>
+  </div>
+</body>
+</html>
