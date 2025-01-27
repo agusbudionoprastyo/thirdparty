@@ -1,7 +1,7 @@
 /* Font Heading Bold */
 @font-face {
     font-family: 'HeadingBold';
-    src: url('./assets/fonts/heading-bold.ttf') format('truetype');
+    src: url('../fonts/heading-bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
   }
@@ -9,7 +9,7 @@
   /* Font Helvetica Bold */
   @font-face {
     font-family: 'HelveticaBold';
-    src: url('./assets/fonts/Helvetica-Bold.ttf') format('truetype');
+    src: url('../fonts/Helvetica-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
   }
@@ -17,7 +17,7 @@
   /* Font Helvetica Regular */
   @font-face {
     font-family: 'Helvetica';
-    src: url('./assets/fonts/Helvetica.ttf') format('truetype');
+    src: url('../fonts/Helvetica.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
   }
