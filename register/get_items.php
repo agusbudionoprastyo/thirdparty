@@ -3,12 +3,24 @@ include '../helper/db.php';
 
 header('Content-Type: application/json');
 
-// Query untuk mengambil data items dari tabel
+// Query to get items from the table
 $sql = "SELECT id, name FROM items";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$result = $conn->query($sql);
 
-// Kembalikan data sebagai JSON
-echo json_encode($items);
+// Check if there are any items
+if ($result->num_rows > 0) {
+    // Fetch all rows as associative array
+    $items = [];
+    while ($row = $result->fetch_assoc()) {
+        $items[] = $row;
+    }
+    // Return the data as JSON
+    echo json_encode($items);
+} else {
+    // If no items found
+    echo json_encode([]);
+}
+
+// Close the connection
+$conn->close();
 ?>
