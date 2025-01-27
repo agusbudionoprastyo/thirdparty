@@ -84,44 +84,25 @@
         </iframe>
       </div>
 
-      <div class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
-        <div>
-            <p class="helvetica text-gray-400 text-sm">Price start from</p>
-            <p class="helvetica text-[#ff005b] font-bold">IDR 100k/Person</p>
-        </div>
-        <button id="registerBtn" class="button is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================== Register Modal ========================== -->
-  <div id="registerModal" class="modal">
-    <article class="modal-container">
-      <header class="modal-container-header">
-        <h1 class="modal-container-title">
-          Register
-        </h1>
-        <button id="closeModal" class="icon-button shadow-md rounded-full">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path fill="currentColor" d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" />
-          </svg>
+      <!-- Form Box -->
+      <div id="box" class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50 relative">
+        <button id="closeBtn" class="icon-button shadow-md rounded-full absolute top-2 right-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path fill="currentColor" d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" />
+            </svg>
         </button>
-      </header>
-      <form id="registrationForm">
-        <section class="modal-container-body rtf">
+        <form id="registrationForm">
           <!-- Radio buttons for Single and Couple -->
-          <div>
-            <div class="mt-2 flex space-x-4">
-              <label>
-                <input type="radio" name="registrationType" value="single" id="single" class="mr-2"> Single
-              </label>
-              <label>
-                <input type="radio" name="registrationType" value="couple" id="couple" class="mr-2"> Couple
-              </label>
-            </div>
+          <div class="mt-2 flex space-x-4">
+            <label>
+              <input type="radio" name="registrationType" value="single" id="single" class="mr-2" checked> Single
+            </label>
+            <label>
+              <input type="radio" name="registrationType" value="couple" id="couple" class="mr-2"> Couple
+            </label>
           </div>
-  
+
           <!-- Name field -->
           <div class="mt-4 flex space-x-4">
             <div class="w-3/4">
@@ -133,10 +114,11 @@
               <input type="number" id="age" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Age" required>
             </div>
           </div>
-          
+
+          <!-- Gender and Photo -->
           <div class="mt-2 flex space-x-4">
             <div class="w-3/4">
-            <label for="gender" class="block text-gray-700">Gender</label>
+              <label for="gender" class="block text-gray-700">Gender</label>
               <label>
                 <input type="radio" name="gender" value="male" id="male" class="mr-2"> Male
               </label>
@@ -156,7 +138,7 @@
             </div>
           </div>
 
-          <!-- Couple field (hidden initially) -->
+          <!-- Couple Section (hidden initially) -->
           <div id="CoupleContainer" class="mt-4 hidden">
             <div class="flex space-x-4">
               <div class="w-3/4">
@@ -171,10 +153,10 @@
               <div class="w-3/4">
                 <label class="block text-gray-700">Gender</label>
                 <label>
-                  <input type="radio" name="coupleMale" value="male" id="male" class="mr-2"> Male
+                  <input type="radio" name="coupleMale" value="male" id="coupleMale" class="mr-2"> Male
                 </label>
                 <label>
-                  <input type="radio" name="coupleFemale" value="female" id="female" class="mr-2"> Female
+                  <input type="radio" name="coupleFemale" value="female" id="coupleFemale" class="mr-2"> Female
                 </label>
               </div>
               <div class="w-1/4">
@@ -189,53 +171,36 @@
             </div>
           </div>
 
-          <!-- Phone Email field -->
-          <div class="mt-2 flex items-center space-x-4 mt-8">
-            <div class="w-1/4">
+          <!-- Phone Email -->
+          <div class="mt-4">
               <label for="phone" class="block text-gray-700">Phone</label>
-            </div>
-            <div class="w-3/4">
-              <input type="text" id="phone" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Phone Number" required>
-            </div>
+              <input type="text" id="phone" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="62xxxxxxxxxx" required>
           </div>
 
-          <div class="mt-2 flex items-center space-x-4">
-            <div class="w-1/4">
+          <div class="mt-2">
               <label for="email" class="block text-gray-700">Email</label>
-            </div>
-            <div class="w-3/4">
-              <input type="email" id="email" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Email" required>
-            </div>
+              <input type="email" id="email" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="yourmail@xxx" required>
           </div>
-        </section>
-  
-        <!-- Footer with submit button -->
-        <footer class="modal-container-footer">
-          <button type="submit" class="button shadow-md is-primary rounded-full">Submit</button>
-        </footer>
-      </form>
-    </article>
+
+          <!-- Submit Button -->
+          <div class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+            <div>
+                <p class="helvetica text-gray-400 text-sm">Price start from</p>
+                <p class="helvetica text-[#ff005b] font-bold">IDR 100k/Person</p>
+            </div>
+            <button id="signUpBtn" type="submit" class="button is-primary text-white font-semibold py-4 px-8 rounded-full hidden">SignUp</button>
+            <button id="registerBtn" class="button is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
   </div>
   
     <script>
       const singleRadio = document.getElementById('single');
       const coupleRadio = document.getElementById('couple');
       const CoupleContainer = document.getElementById('CoupleContainer');
-      // Modal show and hide
-      const registerBtn = document.getElementById("registerBtn");
-      const registerModal = document.getElementById("registerModal");
-      const closeModal = document.getElementById("closeModal");
-  
-      // Show Modal when 'Register Now' button is clicked
-      registerBtn.addEventListener("click", function() {
-        registerModal.style.display = "flex";
-        loadItems();  // Load items into the dropdown when modal opens
-      });
-  
-      // Close Modal when 'Close' button is clicked
-      closeModal.addEventListener("click", function() {
-        registerModal.style.display = "none";
-      });
 
       // Event listener to handle the display of the Female Name field
       coupleRadio.addEventListener('change', function () {
@@ -249,14 +214,27 @@
           CoupleContainer.classList.add('hidden'); // Hide Female Name field
         }
       });
-  
-      // Close Modal when clicking outside the modal content
-      window.addEventListener("click", function(event) {
-        if (event.target === registerModal) {
-          registerModal.style.display = "none";
-        }
+
+      const registerBtn = document.getElementById("registerBtn");
+      const closeBtn = document.getElementById("closeBtn");
+      const box = document.getElementById("box");
+      const signUpBtn = document.getElementById("signUpBtn");
+
+      registerBtn.addEventListener("click", function() {
+          box.classList.add("expanded");
+          closeBtn.classList.remove("hidden");
+          registerBtn.classList.add("hidden");
+          signUpBtn.classList.remove("hidden");
       });
-  
+
+      // Event listener untuk tombol "Close"
+      closeBtn.addEventListener("click", function() {
+          box.classList.remove("expanded");
+          closeBtn.classList.add("hidden");
+          registerBtn.classList.remove("hidden");
+          signUpBtn.classList.add("hidden");
+      });
+
       // Fetch and populate items into the dropdown
       function loadItems() {
         fetch('get_items.php') // Ambil data items dari file PHP
