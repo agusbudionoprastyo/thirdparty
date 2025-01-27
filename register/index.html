@@ -6,46 +6,7 @@
   <title>Event Details</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-
-  <!-- Menggunakan font lokal -->
-  <style>
-    /* Font Heading Bold */
-    @font-face {
-      font-family: 'HeadingBold';
-      src: url('./assets/fonts/heading-bold.ttf') format('truetype');
-      font-weight: bold;
-      font-style: normal;
-    }
-
-    /* Font Helvetica Bold */
-    @font-face {
-      font-family: 'HelveticaBold';
-      src: url('./assets/fonts/Helvetica-Bold.ttf') format('truetype');
-      font-weight: bold;
-      font-style: normal;
-    }
-
-    /* Font Helvetica Regular */
-    @font-face {
-      font-family: 'Helvetica';
-      src: url('./assets/fonts/Helvetica.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    /* Pengaturan font pada elemen spesifik */
-    .heading-bold {
-      font-family: 'HeadingBold', sans-serif; /* Font khusus untuk heading */
-    }
-
-    .helvetica-bold {
-      font-family: 'HelveticaBold', sans-serif; /* Font untuk teks tebal khusus */
-    }
-
-    .helvetica {
-      font-family: 'Helvetica', sans-serif; /* Font untuk teks reguler */
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-gray-100">
   <div class="max-w-md mx-auto overflow-hidden">
@@ -73,17 +34,19 @@
       <h2 class="text-2xl font-semibold helvetica">Third Party Effect</h2>
 
       <div class="flex items-center mt-2">
-        <i class="fas fa-calendar-alt text-blue-500"></i>
+        <i class="fas fa-calendar-alt text-[#ff005b]"></i>
         <p class="ml-2 helvetica text-gray-700">15 Februari 2025 - 20:00 PM</p>
       </div>
       <div class="flex items-center mt-2">
-        <i class="fas fa-map-marker-alt text-blue-500"></i>
+        <i class="fas fa-map-marker-alt text-[#ff005b]"></i>
         <p class="ml-2 helvetica text-gray-700">Jl. Imam Bonjol No.188, Semarang</p>
       </div>
 
         <div class="mt-4">
             <h3 class="text-lg font-semibold helvetica">About</h3>
-            <p class="helvetica text-gray-700 mt-2">Event third party effect adalah perayaan valentine dg tema modern yg menghadirkan hiburan dari DJ, serta dipandu oleh MC Kondang yg dapat memberikan pengalaman unik dg konsep masqurade hiburan, pesta kostum doorprize menarik, games games seru, hingga lelang makanan dan minuman.</p>
+            <p class="helvetica text-gray-700 mt-2">
+              Event "Third Party Effect" is a modern-themed Valentine’s celebration featuring entertainment by a DJ, guided by a renowned MC, offering a unique experience with a masquerade concept. The event includes exciting costume parties, attractive door prizes, fun games, and even a food and drink auction.
+            </p>
         </div>
 
       <div class="mt-4">
@@ -98,17 +61,109 @@
         </iframe>
       </div>
 
-
-
         <div class="bg-white rounded-[24px] shadow-md p-4 flex items-center justify-between w-full h-32 max-w-md mt-4">
             <div>
                 <p class="helvetica text-gray-400 text-sm">Price start from</p>
-                <p class="helvetica text-blue-600 font-bold">IDR 100k/Person</p>
+                <p class="helvetica text-[#ff005b] font-bold">IDR 100k/Person</p>
             </div>
-            <button class="bg-blue-600 text-white font-semibold py-4 px-8 rounded-full">Register Now</button>
+            <button id="registerBtn" class="button is-primary text-white font-semibold py-4 px-8 rounded-full">Joint Now</button>
         </div>
-      
     </div>
   </div>
+
+    <div id="registerModal" class="modal">
+      <article class="modal-container">
+        <header class="modal-container-header">
+          <h1 class="modal-container-title">
+            Third Party Effect
+          </h1>
+          <button id="closeModal" class="icon-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path fill="currentColor" d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" />
+            </svg>
+          </button>
+        </header>
+        <form id="registrationForm">
+        <section class="modal-container-body rtf">
+            <div>
+              <label for="name" class="block text-gray-700">Name</label>
+              <input type="text" id="name" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Your Name" required>
+            </div>
+            <div class="mt-4">
+              <label for="email" class="block text-gray-700">Email</label>
+              <input type="email" id="email" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Your Email" required>
+            </div>
+            <div class="mt-4">
+              <label for="item" class="block text-gray-700">Select Item</label>
+              <select id="item" class="mt-2 p-2 w-full border border-gray-300 rounded-full">
+              </select>
+            </div>
+        </section>
+        <footer class="modal-container-footer">
+          <button type="submit" class="button is-primary rounded-full">Register</button>
+        </footer>
+      </form>
+      </article>
+    </div>
+  
+    <script>
+      // Modal show and hide
+      const registerBtn = document.getElementById("registerBtn");
+      const registerModal = document.getElementById("registerModal");
+      const closeModal = document.getElementById("closeModal");
+  
+      // Show Modal when 'Register Now' button is clicked
+      registerBtn.addEventListener("click", function() {
+        registerModal.style.display = "flex";
+        loadItems();  // Load items into the dropdown when modal opens
+      });
+  
+      // Close Modal when 'Close' button is clicked
+      closeModal.addEventListener("click", function() {
+        registerModal.style.display = "none";
+      });
+  
+      // Close Modal when clicking outside the modal content
+      window.addEventListener("click", function(event) {
+        if (event.target === registerModal) {
+          registerModal.style.display = "none";
+        }
+      });
+  
+      // Fetch and populate items into the dropdown
+      function loadItems() {
+        fetch('get_items.php') // Ambil data items dari file PHP
+          .then(response => response.json())
+          .then(items => {
+            const itemSelect = document.getElementById("item");
+            itemSelect.innerHTML = ""; // Clear existing options
+  
+            // Tambahkan option ke dalam dropdown
+            items.forEach(item => {
+              const option = document.createElement("option");
+              option.value = item.id;
+              option.textContent = item.name;
+              itemSelect.appendChild(option);
+            });
+          })
+          .catch(error => console.error('Error loading items:', error));
+      }
+  
+      // Handle form submission
+      document.getElementById("registrationForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const itemId = document.getElementById("item").value;
+  
+        // Process form submission (e.g., send data to server)
+        console.log("Registration submitted:", { name, email, itemId });
+  
+        // Close modal after submission
+        registerModal.style.display = "none";
+      });
+    </script>
 </body>
 </html>
