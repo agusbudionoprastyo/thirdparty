@@ -212,6 +212,6 @@
 
   &:hover,
   &:focus {
-    background-color: #dfdad7;
+    background-color: rgba(#fff, 0.75);
   }
 }
