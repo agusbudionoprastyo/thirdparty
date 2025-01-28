@@ -26,7 +26,7 @@ $maleUserId = $stmt->insert_id; // ID pengguna pertama (male)
 
 // Jika ada foto yang diupload
 if (isset($_FILES['photo'])) {
-    $targetDir = "assets/users/";
+    $targetDir = "./assets/users/";
     $targetFile = $targetDir . basename($_FILES["photo"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
