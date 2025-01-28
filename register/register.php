@@ -37,10 +37,17 @@ if ($registrationType === 'couple' && $coupleData) {
     $stmt->execute();
     $femaleUserId = $stmt->insert_id; // ID pasangan (female)
 
-    // Simpan relasi pasangan di tabel 'matches'
-    $query = "INSERT INTO matches (male_user_id, female_user_id) VALUES (?, ?)";
+    // Menyimpan data pasangan ke tabel 'matches'
+    $maleVote = 'like'; // Default vote dari male
+    $femaleVote = 'like'; // Default vote dari female
+    $isMatch = 1; // Misalnya, cocok
+    $sessionCompleted = 1; // Misalnya, sesi telah selesai
+
+    // Query untuk memasukkan pasangan ke tabel 'matches'
+    $query = "INSERT INTO matches (male_user_id, female_user_id, male_vote, female_vote, is_match, session_completed) 
+                VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ii", $maleUserId, $femaleUserId);
+    $stmt->bind_param("iissii", $maleUserId, $femaleUserId, $maleVote, $femaleVote, $isMatch, $sessionCompleted);
     $stmt->execute();
 }
 
