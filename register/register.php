@@ -7,7 +7,7 @@ function uploadPhoto($photoInputName) {
     // Cek apakah ada file yang di-upload
     if (isset($_FILES[$photoInputName]) && $_FILES[$photoInputName]['error'] === UPLOAD_ERR_OK) {
         // Tentukan direktori penyimpanan foto
-        $uploadDir = '../assets/';
+        $uploadDir = 'assets/users/';
         
         // Ambil informasi file
         $fileTmpPath = $_FILES[$photoInputName]['tmp_name'];
