@@ -305,77 +305,62 @@
         })
         .catch(error => console.error('Error:', error));
 
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mendapatkan elemen-elemen form
-        const registrationForm = document.getElementById('registrationForm');  
+        // Mengambil data dari form
+const registrationForm = document.getElementById('registrationForm');
+registrationForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // Mencegah submit standar
 
-        // Event listener untuk menangani submit form
-        registrationForm.addEventListener('submit', function (event) {
-          event.preventDefault(); // Mencegah pengiriman form standar
+    const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
+    const username = document.getElementById('name').value;
+    const age = document.getElementById('age').value;
+    const gender = document.querySelector('input[name="gender"]:checked').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
 
-          // Ambil data dari form
-          const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
-          const username = document.getElementById('name').value;
-          const age = document.getElementById('age').value;
-          const gender = document.querySelector('input[name="gender"]:checked').value;
-          const phone = document.getElementById('phone').value;
-          const email = document.getElementById('email').value;
+    let coupleData = null;
+    if (registrationType === 'couple') {
+        coupleData = {
+            coupleUsername: document.getElementById('coupleName').value,
+            coupleAge: document.getElementById('coupleage').value,
+            coupleGender: document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female'
+        };
+    }
 
-          let coupleData = null;
-          if (registrationType === 'couple') {
-            coupleData = {
-              coupleUsername: document.getElementById('coupleName').value,
-              coupleAge: document.getElementById('coupleage').value,
-              coupleGender: document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female'
-            };
-          }
+    // Siapkan data untuk dikirim
+    const formData = {
+        registrationType,
+        username,
+        age,
+        gender,
+        phone,
+        email,
+        coupleData
+    };
 
-          // Siapkan data untuk dikirim ke server
-          const formData = {
-            registrationType: registrationType,
-            username: username,
-            age: age,
-            gender: gender,
-            phone: phone,
-            email: email,
-            coupleData: coupleData
-          };
+    // Kirim ke server menggunakan fetch
+    fetch('register.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server Response:', data);  // Debug log response
+        if (data.status === 'success') {
+            alert('Pendaftaran berhasil!');
+            registrationForm.reset();
+        } else {
+            alert('Terjadi kesalahan, coba lagi.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim data.');
+    });
+});
 
-          fetch('register.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-          })
-          .then(response => {
-            // Cek apakah response berhasil dan memiliki konten JSON
-            console.log('Response Status:', response.status); // Untuk debug
-            return response.text(); // Ambil teks dulu, nanti coba parse jika bisa
-          })
-          .then(text => {
-            try {
-              // Coba parsing sebagai JSON
-              const data = JSON.parse(text);
-              console.log('Parsed Response:', data);
-              // Cek status dan tampilkan alert sesuai
-              if (data.status === 'success') {
-                alert('Pendaftaran berhasil!');
-                registrationForm.reset();
-              } else {
-                alert('Terjadi kesalahan, coba lagi.');
-              }
-            } catch (error) {
-              console.error('Parsing error:', error);
-              alert('Terjadi kesalahan saat mengirim data.');
-            }
-          })
-          .catch(error => {
-            console.error('Fetch error:', error);
-            alert('Terjadi kesalahan saat mengirim data.');
-          });
-        });
-      });
 
     </script>
 </body>
