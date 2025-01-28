@@ -85,14 +85,17 @@
 
 #box {
   position: fixed;
-  bottom: -100vh;  /* Posisi awal di bawah layar (tidak terlihat) */
+  bottom: -85vh;  /* Posisi awal di bawah layar (tidak terlihat) */
   left: 0;
   right: 0;
   transition: bottom 0.5s ease-in-out; /* Transisi untuk bergerak ke atas */
-  height: 95vh; /* Ukuran tinggi kontainer ketika drawer muncul */
+  height: 85vh; /* Ukuran tinggi kontainer ketika drawer muncul */
   z-index: 50;
 }
 
 #box.expanded {
   bottom: 0; /* Menarik kotak ke atas sampai ke bawah layar */
+}
+.dark-img {
+  filter: brightness(0); /* Menggelapkan gambar */
 }

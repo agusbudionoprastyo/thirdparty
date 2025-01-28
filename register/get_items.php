@@ -3,24 +3,28 @@ include '../helper/db.php';
 
 header('Content-Type: application/json');
 
-// Query to get items from the table
-$sql = "SELECT id, name FROM items";
+// Query untuk mendapatkan id, name, dan price dari tabel items
+$sql = "SELECT id, name, price FROM items";
 $result = $conn->query($sql);
 
-// Check if there are any items
+// Cek apakah ada data
 if ($result->num_rows > 0) {
-    // Fetch all rows as associative array
+    // Ambil data sebagai array asosiatif
     $items = [];
     while ($row = $result->fetch_assoc()) {
-        $items[] = $row;
+        $items[] = [
+            'id' => $row['id'],
+            'name' => $row['name'],
+            'price' => $row['price'],  // Menambahkan harga
+        ];
     }
-    // Return the data as JSON
+    // Kembalikan data dalam format JSON
     echo json_encode($items);
 } else {
-    // If no items found
+    // Jika tidak ada data
     echo json_encode([]);
 }
 
-// Close the connection
+// Menutup koneksi
 $conn->close();
 ?>

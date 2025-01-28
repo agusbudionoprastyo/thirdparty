@@ -13,14 +13,21 @@
     <div class="relative">
       <img alt="Third party effect" class="w-full h-screen-1/2 object-cover" src="./assets/image/bg.png">
     </div>
-    <div class="flex space-x-6 overflow-x-auto p-4">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/image1.PNG">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/nike.png">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/image8.PNG">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/samsung.png">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/google.png">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/image10.PNG">
-      <img alt="Thumbnail sponsor" class="h-8 object-fill" src="./assets/image/sponsor/stripe.png">
+    <div class="flex space-x-2 overflow-x-auto p-4">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/ArtotelCasaKuningan.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/ArtotelGajahMada.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/DafamWonosobo.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/GrandDafamAncol.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/GrandDafamBraga.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/KyriadMakassar.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/MaxoneBoyolali.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/MeotelPurwokerto.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/Nexa.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/RoyalSingosariCendana.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/SurabayaSuiteHotel.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/SwissBelinBogor.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/SwissBelinMalang.png">
+      <img alt="Thumbnail sponsor" class="h-12 object-fill dark-img" src="./assets/image/sponsor/TSArtotelSurabaya.png">
     </div>
     
     <div class="p-4">
@@ -181,17 +188,19 @@
               <label for="email" class="block text-gray-700">Email</label>
               <input type="email" id="email" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="yourmail@xxx" required>
           </div>
+
           <div class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
-            <div>
-                <p class="helvetica text-gray-400 text-sm">Price start from</p>
-                <p class="helvetica text-[#ff005b] font-bold">IDR 100k/Person</p>
+            <div id="items-container">
+                <!-- <p class="helvetica text-gray-400 text-sm">Price start from</p>
+                <p class="helvetica text-[#ff005b] font-bold">IDR 100k/Person</p> -->
             </div>
-            <button id="signUpBtn" type="submit" class="button is-primary text-white font-semibold py-4 px-8 rounded-full hidden">SignUp</button>
+            <button id="signUpBtn" type="submit" class="button w-40 is-primary text-white font-semibold py-4 px-8 rounded-full hidden">SignUp</button>
+            <button id="registerBtn" class="button w-40 bottom is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
           </div>
+
         </form>
       </div>
-
-      <button id="registerBtn" class="button w-40 fixed bottom-8 right-4 mx-auto z-50 is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
+      <!-- <button id="registerBtn" class="button w-40 fixed bottom-8 right-4 mx-auto z-50 is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button> -->
       </div>
     </div>
   
@@ -233,24 +242,34 @@
           signUpBtn.classList.add("hidden");
       });
 
-      // Fetch and populate items into the dropdown
-      function loadItems() {
-        fetch('get_items.php') // Ambil data items dari file PHP
+        fetch('get_items.php')
           .then(response => response.json())
-          .then(items => {
-            const itemSelect = document.getElementById("item");
-            itemSelect.innerHTML = ""; // Clear existing options
-  
-            // Tambahkan option ke dalam dropdown
-            items.forEach(item => {
-              const option = document.createElement("option");
-              option.value = item.id;
-              option.textContent = item.name;
-              itemSelect.appendChild(option);
+          .then(data => {
+            const container = document.getElementById('items-container'); // Misalnya ada container untuk menampung data
+            data.forEach(item => {
+              // Membuat elemen baru untuk setiap item
+              const itemElement = document.createElement('div');
+              
+              // Menambahkan nama item
+              const nameElement = document.createElement('p');
+              nameElement.className = 'helvetica text-gray-400 text-sm';
+              nameElement.textContent = `${item.name}`;
+              
+              // Menambahkan harga item
+              const priceElement = document.createElement('p');
+              priceElement.className = 'helvetica text-[#ff005b] font-bold';
+              priceElement.textContent = `IDR ${item.price} / Person`;
+              
+              // Menambahkan nama dan harga ke dalam itemElement
+              itemElement.appendChild(nameElement);
+              itemElement.appendChild(priceElement);
+              
+              // Menambahkan itemElement ke dalam container
+              container.appendChild(itemElement);
             });
           })
-          .catch(error => console.error('Error loading items:', error));
-      }
+          .catch(error => console.error('Error:', error));
+
   
       // Handle form submission
       document.getElementById("registrationForm").addEventListener("submit", function(event) {
