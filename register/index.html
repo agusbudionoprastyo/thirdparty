@@ -191,14 +191,14 @@
           </div>
 
           <div class="w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
-            <div id="signup-items-container"></div>
+            <div></div>
             <button id="signUpBtn" type="submit" class="button w-40 is-primary text-white font-semibold py-4 px-8 rounded-full">SignUp</button>
           </div>
         </form>
       </div>
     </div>
 
-        <div id="join-container" class="w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+        <div class="w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
           <div id="items-container"></div>
           <button id="registerBtn" class="button w-40 bottom is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
         </div>
@@ -226,19 +226,18 @@
       const registerBtn = document.getElementById("registerBtn");
       const closeBtn = document.getElementById("closeBtn");
       const box = document.getElementById("box");
-      const joinContainer = document.getElementById("join-container");
       const signupContainer = document.getElementById("signup-container");
 
       registerBtn.addEventListener("click", function() {
           box.classList.add("expanded");
-          joinContainer.classList.add("hidden");
+          registerBtn.classList.add("hidden");
           signupContainer.classList.remove("hidden");
       });
 
       // Event listener untuk tombol "Close"
       closeBtn.addEventListener("click", function() {
           box.classList.remove("expanded");
-          joinContainer.classList.remove("hidden");
+          registerBtn.classList.remove("hidden");
           signupContainer.classList.add("hidden");
       });
 
@@ -260,7 +259,6 @@
         .then(response => response.json())
         .then(data => {
           const container = document.getElementById('items-container'); // Misalnya ada container untuk menampung data
-          const signUpContainer = document.getElementById('signup-items-container');
           data.forEach(item => {
             // Membuat elemen baru untuk setiap item
             const itemElement = document.createElement('div');
@@ -281,7 +279,6 @@
             
             // Menambahkan itemElement ke dalam container
             container.appendChild(itemElement);
-            signUpContainer.appendChild(itemElement);
           });
         })
         .catch(error => console.error('Error:', error));
