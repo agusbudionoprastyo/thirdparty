@@ -305,12 +305,13 @@
         })
         .catch(error => console.error('Error:', error));
 
-      // Mendapatkan elemen-elemen form
-      const registrationForm = document.getElementById('registrationForm');  
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mendapatkan elemen-elemen form
+        const registrationForm = document.getElementById('registrationForm');  
 
-      // Menangani submit form
-      registrationForm.addEventListener('submit', function(event) {
-          event.preventDefault(); // Mencegah form submit standar
+        // Event listener untuk menangani submit form
+        registrationForm.addEventListener('submit', function (event) {
+          event.preventDefault(); // Mencegah pengiriman form standar
 
           // Ambil data dari form
           const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
@@ -322,47 +323,49 @@
 
           let coupleData = null;
           if (registrationType === 'couple') {
-              coupleData = {
-                  coupleUsername: document.getElementById('coupleName').value,
-                  coupleAge: document.getElementById('coupleage').value,
-                  coupleGender: document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female'
-              };
+            coupleData = {
+              coupleUsername: document.getElementById('coupleName').value,
+              coupleAge: document.getElementById('coupleage').value,
+              coupleGender: document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female'
+            };
           }
 
           // Siapkan data untuk dikirim ke server
           const formData = {
-              registrationType: registrationType,
-              username: username,
-              age: age,
-              gender: gender,
-              phone: phone,
-              email: email,
-              coupleData: coupleData
+            registrationType: registrationType,
+            username: username,
+            age: age,
+            gender: gender,
+            phone: phone,
+            email: email,
+            coupleData: coupleData
           };
 
           // Kirim data ke server menggunakan fetch
           fetch('register.php', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(formData)
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
           })
           .then(response => response.json())
           .then(data => {
-              // Tampilkan pesan sukses atau gagal
-              if (data.status === 'success') {
-                  alert('Pendaftaran berhasil!');
-                  registrationForm.reset();
-              } else {
-                  alert('Terjadi kesalahan, coba lagi.');
-              }
+            // Tampilkan pesan sukses atau gagal
+            if (data.status === 'success') {
+              alert('Pendaftaran berhasil!');
+              registrationForm.reset(); // Reset form setelah sukses
+            } else {
+              alert('Terjadi kesalahan, coba lagi.');
+            }
           })
           .catch(error => {
-              console.error('Error:', error);
-              alert('Terjadi kesalahan saat mengirim data.');
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengirim data.');
           });
+        });
       });
+
     </script>
 </body>
 </html>
