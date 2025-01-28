@@ -249,14 +249,18 @@
       registerBtn.addEventListener("click", function() {
           box.classList.add("expanded");
           registerBtn.classList.add("hidden");
-          signupContainer.classList.remove("hidden");
+          setTimeout(function() {
+            signupContainer.classList.remove("hidden");
+          }, 200);
       });
 
       // Event listener untuk tombol "Close"
       closeBtn.addEventListener("click", function() {
           box.classList.remove("expanded");
           registerBtn.classList.remove("hidden");
-          signupContainer.classList.add("hidden");
+          setTimeout(function() {
+            signupContainer.classList.add("hidden");
+          }, 200);
       });
 
       // Fungsi untuk memformat harga menjadi format yang lebih mudah dibaca
