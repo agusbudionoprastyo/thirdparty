@@ -1,6 +1,6 @@
 <?php
 // Mengimpor koneksi database
-include('db.php');
+include('../helper/db.php');
 
 // Mengambil data dari form menggunakan JSON
 $data = json_decode(file_get_contents("php://input"), true);
