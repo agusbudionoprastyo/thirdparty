@@ -305,17 +305,11 @@
         })
         .catch(error => console.error('Error:', error));
 
-      // Mengambil data dari form
-      // Mendapatkan elemen-elemen dari form
-      const registrationForm = document.getElementById('registrationForm');
-      const photoInput = document.getElementById('photo');
-      const couplePhotoInput = document.getElementById('couplePhoto');
-
-      // Event listener untuk submit form
-      registrationForm.addEventListener('submit', function(event) {
+        // Mengambil data dari form
+        const registrationForm = document.getElementById('registrationForm');
+        registrationForm.addEventListener('submit', function(event) {
           event.preventDefault(); // Mencegah submit standar
 
-          // Mengambil data dari form
           const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
           const username = document.getElementById('name').value;
           const age = document.getElementById('age').value;
@@ -323,7 +317,6 @@
           const phone = document.getElementById('phone').value;
           const email = document.getElementById('email').value;
 
-          // Jika tipe registrasi adalah pasangan
           let coupleData = null;
           if (registrationType === 'couple') {
               coupleData = {
@@ -333,51 +326,40 @@
               };
           }
 
-          // Menyiapkan FormData untuk mengirim file foto dan data form
-          const formData = new FormData();
-          formData.append('registrationType', registrationType);
-          formData.append('username', username);
-          formData.append('age', age);
-          formData.append('gender', gender);
-          formData.append('phone', phone);
-          formData.append('email', email);
+          // Siapkan data untuk dikirim
+          const formData = {
+              registrationType,
+              username,
+              age,
+              gender,
+              phone,
+              email,
+              coupleData
+          };
 
-          // Menambahkan data pasangan (jika ada)
-          if (coupleData) {
-              formData.append('coupleData', JSON.stringify(coupleData));
-          }
-
-          // Menambahkan foto pengguna
-          if (photoInput.files[0]) {
-              formData.append('photo', photoInput.files[0]);
-          }
-
-          // Menambahkan foto pasangan (jika ada)
-          if (couplePhotoInput.files[0]) {
-              formData.append('couplePhoto', couplePhotoInput.files[0]);
-          }
-
-          // Mengirim data ke server menggunakan fetch dengan method POST
+          // Kirim ke server menggunakan fetch
           fetch('register.php', {
               method: 'POST',
-              body: formData
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(formData)
           })
-          .then(response => response.json())
-          .then(data => {
-              console.log('Server Response:', data);  // Debug log response
-              if (data.status === 'success') {
-                  alert('Pendaftaran berhasil!');
-                  registrationForm.reset();
-              } else {
-                  alert('Terjadi kesalahan, coba lagi.');
-              }
-          })
-          .catch(error => {
-              console.error('Error:', error);
-              alert('Terjadi kesalahan saat mengirim data.');
+              .then(response => response.json())
+              .then(data => {
+                  console.log('Server Response:', data);  // Debug log response
+                  if (data.status === 'success') {
+                      alert('Pendaftaran berhasil!');
+                      registrationForm.reset();
+                  } else {
+                      alert('Terjadi kesalahan, coba lagi.');
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  alert('Terjadi kesalahan saat mengirim data.');
+              });
           });
-      });
-
     </script>
 </body>
 </html>
