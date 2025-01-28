@@ -191,16 +191,17 @@
 
           <div class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
             <div id="items-container">
-                <!-- <p class="helvetica text-gray-400 text-sm">Price start from</p>
-                <p class="helvetica text-[#ff005b] font-bold">IDR 100k/Person</p> -->
             </div>
             <button id="signUpBtn" type="submit" class="button w-40 is-primary text-white font-semibold py-4 px-8 rounded-full hidden">SignUp</button>
-            <button id="registerBtn" class="button w-40 bottom is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
           </div>
 
         </form>
       </div>
-      <!-- <button id="registerBtn" class="button w-40 fixed bottom-8 right-4 mx-auto z-50 is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button> -->
+      <div id="join-container" class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+        <div id="items-container">
+        </div>
+        <button id="registerBtn" class="button w-40 bottom is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
+      </div>
       </div>
     </div>
   
@@ -226,11 +227,12 @@
       const closeBtn = document.getElementById("closeBtn");
       const box = document.getElementById("box");
       const signUpBtn = document.getElementById("signUpBtn");
+      const joinContainer = document.getElementById("join-container");
 
       registerBtn.addEventListener("click", function() {
           box.classList.add("expanded");
           closeBtn.classList.remove("hidden");
-          registerBtn.classList.add("hidden");
+          joinContainer.classList.add("hidden");
           signUpBtn.classList.remove("hidden");
       });
 
@@ -238,7 +240,7 @@
       closeBtn.addEventListener("click", function() {
           box.classList.remove("expanded");
           closeBtn.classList.add("hidden");
-          registerBtn.classList.remove("hidden");
+          joinContainer.classList.remove("hidden");
           signUpBtn.classList.add("hidden");
       });
 
