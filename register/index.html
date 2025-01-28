@@ -92,7 +92,8 @@
       </div>
 
       <!-- Form Box -->
-      <div id="box" class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+      <div id="box" class="bg-white rounded-t-[24px] shadow-[0_-4px_5px_rgba(0,0,0,0.5)] w-full p-4 flex max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+        <div id="signup-container" class="hidden">
         <button id="closeBtn" class="icon-button shadow-md rounded-full absolute top-2 right-2">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                 <path fill="none" d="M0 0h24v24H0z" />
@@ -189,17 +190,18 @@
               <input type="email" id="email" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="yourmail@xxx" required>
           </div>
 
-          <div class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
-            <div id="items-container hidden"></div>
-            <button id="signUpBtn" type="submit" class="button w-40 is-primary text-white font-semibold py-4 px-8 rounded-full hidden">SignUp</button>
+          <div class="w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+            <div id="items-container"></div>
+            <button id="signUpBtn" type="submit" class="button w-40 is-primary text-white font-semibold py-4 px-8 rounded-full">SignUp</button>
           </div>
-
         </form>
       </div>
-      <div id="join-container" class="bg-white rounded-t-[24px] shadow-md w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
-        <div id="items-container"></div>
-        <button id="registerBtn" class="button w-40 bottom is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
-      </div>
+    </div>
+
+        <div id="join-container" class="w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
+          <div id="items-container"></div>
+          <button id="registerBtn" class="button w-40 bottom is-primary text-white font-semibold py-4 px-8 rounded-full">Join Now</button>
+        </div>
       </div>
     </div>
   
@@ -224,22 +226,20 @@
       const registerBtn = document.getElementById("registerBtn");
       const closeBtn = document.getElementById("closeBtn");
       const box = document.getElementById("box");
-      const signUpBtn = document.getElementById("signUpBtn");
       const joinContainer = document.getElementById("join-container");
+      const signupContainer = document.getElementById("signup-container");
 
       registerBtn.addEventListener("click", function() {
           box.classList.add("expanded");
-          closeBtn.classList.remove("hidden");
           joinContainer.classList.add("hidden");
-          signUpBtn.classList.remove("hidden");
+          signupContainer.classList.remove("hidden");
       });
 
       // Event listener untuk tombol "Close"
       closeBtn.addEventListener("click", function() {
           box.classList.remove("expanded");
-          closeBtn.classList.add("hidden");
           joinContainer.classList.remove("hidden");
-          signUpBtn.classList.add("hidden");
+          signupContainer.classList.add("hidden");
       });
 
       // Fungsi untuk memformat harga menjadi format yang lebih mudah dibaca

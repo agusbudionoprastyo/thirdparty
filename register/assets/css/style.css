@@ -85,7 +85,7 @@
 
 #box {
   position: fixed;
-  bottom: -85vh;  /* Posisi awal di bawah layar (tidak terlihat) */
+  bottom: -66vh;  /* Posisi awal di bawah layar (tidak terlihat) */
   left: 0;
   right: 0;
   transition: bottom 0.5s ease-in-out; /* Transisi untuk bergerak ke atas */
