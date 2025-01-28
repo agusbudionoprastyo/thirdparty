@@ -242,33 +242,48 @@
           signUpBtn.classList.add("hidden");
       });
 
-        fetch('get_items.php')
-          .then(response => response.json())
-          .then(data => {
-            const container = document.getElementById('items-container'); // Misalnya ada container untuk menampung data
-            data.forEach(item => {
-              // Membuat elemen baru untuk setiap item
-              const itemElement = document.createElement('div');
-              
-              // Menambahkan nama item
-              const nameElement = document.createElement('p');
-              nameElement.className = 'helvetica text-gray-400 text-sm';
-              nameElement.textContent = `${item.name}`;
-              
-              // Menambahkan harga item
-              const priceElement = document.createElement('p');
-              priceElement.className = 'helvetica text-[#ff005b] font-bold';
-              priceElement.textContent = `IDR ${item.price} / Person`;
-              
-              // Menambahkan nama dan harga ke dalam itemElement
-              itemElement.appendChild(nameElement);
-              itemElement.appendChild(priceElement);
-              
-              // Menambahkan itemElement ke dalam container
-              container.appendChild(itemElement);
-            });
-          })
-          .catch(error => console.error('Error:', error));
+      // Fungsi untuk memformat harga menjadi format yang lebih mudah dibaca
+      function formatPrice(price) {
+          if (price >= 1000000) {
+              // Untuk harga di atas 1 juta, tampilkan dalam format 'M' (misalnya 1.5M)
+              return (price / 1000000).toFixed(1) + 'M';
+          } else if (price >= 1000) {
+              // Untuk harga di atas 1000, tampilkan dalam format 'K' (misalnya 100K)
+              return (price / 1000).toFixed(0) + 'K';
+          } else {
+              // Untuk harga di bawah 1000, tampilkan langsung
+              return price;
+          }
+      }
+
+      fetch('get_items.php')
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('items-container'); // Misalnya ada container untuk menampung data
+          data.forEach(item => {
+            // Membuat elemen baru untuk setiap item
+            const itemElement = document.createElement('div');
+            
+            // Menambahkan nama item
+            const nameElement = document.createElement('p');
+            nameElement.className = 'helvetica text-gray-400 text-sm';
+            nameElement.textContent = `${item.name}`;
+            
+            // Menambahkan harga item, menggunakan fungsi formatPrice
+            const priceElement = document.createElement('p');
+            priceElement.className = 'helvetica text-[#ff005b] font-bold';
+            priceElement.textContent = `IDR ${formatPrice(item.price)} / Person`;
+            
+            // Menambahkan nama dan harga ke dalam itemElement
+            itemElement.appendChild(nameElement);
+            itemElement.appendChild(priceElement);
+            
+            // Menambahkan itemElement ke dalam container
+            container.appendChild(itemElement);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+
 
   
       // Handle form submission
