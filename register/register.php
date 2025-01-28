@@ -94,12 +94,30 @@ if ($registrationType === 'couple') {
     $stmt->execute();
 }
 
-// Menyimpan transaksi
-$query = "INSERT INTO transactions (user_id, status) VALUES (?, 'pending')";
+// Mengambil harga item yang aktif dan memiliki stok lebih dari 0
+$query = "SELECT price FROM items WHERE active = '1' AND stock > 0 LIMIT 1"; // Ambil satu item
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $maleUserId);
+$stmt->execute();
+$stmt->bind_result($itemPrice);
+$stmt->fetch();
+$stmt->close();
+
+// Jika tidak ada item yang aktif, tampilkan error
+if (!$itemPrice) {
+    echo json_encode(['status' => 'error', 'message' => 'Item tidak tersedia']);
+    exit;
+}
+
+// Jika pendaftaran adalah pasangan, kalikan harga item dengan 2
+$totalAmount = ($registrationType === 'couple') ? $itemPrice * 2 : $itemPrice;
+
+// Menyimpan transaksi
+$query = "INSERT INTO transactions (user_id, total_amount, status) VALUES (?, ?, 'pending')";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("ii", $maleUserId, $totalAmount);
 $stmt->execute();
 
+// Menutup koneksi
 echo json_encode(['status' => 'success', 'message' => 'Form submitted successfully']);
 $stmt->close();
 $conn->close();
