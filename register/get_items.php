@@ -4,7 +4,7 @@ include '../helper/db.php';
 header('Content-Type: application/json');
 
 // Query untuk mendapatkan id, name, dan price dari tabel items
-$sql = "SELECT id, name, price FROM items WHERE active = 1 AND stock > 0";
+$sql = "SELECT id, name, description, price FROM items WHERE active = '1' AND stock > 0";
 $result = $conn->query($sql);
 
 // Cek apakah ada data
@@ -15,7 +15,8 @@ if ($result->num_rows > 0) {
         $items[] = [
             'id' => $row['id'],
             'name' => $row['name'],
-            'price' => $row['price'],  // Menambahkan harga
+            'description' => $row['description'],
+            'price' => $row['price'],
         ];
     }
     // Kembalikan data dalam format JSON

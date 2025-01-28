@@ -265,9 +265,9 @@
             const itemElement = document.createElement('div');
             
             // Menambahkan nama item
-            const nameElement = document.createElement('p');
-            nameElement.className = 'helvetica text-gray-400 text-sm';
-            nameElement.textContent = `${item.name}`;
+            const descriptionElement = document.createElement('p');
+            descriptionElement.className = 'helvetica text-gray-400 text-sm';
+            descriptionElement.textContent = `${item.description}`;
             
             // Menambahkan harga item, menggunakan fungsi formatPrice
             const priceElement = document.createElement('p');
@@ -275,7 +275,7 @@
             priceElement.textContent = `IDR ${formatPrice(item.price)} / Person`;
             
             // Menambahkan nama dan harga ke dalam itemElement
-            itemElement.appendChild(nameElement);
+            itemElement.appendChild(descriptionElement);
             itemElement.appendChild(priceElement);
             
             // Menambahkan itemElement ke dalam container
