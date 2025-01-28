@@ -7,7 +7,7 @@ function uploadPhoto($photoInputName) {
     // Cek apakah ada file yang di-upload
     if (isset($_FILES[$photoInputName]) && $_FILES[$photoInputName]['error'] === UPLOAD_ERR_OK) {
         // Tentukan direktori penyimpanan foto
-        $uploadDir = '../assets/';
+        $uploadDir = '../uploads/';
         
         // Ambil informasi file
         $fileTmpPath = $_FILES[$photoInputName]['tmp_name'];
@@ -43,46 +43,40 @@ function uploadPhoto($photoInputName) {
     return false; // Tidak ada file yang di-upload
 }
 
-// Mengambil data dari form menggunakan JSON
-$data = json_decode(file_get_contents("php://input"), true);
-
-// Cek validasi data JSON
-if ($data === null) {
-    die(json_encode(['status' => 'error', 'message' => 'Invalid JSON input']));
-}
-
-// Ambil data dari form
-$registrationType = $data['registrationType'];
-$username = $data['username'];
-$age = $data['age'];
-$gender = $data['gender'];
-$coupleData = $data['coupleData'] ?? null;
+// Mengambil data dari form
+$registrationType = $_POST['registrationType'];
+$username = $_POST['username'];
+$age = $_POST['age'];
+$gender = $_POST['gender'];
+$phone = $_POST['phone'];
+$email = $_POST['email'];
 
 // Proses upload foto
 $photoFileName = uploadPhoto('photo'); // Foto untuk peserta
 $couplePhotoFileName = null;
 
 if ($registrationType === 'couple') {
-    $couplePhotoFileName = uploadPhoto('couplePhoto'); // Foto untuk pasangan
+    $coupleUsername = $_POST['coupleUsername'];
+    $coupleAge = $_POST['coupleAge'];
+    $coupleGender = $_POST['coupleGender'];
+
+    // Upload foto pasangan
+    $couplePhotoFileName = uploadPhoto('couplePhoto');
 }
 
 // Proses penyimpanan data ke database
-$query = "INSERT INTO users (username, gender, age, photo) VALUES (?, ?, ?, ?)";
+$query = "INSERT INTO users (username, gender, age, phone, email, photo) VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ssis", $username, $gender, $age, $photoFileName);
+$stmt->bind_param("ssisss", $username, $gender, $age, $phone, $email, $photoFileName);
 $stmt->execute();
 $maleUserId = $stmt->insert_id; // ID pengguna pertama (male)
 
 // Jika tipe pendaftaran adalah pasangan, simpan data pasangan ke tabel 'users' dan buat relasi di tabel 'matches'
-if ($registrationType === 'couple' && $coupleData) {
-    $coupleUsername = $coupleData['coupleUsername'];
-    $coupleAge = $coupleData['coupleAge'];
-    $coupleGender = $coupleData['coupleGender'];
-
+if ($registrationType === 'couple') {
     // Simpan pasangan ke tabel 'users' dengan foto pasangan
-    $query = "INSERT INTO users (username, gender, age, photo) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO users (username, gender, age, phone, email, photo) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssis", $coupleUsername, $coupleGender, $coupleAge, $couplePhotoFileName);
+    $stmt->bind_param("ssisss", $coupleUsername, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName);
     $stmt->execute();
     $femaleUserId = $stmt->insert_id; // ID pasangan (female)
 
