@@ -85,11 +85,11 @@
 
 #box {
   position: fixed;
-  bottom: -66vh;  /* Posisi awal di bawah layar (tidak terlihat) */
+  bottom: -70vh;  /* Posisi awal di bawah layar (tidak terlihat) */
   left: 0;
   right: 0;
   transition: bottom 0.5s ease-in-out; /* Transisi untuk bergerak ke atas */
-  height: 85vh; /* Ukuran tinggi kontainer ketika drawer muncul */
+  height: 85vh;
   z-index: 50;
 }
 
