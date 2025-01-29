@@ -531,29 +531,36 @@
 
             fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
                 .then(response => {
+                    // Memeriksa apakah respons berhasil
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);
                     }
+                    
+                    // Menangani respons JSON
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Transaction Details:', data);  // Log data yang diterima
+                    console.log('Transaction Details:', data);
 
                     const transactionDetailsContainer = document.getElementById('transaction-details-container');
                     if (data.error) {
                         // Tampilkan error jika transaksi tidak ditemukan
                         transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
                     } else {
-                        // Tampilkan detail transaksi
                         const totalAmount = data.total_amount;
                         const transactionDate = data.transaction_date;
 
-                        // Pastikan format transaction_date sesuai dengan format yang diinginkan
+                        // Format date dan total amount
                         const formattedDate = new Date(transactionDate).toLocaleString();
+                        const formattedAmount = new Intl.NumberFormat('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR'
+                        }).format(totalAmount);
 
+                        // Menampilkan data transaksi
                         transactionDetailsContainer.innerHTML = `
                             <ul>
-                                <li><strong>Total Amount:</strong> IDR ${totalAmount}</li>
+                                <li><strong>Total Amount:</strong> ${formattedAmount}</li>
                                 <li><strong>Transaction Date:</strong> ${formattedDate}</li>
                             </ul>
                         `;
