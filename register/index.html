@@ -529,28 +529,30 @@
                 transactionIdDisplay.textContent = 'Transaction ID: Tidak ditemukan';
             }
 
-            // Ambil detail transaksi berdasarkan transaction_id
             fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Transaction Details:', data);  // Log data yang diterima
                     const transactionDetailsContainer = document.getElementById('transaction-details-container');
                     if (data.error) {
                         // Tampilkan error jika transaksi tidak ditemukan
                         transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
                     } else {
                         // Tampilkan detail transaksi
-                        let detailsHtml = '<ul>';
-                        data.forEach(detail => {
-                            detailsHtml += `
-                                <li>
-                                    <strong>Amount:</strong> IDR ${detail.total_amount} <br>
-                                    <strong>Date:</strong> ${detail.transaction_date} <br>
-                                </li>
-                                <hr>
-                            `;
-                        });
-                        detailsHtml += '</ul>';
-                        transactionDetailsContainer.innerHTML = detailsHtml;
+                        const totalAmount = data.total_amount;
+                        const transactionDate = data.transaction_date;
+
+                        transactionDetailsContainer.innerHTML = `
+                            <ul>
+                                <li><strong>Total Amount:</strong> IDR ${totalAmount}</li>
+                                <li><strong>Transaction Date:</strong> ${new Date(transactionDate).toLocaleString()}</li>
+                            </ul>
+                        `;
                     }
                 })
                 .catch(error => {
