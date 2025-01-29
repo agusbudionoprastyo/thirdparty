@@ -222,8 +222,7 @@
       <div class="bg-white p-4 rounded-[24px] shadow-md max-w-sm w-full">
           <h2 class="text-2xl font-bold text-center text-gray-700">Payment</h2>
 
-          <p id="transaction-id" class="mt-4 text-center text-sm text-gray-500"></p>
-          <div id="transaction-details-container" class="text-center text-sm text-gray-500"></div>
+          <div id="transaction-details-container" class="mt-4 text-center text-sm text-gray-500"></div>
 
           <p class="mt-4 text-center">Silakan lakukan pembayaran ke No. Rekening berikut ( Mandiri - PT Dafam Mambo International )</p>
           <p class="mt-4 text-center">Upload bukti pembayaran</p>
@@ -494,14 +493,6 @@
                 // Ambil transactionid dari localStorage
                 const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
 
-                // Tampilkan transaction_id di modal
-                const transactionIdDisplay = document.getElementById('transaction-id');
-            if (transactionIdFromLocalStorage) {
-                transactionIdDisplay.textContent = 'Transaction ID: ' + transactionIdFromLocalStorage;
-            } else {
-                transactionIdDisplay.textContent = 'Transaction ID: Tidak ditemukan';
-            }
-
             fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
                 .then(response => {
                     if (!response.ok) {
@@ -532,12 +523,16 @@
                         transactionDetailsContainer.innerHTML = `
                           <ul>
                               <li class="flex justify-between">
-                                  <span><strong>Total Amount </strong></span>
-                                  <span class="text-left">${formattedAmount}</span>
+                                  <span><strong>Transaction ID</strong></span>
+                                  <span class="text-rigth">${transactionIdFromLocalStorage}</span>
                               </li>
                               <li class="flex justify-between">
-                                  <span><strong>Transaction Date </strong></span>
-                                  <span class="text-left">${formattedDate}</span>
+                                  <span><strong>Total Amount</strong></span>
+                                  <span class="text-rigth">${formattedAmount}</span>
+                              </li>
+                              <li class="flex justify-between">
+                                  <span><strong>Transaction Date</strong></span>
+                                  <span class="text-right">${formattedDate}</span>
                               </li>
                           </ul>
                         `;
