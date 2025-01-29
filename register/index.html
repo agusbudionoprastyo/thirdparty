@@ -207,6 +207,8 @@
               <input type="email" id="email" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="yourmail@xxx" required>
           </div>
 
+          <input type="hidden" id="transactionid" name="transactionid" value="">
+
           <div class="w-full p-4 flex items-center justify-between h-32 max-w-md mt-4 fixed bottom-0 left-0 right-0 mx-auto z-50">
             <div></div>
             <button id="signUpBtn" type="submit" class="button w-40 is-primary text-white font-semibold py-4 px-8 rounded-full">Sign up</button>
@@ -218,8 +220,8 @@
     <!-- Success Modal -->
     <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-4 rounded-[24px] shadow-md max-w-sm w-full">
-          <h2 class="text-2xl font-bold text-center text-gray-700">Registrasi Berhasil!</h2>
-          <p class="mt-4 text-center">Silakan lakukan pembayaran ke No. Rekening berikut (Mandiri - PT Dafam Mambo International )</p>
+          <h2 class="text-2xl font-bold text-center text-gray-700">Payment</h2>
+          <p class="mt-4 text-center">Silakan lakukan pembayaran ke No. Rekening berikut ( Mandiri - PT Dafam Mambo International )</p>
           <p class="mt-4 text-center">Upload bukti pembayaran dibawah ini</p>
       </div>
     </div>
@@ -378,6 +380,18 @@
             }
         }
 
+        // Generate transaction ID
+        function generateTransactionId() {
+            return 'TXN-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+
+        const transactionIdInput = document.getElementById('transactionid');
+        const generatedTransactionId = generateTransactionId();
+        transactionIdInput.value = generatedTransactionId;
+
+        // Simpan transactionid ke localStorage
+        localStorage.setItem('transactionid', generatedTransactionId);
+
         const registrationForm = document.getElementById('registrationForm');
         registrationForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Mencegah submit standar
@@ -393,6 +407,7 @@
             const email = document.getElementById('email').value;
 
             // Masukkan data ke dalam FormData
+            formData.append('transactionid', generatedTransactionId);
             formData.append('registrationType', registrationType);
             formData.append('username', username);
             formData.append('age', age);

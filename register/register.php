@@ -111,10 +111,12 @@ if (!$itemPrice) {
 // Jika pendaftaran adalah pasangan, kalikan harga item dengan 2
 $totalAmount = ($registrationType === 'couple') ? $itemPrice * 2 : $itemPrice;
 
-// Menyimpan transaksi
-$query = "INSERT INTO transactions (user_id, total_amount, status) VALUES (?, ?, 'pending')";
+// Mendapatkan transaction ID dari form
+$transactionId = $_POST['transactionid'];
+
+$query = "INSERT INTO transactions (transaction_id, user_id, total_amount, status) VALUES (?, ?, ?, 'pending')";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ii", $maleUserId, $totalAmount);
+$stmt->bind_param("sii", $transactionId, $maleUserId, $totalAmount);
 $stmt->execute();
 
 // Menutup koneksi
