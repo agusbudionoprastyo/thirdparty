@@ -8,29 +8,28 @@
 </head>
 <body>
 <section class="main" id="messages"></section>
-    <script>
-        // Membuka koneksi SSE
-        const eventSource = new EventSource('backend.php'); // Ganti dengan path PHP yang sesuai
-        
-        // Mendengarkan event dari server
-        eventSource.onmessage = function(event) {
-            const messageData = JSON.parse(event.data);
 
-            if (messageData.status === 'waiting') {
-                const male = messageData.male_user;
-                const female = messageData.female_user;
+<script>
+    // Membuka koneksi SSE (Server-Sent Events)
+    const eventSource = new EventSource('backend.php'); // Ganti dengan path PHP yang sesuai
+    
+    // Mendengarkan event dari server
+    eventSource.onmessage = function(event) {
+        const messageData = JSON.parse(event.data);  // Parse data yang dikirim dari server
 
-                // Ambil elemen untuk menampilkan pesan
-                const messagesContainer = document.getElementById('messages');
+        // Jika statusnya adalah 'waiting'
+        if (messageData.status === 'waiting') {
+            const male = messageData.male_user;
+            const female = messageData.female_user;
 
-                // Bersihkan pesan yang ada sebelumnya
-                messagesContainer.innerHTML = '';
+            // Ambil elemen container pesan
+            const messagesContainer = document.getElementById('messages');
 
-                // Buat elemen pesan baru
-                // const messageElement = document.createElement('div');
-                // messageElement.classList.add('message');
-                const messageElement = document.getElementById('messages');
-                messageElement.innerHTML = `
+            // Bersihkan pesan yang ada sebelumnya
+            messagesContainer.innerHTML = '';
+
+            // Buat HTML untuk profile card pria dan wanita
+            const maleProfileCard = `
                 <div class="profile-card">
                     <div class="image">
                         <img src="../users/${male.photo}" alt="" class="profile-pic">
@@ -50,10 +49,13 @@
                         </div>
                     </div>
                 </div>
+            `;
+
+            const femaleProfileCard = `
                 <div class="profile-card">
-                        <div class="image">
-                            <img src="../users/${female.photo}" alt="" class="profile-pic">
-                        </div>
+                    <div class="image">
+                        <img src="../users/${female.photo}" alt="" class="profile-pic">
+                    </div>
                     <div class="data">
                         <h2>${female.username}</h2>
                         <span>${female.phone}</span>
@@ -69,14 +71,18 @@
                         </div>
                     </div>
                 </div>
-                `;
-                messagesContainer.appendChild(messageElement);
-            }
-        };
+            `;
 
-        eventSource.onerror = function(error) {
-            console.error("Error occurred:", error);
-        };
-    </script>
+            // Gabungkan kedua profile card dan masukkan ke dalam container
+            messagesContainer.innerHTML = maleProfileCard + femaleProfileCard;
+        }
+    };
+
+    // Tangani error jika ada masalah dengan koneksi SSE
+    eventSource.onerror = function(error) {
+        console.error("Error occurred:", error);
+    };
+</script>
+
 </body>
 </html>
