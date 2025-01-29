@@ -383,15 +383,12 @@
 
         // Generate transaction ID
         function generateTransactionId() {
-            return 'TXN-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            return 'TPE-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
         }
 
         const transactionIdInput = document.getElementById('transactionid');
         const generatedTransactionId = generateTransactionId();
         transactionIdInput.value = generatedTransactionId;
-
-        // Simpan transactionid ke localStorage
-        localStorage.setItem('transactionid', generatedTransactionId);
 
         const registrationForm = document.getElementById('registrationForm');
         registrationForm.addEventListener('submit', function(event) {
@@ -449,7 +446,9 @@
                 if (data.status === 'success') {
                   // Simpan status di localStorage agar tetap muncul meskipun di-reload
                   localStorage.setItem('registrationSuccess', 'true');
-                  
+                  // Simpan transactionid ke localStorage
+                  localStorage.setItem('transactionid', generatedTransactionId);
+
                   // Menutup form dan menampilkan modal
                   box.classList.remove("expanded");
                   registerBtn.classList.remove("hidden");
