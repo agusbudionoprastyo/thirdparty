@@ -147,7 +147,7 @@
 
           <!-- Gender and Photo -->
           <div class="mt-2 flex space-x-4">
-            <div class="w-3/4">
+            <div class="w-1/2">
               <label for="gender" class="block text-gray-700">Gender</label>
               <label>
                 <input type="radio" name="gender" value="male" id="male" class="mr-2"> Male
@@ -155,6 +155,11 @@
               <label>
                 <input type="radio" name="gender" value="female" id="female" class="mr-2"> Female
               </label>
+            </div>
+         
+            <div id="photo-info" class="w-1/4 mt-2 text-sm text-gray-500">
+              <p id="photo-name" class="font-medium"></p> <!-- For file name -->
+              <p id="photo-size" class="text-xs"></p>    <!-- For file size -->
             </div>
 
             <div class="w-1/4">
@@ -180,7 +185,7 @@
               </div>
             </div>
             <div class="mt-2 flex space-x-4">
-              <div class="w-3/4">
+              <div class="w-1/2">
                 <label class="block text-gray-700">Gender</label>
                 <label>
                   <input type="radio" name="coupleMale" value="male" id="coupleMale" class="mr-2"> Male
@@ -189,6 +194,12 @@
                   <input type="radio" name="coupleFemale" value="female" id="coupleFemale" class="mr-2"> Female
                 </label>
               </div>
+
+              <div id="couple-photo-info" class="w-1/4 mt-2 text-sm text-gray-500">
+                <p id="couple-photo-name" class="font-medium"></p> <!-- For file name -->
+                <p id="couple-photo-size" class="text-xs"></p>    <!-- For file size -->
+              </div>
+
               <div class="w-1/4">
                 <div class="mt-2 flex items-center space-x-2">
                   <label for="couplePhoto" class="cursor-pointer items-center justify-center w-full p-2 bg-white shadow-md rounded-full flex items-center space-x-2">
@@ -305,127 +316,139 @@
         })
         .catch(error => console.error('Error:', error));
 
-        // // Mengambil data dari form
-        // const registrationForm = document.getElementById('registrationForm');
-        // registrationForm.addEventListener('submit', function(event) {
-        //   event.preventDefault(); // Mencegah submit standar
+        // Fungsi untuk memformat nama file menjadi maksimal 10 karakter tanpa ekstensi
+        function formatFileName(fileName) {
+            // Menghapus ekstensi dari nama file
+            const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.')) || fileName; // Menghapus ekstensi
+            if (nameWithoutExt.length > 10) {
+                // Jika panjang nama file tanpa ekstensi lebih dari 10 karakter, potong dan tambahkan '...'
+                return nameWithoutExt.substring(0, 10) + '...';
+            }
+            return nameWithoutExt; // Jika tidak, kembalikan nama file tanpa ekstensi
+        }
 
-        //   const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
-        //   const username = document.getElementById('name').value;
-        //   const age = document.getElementById('age').value;
-        //   const gender = document.querySelector('input[name="gender"]:checked').value;
-        //   const phone = document.getElementById('phone').value;
-        //   const email = document.getElementById('email').value;
+        // Untuk menampilkan informasi foto tunggal
+        const photoInput = document.getElementById('photo');
+        const photoName = document.getElementById('photo-name');
+        const photoSize = document.getElementById('photo-size');
 
-        //   let coupleData = null;
-        //   if (registrationType === 'couple') {
-        //       coupleData = {
-        //           coupleUsername: document.getElementById('coupleName').value,
-        //           coupleAge: document.getElementById('coupleage').value,
-        //           coupleGender: document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female'
-        //       };
-        //   }
+        photoInput.addEventListener('change', function () {
+            const file = photoInput.files[0];
+            if (file) {
+                // Nama file tanpa ekstensi dan batas 10 karakter
+                const fileName = formatFileName(file.name);
+                // Ukuran file dalam KB atau MB
+                const fileSize = formatFileSize(file.size);
+                
+                // Tampilkan nama file dan ukuran
+                photoName.textContent = fileName;
+                photoSize.textContent = `${fileSize}`;
+            } else {
+                photoName.textContent = ''; // Clear if no file selected
+                photoSize.textContent = ''; // Clear if no file selected
+            }
+        });
 
-        //   // Siapkan data untuk dikirim
-        //   const formData = {
-        //       registrationType,
-        //       username,
-        //       age,
-        //       gender,
-        //       phone,
-        //       email,
-        //       coupleData
-        //   };
+        // Untuk menampilkan informasi foto pasangan
+        const couplePhotoInput = document.getElementById('couplePhoto');
+        const couplePhotoName = document.getElementById('couple-photo-name');
+        const couplePhotoSize = document.getElementById('couple-photo-size');
 
-        //   // Kirim ke server menggunakan fetch
-        //   fetch('register.php', {
-        //       method: 'POST',
-        //       headers: {
-        //           'Content-Type': 'application/json'
-        //       },
-        //       body: JSON.stringify(formData)
-        //   })
-        //       .then(response => response.json())
-        //       .then(data => {
-        //           console.log('Server Response:', data);  // Debug log response
-        //           if (data.status === 'success') {
-        //               alert('Pendaftaran berhasil!');
-        //               registrationForm.reset();
-        //           } else {
-        //               alert('Terjadi kesalahan, coba lagi.');
-        //           }
-        //       })
-        //       .catch(error => {
-        //           console.error('Error:', error);
-        //           alert('Terjadi kesalahan saat mengirim data.');
-        //       });
-        //   });
+        couplePhotoInput.addEventListener('change', function () {
+            const file = couplePhotoInput.files[0];
+            if (file) {
+                // Nama file tanpa ekstensi dan batas 10 karakter
+                const fileName = formatFileName(file.name);
+                // Ukuran file dalam KB atau MB
+                const fileSize = formatFileSize(file.size);
+                
+                // Tampilkan nama file dan ukuran
+                couplePhotoName.textContent = fileName;
+                couplePhotoSize.textContent = `${fileSize}`;
+            } else {
+                couplePhotoName.textContent = ''; // Clear if no file selected
+                couplePhotoSize.textContent = ''; // Clear if no file selected
+            }
+        });
+
+        // Fungsi untuk format ukuran file ke KB/MB
+        function formatFileSize(size) {
+            if (size >= 1000000) {
+                // Jika ukuran lebih dari 1MB, tampilkan dalam MB
+                return (size / 1000000).toFixed(2) + ' MB';
+            } else if (size >= 1000) {
+                // Jika ukuran lebih dari 1KB, tampilkan dalam KB
+                return (size / 1000).toFixed(0) + ' KB';
+            } else {
+                // Jika ukuran lebih kecil dari 1KB, tampilkan dalam byte
+                return size + ' bytes';
+            }
+        }
 
         const registrationForm = document.getElementById('registrationForm');
-registrationForm.addEventListener('submit', function(event) {
-    event.preventDefault(); // Mencegah submit standar
+        registrationForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah submit standar
 
-    const formData = new FormData();
+            const formData = new FormData();
 
-    // Ambil data dari form
-    const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
-    const username = document.getElementById('name').value;
-    const age = document.getElementById('age').value;
-    const gender = document.querySelector('input[name="gender"]:checked').value;
-    const phone = document.getElementById('phone').value;
-    const email = document.getElementById('email').value;
+            // Ambil data dari form
+            const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
+            const username = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
 
-    // Masukkan data ke dalam FormData
-    formData.append('registrationType', registrationType);
-    formData.append('username', username);
-    formData.append('age', age);
-    formData.append('gender', gender);
-    formData.append('phone', phone);
-    formData.append('email', email);
+            // Masukkan data ke dalam FormData
+            formData.append('registrationType', registrationType);
+            formData.append('username', username);
+            formData.append('age', age);
+            formData.append('gender', gender);
+            formData.append('phone', phone);
+            formData.append('email', email);
 
-    // Ambil file foto jika ada
-    const photoInput = document.getElementById('photo');
-    if (photoInput.files.length > 0) {
-        formData.append('photo', photoInput.files[0]); // File foto
-    }
+            // Ambil file foto jika ada
+            const photoInput = document.getElementById('photo');
+            if (photoInput.files.length > 0) {
+                formData.append('photo', photoInput.files[0]); // File foto
+            }
 
-    // Jika tipe pendaftaran adalah pasangan, ambil data pasangan dan foto pasangan
-    if (registrationType === 'couple') {
-        const coupleUsername = document.getElementById('coupleName').value;
-        const coupleAge = document.getElementById('coupleage').value;
-        const coupleGender = document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female';
+            // Jika tipe pendaftaran adalah pasangan, ambil data pasangan dan foto pasangan
+            if (registrationType === 'couple') {
+                const coupleUsername = document.getElementById('coupleName').value;
+                const coupleAge = document.getElementById('coupleage').value;
+                const coupleGender = document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female';
 
-        formData.append('coupleUsername', coupleUsername);
-        formData.append('coupleAge', coupleAge);
-        formData.append('coupleGender', coupleGender);
+                formData.append('coupleUsername', coupleUsername);
+                formData.append('coupleAge', coupleAge);
+                formData.append('coupleGender', coupleGender);
 
-        const couplePhotoInput = document.getElementById('couplePhoto');
-        if (couplePhotoInput.files.length > 0) {
-            formData.append('couplePhoto', couplePhotoInput.files[0]); // Foto pasangan
-        }
-    }
+                const couplePhotoInput = document.getElementById('couplePhoto');
+                if (couplePhotoInput.files.length > 0) {
+                    formData.append('couplePhoto', couplePhotoInput.files[0]); // Foto pasangan
+                }
+            }
 
-    // Kirim data menggunakan FormData
-    fetch('register.php', {
-        method: 'POST',
-        body: formData // Kirim FormData, tidak perlu JSON.stringify
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // Cek hasil dari server
-        if (data.status === 'success') {
-            alert('Pendaftaran berhasil!');
-            registrationForm.reset();
-        } else {
-            alert('Terjadi kesalahan, coba lagi.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengirim data.');
-    });
-});
-
+            // Kirim data menggunakan FormData
+            fetch('register.php', {
+                method: 'POST',
+                body: formData // Kirim FormData, tidak perlu JSON.stringify
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Cek hasil dari server
+                if (data.status === 'success') {
+                    alert('Pendaftaran berhasil!');
+                    registrationForm.reset();
+                } else {
+                    alert('Terjadi kesalahan, coba lagi.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengirim data.');
+            });
+        });
     </script>
 </body>
 </html>
