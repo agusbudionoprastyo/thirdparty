@@ -531,12 +531,9 @@
 
             fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
                 .then(response => {
-                    // Memeriksa apakah respons berhasil
                     if (!response.ok) {
                         throw new Error('Network response was not ok ' + response.statusText);
                     }
-                    
-                    // Menangani respons JSON
                     return response.json();
                 })
                 .then(data => {
@@ -544,14 +541,15 @@
 
                     const transactionDetailsContainer = document.getElementById('transaction-details-container');
                     if (data.error) {
-                        // Tampilkan error jika transaksi tidak ditemukan
                         transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
                     } else {
-                        const totalAmount = data.total_amount;
-                        const transactionDate = data.transaction_date;
+                        const totalAmount = parseFloat(data[0].total_amount); // Pastikan menjadi angka
+                        const transactionDate = data[0].transaction_date;
 
-                        // Format date dan total amount
-                        const formattedDate = new Date(transactionDate).toLocaleString();
+                        // Format tanggal ke format yang lebih mudah dipahami oleh JavaScript
+                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  // Mengubah ' ' ke 'T' untuk ISO format
+
+                        // Format total_amount ke IDR dengan dua desimal
                         const formattedAmount = new Intl.NumberFormat('id-ID', {
                             style: 'currency',
                             currency: 'IDR'
