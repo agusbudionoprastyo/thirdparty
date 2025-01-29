@@ -224,6 +224,7 @@
           <p class="mt-4 text-center">Silakan lakukan pembayaran ke No. Rekening berikut ( Mandiri - PT Dafam Mambo International )</p>
           <p class="mt-4 text-center">Upload bukti pembayaran dibawah ini</p>
           <p id="transaction-id" class="mt-4 text-center text-sm text-gray-500"></p>
+          <div id="transaction-details-container" class="mt-4"></div>
       </div>
     </div>
 
@@ -520,13 +521,43 @@
                 // Ambil transactionid dari localStorage
                 const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
 
-                // Tampilkan transactionid di modal jika ada
+                // Tampilkan transaction_id di modal
                 const transactionIdDisplay = document.getElementById('transaction-id');
-                if (transactionIdFromLocalStorage) {
-                    transactionIdDisplay.textContent = 'Transaction ID: ' + transactionIdFromLocalStorage;
-                } else {
-                    transactionIdDisplay.textContent = 'Transaction ID: Tidak ditemukan';
-                }
+            if (transactionIdFromLocalStorage) {
+                transactionIdDisplay.textContent = 'Transaction ID: ' + transactionIdFromLocalStorage;
+            } else {
+                transactionIdDisplay.textContent = 'Transaction ID: Tidak ditemukan';
+            }
+
+            // Ambil detail transaksi berdasarkan transaction_id
+            fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
+                .then(response => response.json())
+                .then(data => {
+                    const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                    if (data.error) {
+                        // Tampilkan error jika transaksi tidak ditemukan
+                        transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
+                    } else {
+                        // Tampilkan detail transaksi
+                        let detailsHtml = '<ul>';
+                        data.forEach(detail => {
+                            detailsHtml += `
+                                <li>
+                                    <strong>Amount:</strong> IDR ${detail.total_amount} <br>
+                                    <strong>Date:</strong> ${detail.transaction_date} <br>
+                                </li>
+                                <hr>
+                            `;
+                        });
+                        detailsHtml += '</ul>';
+                        transactionDetailsContainer.innerHTML = detailsHtml;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching transaction details:', error);
+                    const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                    transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
+                });
               }
             });
     </script>
