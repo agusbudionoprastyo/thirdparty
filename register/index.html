@@ -220,14 +220,14 @@
 </div>
   
     <script>
-
-      // Fungsi untuk menampilkan SweetAlert2
       function showSuccessModal() {
           Swal.fire({
               icon: 'success',
               title: 'Registrasi Berhasil!',
               text: 'Terima kasih telah mendaftar. Selamat datang!',
               confirmButtonText: 'Tutup',
+              allowOutsideClick: false,  // Tidak bisa menutup dengan klik di luar modal
+              allowEscapeKey: false,    // Tidak bisa menutup dengan menekan tombol Escape
               willClose: () => {
                   // Hapus status keberhasilan setelah modal ditutup
                   localStorage.removeItem('registrationSuccess');
