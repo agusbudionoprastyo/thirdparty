@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Third Party Effect</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -216,33 +215,19 @@
       </div>
     </div>
 
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div class="bg-white p-4 rounded-[24px] shadow-md max-w-sm w-full">
+          <h2 class="text-2xl font-bold text-center text-gray-700">Registrasi Berhasil!</h2>
+          <p class="mt-4 text-center">Silakan lakukan pembayaran ke No. Rekening berikut (Mandiri - PT Dafam Mambo International )</p>
+          <p class="mt-4 text-center">Upload bukti pembayaran dibawah ini</p>
+      </div>
+    </div>
+
   </div>
 </div>
   
     <script>
-      function showSuccessModal() {
-          Swal.fire({
-              icon: 'success',
-              title: 'Registrasi Berhasil!',
-              text: 'Terima kasih telah mendaftar. Selamat datang!',
-              confirmButtonText: 'Tutup',
-              allowOutsideClick: false,  // Tidak bisa menutup dengan klik di luar modal
-              allowEscapeKey: false,    // Tidak bisa menutup dengan menekan tombol Escape
-              willClose: () => {
-                  // Hapus status keberhasilan setelah modal ditutup
-                  localStorage.removeItem('registrationSuccess');
-              }
-          });
-      }
-
-      // Cek jika status registrasi berhasil ada di localStorage saat reload
-      window.addEventListener('load', function() {
-          if (localStorage.getItem('registrationSuccess') === 'true') {
-              // Tampilkan SweetAlert2 jika status berhasil ada
-              showSuccessModal();
-          }
-      });
-
       const singleRadio = document.getElementById('single');
       const coupleRadio = document.getElementById('couple');
       const CoupleContainer = document.getElementById('CoupleContainer');
@@ -456,10 +441,12 @@
                       signupContainer.classList.add("hidden");
                   }, 200);
                   
+                  // Menampilkan modal
+                  const successModal = document.getElementById('successModal');
+                  successModal.classList.remove('hidden');
+                  
                   // Reset form setelah sukses
                   registrationForm.reset();
-
-                  showSuccessModal();
               } else {
                     alert('Terjadi kesalahan, coba lagi.');
                 }
@@ -471,15 +458,11 @@
         });
 
         window.addEventListener('load', function() {
-          if (localStorage.getItem('registrationSuccess') === 'true') {
-              // Tampilkan modal jika status berhasil ada
-              const successModal = document.getElementById('successModal');
-              successModal.classList.remove('hidden');
-              
-              // Hapus status setelah menampilkan modal, agar tidak tampil lagi setelah reload
-              localStorage.removeItem('registrationSuccess');
-          }
-        });
+            if (localStorage.getItem('registrationSuccess') === 'true') {
+                const successModal = document.getElementById('successModal');
+                successModal.classList.remove('hidden');
+            }
+          });
     </script>
 
 </body>
