@@ -538,6 +538,7 @@
                 })
                 .then(data => {
                     console.log('Transaction Details:', data);  // Log data yang diterima
+
                     const transactionDetailsContainer = document.getElementById('transaction-details-container');
                     if (data.error) {
                         // Tampilkan error jika transaksi tidak ditemukan
@@ -547,10 +548,13 @@
                         const totalAmount = data.total_amount;
                         const transactionDate = data.transaction_date;
 
+                        // Pastikan format transaction_date sesuai dengan format yang diinginkan
+                        const formattedDate = new Date(transactionDate).toLocaleString();
+
                         transactionDetailsContainer.innerHTML = `
                             <ul>
                                 <li><strong>Total Amount:</strong> IDR ${totalAmount}</li>
-                                <li><strong>Transaction Date:</strong> ${new Date(transactionDate).toLocaleString()}</li>
+                                <li><strong>Transaction Date:</strong> ${formattedDate}</li>
                             </ul>
                         `;
                     }
