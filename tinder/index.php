@@ -52,7 +52,7 @@
                 </div>
                 <div class="profile-card">
                         <div class="image">
-                            <img src="../users/${male.photo}" alt="" class="profile-pic">
+                            <img src="../users/${female.photo}" alt="" class="profile-pic">
                         </div>
                     <div class="data">
                         <h2>${female.username}</h2>
