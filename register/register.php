@@ -117,12 +117,8 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("ii", $maleUserId, $totalAmount);
 $stmt->execute();
 
-// Mendapatkan ID transaksi yang baru saja dimasukkan
-$transactionId = $stmt->insert_id;  // Ambil ID transaksi yang baru dimasukkan
-
 // Menutup koneksi
-echo json_encode(['status' => 'success', 'message' => 'Form submitted successfully', 'transaction_id' => $transactionId]);
-
+echo json_encode(['status' => 'success', 'message' => 'Form submitted successfully']);
 $stmt->close();
 $conn->close();
 ?>
