@@ -215,6 +215,14 @@
       </div>
     </div>
 
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
+      <div class="bg-white p-6 rounded-[24px] shadow-md max-w-sm w-full">
+          <h2 class="text-2xl font-bold text-center text-green-600">Registrasi Berhasil!</h2>
+          <p class="mt-4 text-center">Terima kasih telah mendaftar. Selamat datang!</p>
+      </div>
+    </div>
+
   </div>
 </div>
   
@@ -422,14 +430,23 @@
             .then(data => {
                 console.log(data); // Cek hasil dari server
                 if (data.status === 'success') {
-                    alert('Pendaftaran berhasil!');
-                    box.classList.remove("expanded");
-                    registerBtn.classList.remove("hidden");
-                    setTimeout(function() {
+                  // Simpan status di localStorage agar tetap muncul meskipun di-reload
+                  localStorage.setItem('registrationSuccess', 'true');
+                  
+                  // Menutup form dan menampilkan modal
+                  box.classList.remove("expanded");
+                  registerBtn.classList.remove("hidden");
+                  setTimeout(function() {
                       signupContainer.classList.add("hidden");
-                    }, 200);
-                    registrationForm.reset();
-                } else {
+                  }, 200);
+                  
+                  // Menampilkan modal
+                  const successModal = document.getElementById('successModal');
+                  successModal.classList.remove('hidden');
+                  
+                  // Reset form setelah sukses
+                  registrationForm.reset();
+              } else {
                     alert('Terjadi kesalahan, coba lagi.');
                 }
             })
@@ -437,6 +454,17 @@
                 console.error('Error:', error);
                 alert('Terjadi kesalahan saat mengirim data.');
             });
+        });
+
+        window.addEventListener('load', function() {
+          if (localStorage.getItem('registrationSuccess') === 'true') {
+              // Tampilkan modal jika status berhasil ada
+              const successModal = document.getElementById('successModal');
+              successModal.classList.remove('hidden');
+              
+              // Hapus status setelah menampilkan modal, agar tidak tampil lagi setelah reload
+              localStorage.removeItem('registrationSuccess');
+          }
         });
     </script>
 
