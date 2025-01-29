@@ -33,11 +33,11 @@
                 messageElement.innerHTML = `
                 <div class="profile-card">
                     <div class="image">
-                        <img src="assets/images/male.jpg" alt="" class="profile-pic">
+                        <img src="../users/${male.photo}" alt="" class="profile-pic">
                     </div>
                     <div class="data">
                         <h2>${male.username}</h2>
-                        <span>${male.gender}</span>
+                        <span>${male.phone}</span>
                     </div>
                     <div class="row">
                         <div class="info">
@@ -45,18 +45,18 @@
                             <span>${male.age}</span>
                         </div>
                         <div class="info">
-                            <h3>City</h3>
-                            <span>${male.city}</span>
+                            <h3>Gender</h3>
+                            <span>${male.gender}</span>
                         </div>
                     </div>
                 </div>
                 <div class="profile-card">
                         <div class="image">
-                            <img src="assets/images/female.jpg" alt="" class="profile-pic">
+                            <img src="../users/${male.photo}" alt="" class="profile-pic">
                         </div>
                     <div class="data">
                         <h2>${female.username}</h2>
-                        <span>${female.gender}</span>
+                        <span>${female.phone}</span>
                     </div>
                     <div class="row">
                         <div class="info">
@@ -64,8 +64,8 @@
                             <span>${female.age}</span>
                         </div>
                         <div class="info">
-                            <h3>City</h3>
-                            <span>${female.city}</span>
+                            <h3>Gender</h3>
+                            <span>${female.gender}</span>
                         </div>
                     </div>
                 </div>

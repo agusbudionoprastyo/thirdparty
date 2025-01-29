@@ -1,5 +1,5 @@
 <?php
-require_once 'helper/db.php';
+require_once '../helper/db.php';
 
 // Menyiapkan header untuk SSE
 header('Content-Type: text/event-stream');

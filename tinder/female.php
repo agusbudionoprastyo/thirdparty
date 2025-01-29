@@ -1,5 +1,5 @@
 <?php
-require_once 'helper/db.php';
+require_once '../helper/db.php';
 
 if (isset($_POST['vote'])) {
     $vote = $_POST['vote']; // 'like' atau 'dislike'
@@ -57,11 +57,11 @@ $conn->close();
                 matchDetails.innerHTML = `
                 <div class="profile-card">
                         <div class="image">
-                            <img src="assets/images/male.jpg" alt="" class="profile-pic">
+                            <img src="../users/${male.photo}" alt="" class="profile-pic">
                         </div>
                     <div class="data">
                         <h2>${male.username}</h2>
-                        <span>${male.gender}</span>
+                        <span>${male.phone}</span>
                     </div>
                     <div class="row">
                         <div class="info">
@@ -69,8 +69,8 @@ $conn->close();
                             <span>${male.age}</span>
                         </div>
                         <div class="info">
-                            <h3>City</h3>
-                            <span>${male.city}</span>
+                            <h3>Gender</h3>
+                            <span>${male.gender}</span>
                         </div>
                     </div>
                 <form method="POST" action="female.php">
