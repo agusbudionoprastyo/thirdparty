@@ -535,10 +535,9 @@
                         // Format tanggal ke format yang lebih mudah dipahami oleh JavaScript
                         const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  // Mengubah ' ' ke 'T' untuk ISO format
 
-                        // Format total_amount ke IDR dengan dua desimal
-                        const formattedAmount = new Intl.NumberFormat('id-ID', {
-                            style: 'currency',
-                            currency: 'IDR'
+                        // Format total_amount ke IDR tanpa desimal
+                        const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
+                          maximumFractionDigits: 0  // Tidak ada angka desimal
                         }).format(totalAmount);
 
                         // Menampilkan data transaksi
@@ -550,7 +549,7 @@
                               </li>
                               <li class="flex justify-between">
                                   <span><strong>Total Amount</strong></span>
-                                  <span class="text-rigth">${formattedAmount}</span>
+                                  <span class="text-rigth"><strong>${formattedAmount}</strong></span>
                               </li>
                               <li class="flex justify-between">
                                   <span><strong>Transaction Date</strong></span>
