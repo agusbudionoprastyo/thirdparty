@@ -221,8 +221,10 @@
     <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="bg-white p-4 rounded-[24px] shadow-md max-w-sm w-full">
           <h2 class="text-2xl font-bold text-center text-gray-700">Payment</h2>
+
           <p id="transaction-id" class="mt-4 text-center text-sm text-gray-500"></p>
           <div id="transaction-details-container" class="text-center text-sm text-gray-500"></div>
+
           <p class="mt-4 text-center">Silakan lakukan pembayaran ke No. Rekening berikut ( Mandiri - PT Dafam Mambo International )</p>
           <p class="mt-4 text-center">Upload bukti pembayaran</p>
       </div>
@@ -467,40 +469,11 @@
                   // Tampilkan transaction_id di modal
                   const transactionIdDisplay = document.getElementById('transaction-id');
                   if (transactionIdFromLocalStorage) {
-                      transactionIdDisplay.textContent = 'Transaction ID: ' + transactionIdFromLocalStorage;
+                      transactionIdDisplay.textContent = 'Transaction ID ' + transactionIdFromLocalStorage;
                   } else {
-                      transactionIdDisplay.textContent = 'Transaction ID: Tidak ditemukan';
+                      transactionIdDisplay.textContent = 'Transaction ID Tidak ditemukan';
                   }
 
-                  // Ambil detail transaksi berdasarkan transaction_id
-                  fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
-                      .then(response => response.json())
-                      .then(data => {
-                          const transactionDetailsContainer = document.getElementById('transaction-details-container');
-                          if (data.error) {
-                              // Tampilkan error jika transaksi tidak ditemukan
-                              transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
-                          } else {
-                              // Tampilkan detail transaksi
-                              let detailsHtml = '<ul>';
-                              data.forEach(detail => {
-                                  detailsHtml += `
-                                      <li>
-                                          <strong>Amount:</strong> IDR ${detail.total_amount} <br>
-                                          <strong>Date:</strong> ${detail.transaction_date} <br>
-                                      </li>
-                                      <hr>
-                                  `;
-                              });
-                              detailsHtml += '</ul>';
-                              transactionDetailsContainer.innerHTML = detailsHtml;
-                          }
-                      })
-                      .catch(error => {
-                          console.error('Error fetching transaction details:', error);
-                          const transactionDetailsContainer = document.getElementById('transaction-details-container');
-                          transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
-                      });
                   
                   // Reset form setelah sukses
                   registrationForm.reset();
@@ -557,10 +530,16 @@
 
                         // Menampilkan data transaksi
                         transactionDetailsContainer.innerHTML = `
-                            <ul>
-                                <li><strong>Total Amount </strong> ${formattedAmount}</li>
-                                <li><strong>Transaction Date </strong> ${formattedDate}</li>
-                            </ul>
+                          <ul>
+                              <li class="flex justify-between">
+                                  <span><strong>Total Amount:</strong></span>
+                                  <span class="text-right">${formattedAmount}</span>
+                              </li>
+                              <li class="flex justify-between">
+                                  <span><strong>Transaction Date:</strong></span>
+                                  <span class="text-right">${formattedDate}</span>
+                              </li>
+                          </ul>
                         `;
                     }
                 })
