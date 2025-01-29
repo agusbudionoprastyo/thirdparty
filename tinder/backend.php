@@ -16,7 +16,7 @@ function sendMessage($message) {
 
 // Fungsi untuk mengambil detail pengguna berdasarkan ID
 function getUserDetails($user_id, $conn) {
-    $sql = "SELECT id, username, gender, age, city FROM users WHERE id = $user_id";
+    $sql = "SELECT id, username, gender, age, phone, photo FROM users WHERE id = $user_id";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         return $result->fetch_assoc();
