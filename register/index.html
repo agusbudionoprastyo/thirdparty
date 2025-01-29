@@ -224,9 +224,14 @@
           <p class="mt-4 text-gray-500 text-xs text-left">Silakan lakukan pembayaran ke No. Rekening berikut.</p>
                    
           <div id="transaction-details-container" class="mt-2 mb-2 text-center text-xs text-gray-500"></div>
-            <p class="text-gray-500 text-xs">PT Dafam Mambo International</p>
-              <img alt="mandiri" class="h-4 object-fill" src="./assets/image/mandiri.png">
-            <p class="text-gray-500 text-xs">2526666663</p>
+          <p class="text-gray-500 text-xs">PT Dafam Mambo International</p>
+          <div class="flex items-center">
+            <img alt="mandiri" class="h-4 object-fill" src="./assets/image/mandiri.png">
+            <p class="text-gray-500 text-xs" id="rek-number">2526666663</p>
+            <button class="ml-2 p-2 bg-blue-500 text-white text-xs rounded" onclick="copyToClipboard()">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>        
           <p class="mt-4 text-gray-500 text-xs text-left">Upload bukti pembayaran</p>
       </div>
     </div>
@@ -235,6 +240,21 @@
 </div>
   
     <script>
+      function copyToClipboard() {
+        // Ambil elemen nomor rekening
+        const rekNumber = document.getElementById('rek-number').innerText;
+        
+        // Salin nomor rekening ke clipboard
+        navigator.clipboard.writeText(rekNumber)
+          .then(() => {
+            alert('Nomor rekening berhasil disalin!');
+          })
+          .catch(err => {
+            console.error('Gagal menyalin: ', err);
+          });
+      }
+
+
       const singleRadio = document.getElementById('single');
       const coupleRadio = document.getElementById('couple');
       const CoupleContainer = document.getElementById('CoupleContainer');
