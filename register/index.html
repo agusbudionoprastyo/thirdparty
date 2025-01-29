@@ -456,9 +456,50 @@
                       signupContainer.classList.add("hidden");
                   }, 200);
                   
+                  // Ambil transactionid dari localStorage
+                  const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
+
                   // Menampilkan modal
                   const successModal = document.getElementById('successModal');
                   successModal.classList.remove('hidden');
+
+                  // Tampilkan transaction_id di modal
+                  const transactionIdDisplay = document.getElementById('transaction-id');
+                  if (transactionIdFromLocalStorage) {
+                      transactionIdDisplay.textContent = 'Transaction ID: ' + transactionIdFromLocalStorage;
+                  } else {
+                      transactionIdDisplay.textContent = 'Transaction ID: Tidak ditemukan';
+                  }
+
+                  // Ambil detail transaksi berdasarkan transaction_id
+                  fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
+                      .then(response => response.json())
+                      .then(data => {
+                          const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                          if (data.error) {
+                              // Tampilkan error jika transaksi tidak ditemukan
+                              transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
+                          } else {
+                              // Tampilkan detail transaksi
+                              let detailsHtml = '<ul>';
+                              data.forEach(detail => {
+                                  detailsHtml += `
+                                      <li>
+                                          <strong>Amount:</strong> IDR ${detail.total_amount} <br>
+                                          <strong>Date:</strong> ${detail.transaction_date} <br>
+                                      </li>
+                                      <hr>
+                                  `;
+                              });
+                              detailsHtml += '</ul>';
+                              transactionDetailsContainer.innerHTML = detailsHtml;
+                          }
+                      })
+                      .catch(error => {
+                          console.error('Error fetching transaction details:', error);
+                          const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                          transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
+                      });
                   
                   // Reset form setelah sukses
                   registrationForm.reset();
