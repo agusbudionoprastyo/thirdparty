@@ -450,7 +450,7 @@
             const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
             const username = document.getElementById('name').value;
             const age = document.getElementById('age').value;
-            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const gender = document.querySelector('input[name="gender"]:checked') ? 'male' : 'female';
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
 
@@ -470,7 +470,7 @@
             if (registrationType === 'couple') {
                 const coupleUsername = document.getElementById('coupleName').value;
                 const coupleAge = document.getElementById('coupleage').value;
-                const coupleGender = document.querySelector('input[name="coupleMale"]:checked') ? 'male' : 'female';
+                const coupleGender = document.querySelector('input[name="coupleGender"]:checked') ? 'male' : 'female';
 
                 formData.append('coupleUsername', coupleUsername);
                 formData.append('coupleAge', coupleAge);
