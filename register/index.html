@@ -219,7 +219,7 @@
     </div>
 
     <!-- Success Modal -->
-    <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 zoom-in">
       <div class="bg-white p-4 rounded-[24px] shadow-md max-w-sm w-full mx-4">
           <h2 class="text-2xl font-bold text-center text-gray-700">Payment</h2>
           <p class="mt-4 text-gray-500 text-sm text-left">Silakan lakukan pembayaran ke No. Rekening berikut.</p>
@@ -250,7 +250,6 @@
             <i class="fas fa-upload mr-2"></i><span>Upload</span>
           </button>
         </div>
-                   
       </div>
     </div>    
 
@@ -661,9 +660,9 @@
                               timerProgressBar: true,
                               showConfirmButton: false,
                               customClass: {
-                                  popup: 'rounded-[24px] text-gray-700 p-6 shadow-lg',
-                                  title: 'text-lg font-semibold',
-                                  content: 'text-sm text-gray-500',
+                                  popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
+                                  title: 'text-sm font-semibold',
+                                  content: 'text-xs text-gray-500',
                               },
                               willClose: () => {
                                   localStorage.removeItem('transactionid');
@@ -674,7 +673,12 @@
                           Swal.fire({
                               icon: 'error',
                               title: 'Error',
-                              text: jsonData.error || "Terjadi kesalahan saat mengupload file."
+                              text: jsonData.error || "Terjadi kesalahan saat mengupload file.",
+                              customClass: {
+                                  popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
+                                  title: 'text-sm font-semibold',
+                                  content: 'text-xs text-gray-500',
+                              }
                           });
                       }
                   } catch (error) {
@@ -682,13 +686,16 @@
                       Swal.fire({
                           icon: 'error',
                           title: 'Error',
-                          text: "Terjadi kesalahan saat mengupload file."
-                      });
-                  }
+                          text: "Terjadi kesalahan saat mengupload file.",
+                          customClass: {
+                                  popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
+                                  title: 'text-sm font-semibold',
+                                  content: 'text-xs text-gray-500',
+                              }
+                          });
+                      }
+                  });
               });
-          });
-
-
     </script>
 
 </body>
