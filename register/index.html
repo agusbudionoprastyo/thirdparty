@@ -376,12 +376,12 @@
         const paymentSize = document.getElementById('file-size');
 
         paymentInput.addEventListener('change', function () {
-            const file = fileInput.files[0];
+            const file = paymentInput.files[0];
             if (file) {
                 // Nama file tanpa ekstensi dan batas 10 karakter
-                const paymentName = formatFileName(file.name);
+                const fileName = formatFileName(file.name);
                 // Ukuran file dalam KB atau MB
-                const paymentSize = formatFileSize(file.size);
+                const fileSize = formatFileSize(file.size);
                 
                 // Tampilkan nama file dan ukuran
                 paymentName.textContent = fileName;
