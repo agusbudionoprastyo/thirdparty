@@ -233,19 +233,17 @@
           </div>     
         <p class="text-gray-700 text-xs">PT Dafam Mambo International</p>
         <div class="mt-4 flex flex-col items-center border-dashed border-2 border-gray-400 p-4 rounded-lg">
-          <p class="mb-4 text-gray-500 text-xs text-center">
-            Upload bukti pembayaran disini
-          </p>
-        
-          <label for="paymentproof" class="cursor-pointer w-32 p-2 bg-[#ff005b] text-white text-center rounded-full shadow-md flex justify-center items-center">
-            <span class="text-white">Choose File</span>
-          </label>
-          <input type="file" id="paymentproof" class="hidden" accept="image/*">
-        
           <div id="file-info" class="mt-4 text-center text-sm text-gray-500">
             <p id="file-name" class="font-medium"></p>
             <p id="file-size" class="text-xs"></p>
           </div>
+          <p class="mb-4 text-gray-500 text-xs text-center">
+            Upload bukti pembayaran disini
+            <label for="paymentproof" class="cursor-pointer">
+              <span class="text-[#ff005b]">Choose File</span>
+            </label>
+            <input type="file" id="paymentproof" class="hidden" accept="image/*">
+          </p>
         
           <!-- Button Upload di bawah -->
           <button class="mt-4 p-2 bg-[#ff005b] text-white text-xs rounded-full shadow-md">
