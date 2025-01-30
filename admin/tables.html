@@ -253,7 +253,7 @@
                 data.forEach(user => {
                     // Create the table row
                     const row = document.createElement('tr');
-                    const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'https://i.pravatar.cc/300';
+                    const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'assets/img/user.png';
                     // Create table cells for each user data
                     row.innerHTML = `
                         <td>
@@ -281,10 +281,8 @@
                         <td class="align-middle text-center text-sm">
                             <span class="badge badge-sm ${user.badge_class}">${user.status}</span>
                         </td>
-                        <td>    
                         <td class="align-middle text-center">
                             <span class="text-secondary text-xs font-weight-bold">${user.payment_prooft}</span>
-                        </td>
                         </td>
 
                         <td class="align-middle">
