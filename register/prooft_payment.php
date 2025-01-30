@@ -29,7 +29,12 @@ if (isset($_FILES['paymentproof'])) {
             $newPassword = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT); // Password 6 angka
             
             // Update password di tabel users
-            $sqlUpdatePassword = "UPDATE users SET password = ? WHERE transaction_id = ?";
+            $sqlUpdatePassword = "
+            UPDATE users u
+            JOIN transactions t ON u.id = t.user_id
+            SET u.password = ?
+            WHERE t.transaction_id = ?;
+            ";
             $stmtUpdatePassword = $conn->prepare($sqlUpdatePassword);
             $stmtUpdatePassword->bind_param("ss", $newPassword, $transaction_id);
             $stmtUpdatePassword->execute();
