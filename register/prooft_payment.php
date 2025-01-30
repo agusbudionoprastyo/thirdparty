@@ -17,7 +17,7 @@ if (isset($_FILES['paymentproof'])) {
     }
 
     // Tentukan folder tujuan untuk upload
-    $uploadDir = '../users';  // Sesuaikan dengan folder tujuan di server
+    $uploadDir = '../users/paymentprooft';
     $fileName = uniqid() . '-' . basename($file['name']);
     $uploadPath = $uploadDir . $fileName;
 
