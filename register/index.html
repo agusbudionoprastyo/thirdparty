@@ -226,12 +226,12 @@
           <div id="transaction-details-container" class="mt-2 mb-2 text-center text-xs text-gray-500"></div>
           <div class="mt-2 flex items-center">
             <img alt="mandiri" class="mb-2 h-4 object-fill" src="./assets/image/mandiri.png">
-            <p class="text-gray-500 text-xs" id="rek-number">2526666663</p>
+            <p class="text-gray-700 text-xs" id="rek-number">2526666663</p>
             <button class="ml-2 text-gray-500 text-xs" onclick="copyToClipboard()">
               <i class="fas fa-clone"></i>
             </button>
           </div>     
-          <p class="text-gray-500 text-xs">PT Dafam Mambo International</p>
+          <p class="text-gray-700 text-xs">PT Dafam Mambo International</p>
           <p class="mt-4 text-gray-500 text-xs text-left">Upload bukti pembayaran</p>
       </div>
     </div>
@@ -489,12 +489,55 @@
 
                   // Tampilkan transaction_id di modal
                   const transactionIdDisplay = document.getElementById('transaction-id');
-                  if (transactionIdFromLocalStorage) {
-                      transactionIdDisplay.textContent = 'Transaction ID ' + transactionIdFromLocalStorage;
-                  } else {
-                      transactionIdDisplay.textContent = 'Transaction ID Tidak ditemukan';
-                  }
+                  fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Transaction Details:', data);
 
+                    const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                    if (data.error) {
+                        transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
+                    } else {
+                        const totalAmount = parseFloat(data[0].total_amount); // Pastikan menjadi angka
+                        const transactionDate = data[0].transaction_date;
+
+                        // Format tanggal ke format yang lebih mudah dipahami oleh JavaScript
+                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  // Mengubah ' ' ke 'T' untuk ISO format
+
+                        // Format total_amount ke IDR tanpa desimal
+                        const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
+                          maximumFractionDigits: 0  // Tidak ada angka desimal
+                        }).format(totalAmount);
+
+                        // Menampilkan data transaksi
+                        transactionDetailsContainer.innerHTML = `
+                          <ul>
+                              <li class="flex justify-between">
+                                  <span><strong>Transaction ID</strong></span>
+                                  <span class="text-rigth">${transactionIdFromLocalStorage}</span>
+                              </li>
+                              <li class="flex justify-between">
+                                  <span><strong>Total Amount</strong></span>
+                                  <span class="text-rigth"><strong>${formattedAmount}</strong></span>
+                              </li>
+                              <li class="flex justify-between">
+                                  <span><strong>Transaction Date</strong></span>
+                                  <span class="text-right">${formattedDate}</span>
+                              </li>
+                          </ul>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching transaction details:', error);
+                    const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                    transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
+                });
                   
                   // Reset form setelah sukses
                   registrationForm.reset();
