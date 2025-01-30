@@ -163,10 +163,10 @@
             <div class="flex space-x-4">
               <div class="w-3/4">
                 <label for="coupleName" class="block text-gray-700">Couple Name</label>
-                <input type="text" id="coupleName" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Name">
+                <input type="text" id="coupleName" class="mt-2 p-2 w-full border border-gray-300 rounded-full" placeholder="Name" required>
               </div>
               <div class="w-1/4 mt-8">
-                <input type="number" id="coupleage" class="p-2 w-full border border-gray-300 rounded-full" placeholder="Age">
+                <input type="number" id="coupleage" class="p-2 w-full border border-gray-300 rounded-full" placeholder="Age" required>
               </div>
             </div>
             <div class="mt-2 flex space-x-4">
@@ -277,7 +277,19 @@
 
       coupleRadio.addEventListener('change', function () {
         if (this.checked) {
-          CoupleContainer.classList.remove('hidden'); 
+          CoupleContainer.classList.remove('hidden');
+
+          if (coupleContainer.classList.contains('hidden')) {
+            coupleName.removeAttribute('required');
+            coupleAge.removeAttribute('required');
+            coupleMale.removeAttribute('required');
+            coupleFemale.removeAttribute('required');
+          } else {
+            coupleName.setAttribute('required', 'true');
+            coupleAge.setAttribute('required', 'true');
+            coupleMale.setAttribute('required', 'true');
+            coupleFemale.setAttribute('required', 'true');
+          } 
         }
       });
     
