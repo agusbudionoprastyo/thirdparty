@@ -447,10 +447,28 @@
 
             const formData = new FormData();
 
+            // Ambil data dari input
+            const genderRadio = document.querySelector('input[name="gender"]:checked');
+            if (!genderRadio) {
+                alert('Gender harus dipilih');
+                return; // berhenti jika gender tidak dipilih
+            }
+            const gender = genderRadio.value;
+
+            // Jika "couple" dipilih, validasi pasangan
+            if (registrationType === 'couple') {
+                const coupleGenderRadio = document.querySelector('input[name="coupleGender"]:checked');
+                if (!coupleGenderRadio) {
+                    alert('Gender pasangan harus dipilih');
+                    return; // berhenti jika gender pasangan tidak dipilih
+                }
+                const coupleGender = coupleGenderRadio.value;
+            }
+
             const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
             const username = document.getElementById('name').value;
             const age = document.getElementById('age').value;
-            const gender = document.querySelector('input[name="gender"]:checked') ? 'male' : 'female';
+            // const gender = document.querySelector('input[name="gender"]:checked') ? 'male' : 'female';
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
 
