@@ -80,7 +80,6 @@ $email = $_POST['email'];
 
 // Generate username
 $username = generateUsername($name);
-$coupleusername = generateCoupleUsername($coupleName);
 $password = generateRandomPassword();
 
 // Proses upload foto
@@ -91,7 +90,7 @@ if ($registrationType === 'couple') {
     $coupleName = $_POST['coupleUsername'];
     $coupleAge = $_POST['coupleAge'];
     $coupleGender = $_POST['coupleGender'];
-
+    $coupleusername = generateCoupleUsername($coupleName);
     // Upload foto pasangan
     $couplePhotoFileName = uploadPhoto('couplePhoto');
 }
