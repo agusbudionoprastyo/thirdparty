@@ -24,35 +24,35 @@ if (isset($_FILES['paymentproof'])) {
         $stmt->bind_param("ss", $fileName, $transaction_id);
         $stmt->execute();
 
-        if ($stmt->affected_rows > 0) {
-            // Generate password acak 6 angka
-            $newPassword = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT); // Password 6 angka
+        // if ($stmt->affected_rows > 0) {
+        //     // Generate password acak 6 angka
+        //     $newPassword = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT); // Password 6 angka
             
-            // Update password di tabel users
-            $sqlUpdatePassword = "
-            UPDATE users u
-            JOIN transactions t ON u.id = t.user_id
-            SET u.password = ?
-            WHERE t.transaction_id = ?;
-            ";
-            $stmtUpdatePassword = $conn->prepare($sqlUpdatePassword);
-            $stmtUpdatePassword->bind_param("ss", $newPassword, $transaction_id);
-            $stmtUpdatePassword->execute();
+        //     // Update password di tabel users
+        //     $sqlUpdatePassword = "
+        //     UPDATE users u
+        //     JOIN transactions t ON u.id = t.user_id
+        //     SET u.password = ?
+        //     WHERE t.transaction_id = ?;
+        //     ";
+        //     $stmtUpdatePassword = $conn->prepare($sqlUpdatePassword);
+        //     $stmtUpdatePassword->bind_param("ss", $newPassword, $transaction_id);
+        //     $stmtUpdatePassword->execute();
 
-            if ($stmtUpdatePassword->affected_rows > 0) {
-                echo json_encode([
-                    'success' => true, 
-                    'message' => 'Bukti pembayaran berhasil diupload, transaksi diperbarui, dan password pengguna telah diupdate.',
-                    'newPassword' => $newPassword // Menampilkan password baru yang dihasilkan
-                ]);
-            } else {
-                echo json_encode(['error' => 'Gagal memperbarui password pengguna']);
-            }
+        //     if ($stmtUpdatePassword->affected_rows > 0) {
+        //         echo json_encode([
+        //             'success' => true, 
+        //             'message' => 'Bukti pembayaran berhasil diupload, transaksi diperbarui, dan password pengguna telah diupdate.',
+        //             'newPassword' => $newPassword // Menampilkan password baru yang dihasilkan
+        //         ]);
+        //     } else {
+        //         echo json_encode(['error' => 'Gagal memperbarui password pengguna']);
+        //     }
 
-            $stmtUpdatePassword->close();
-        } else {
-            echo json_encode(['error' => 'Gagal memperbarui transaksi']);
-        }
+        //     $stmtUpdatePassword->close();
+        // } else {
+        //     echo json_encode(['error' => 'Gagal memperbarui transaksi']);
+        // }
 
         $stmt->close();
     } else {
