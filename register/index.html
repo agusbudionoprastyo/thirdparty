@@ -245,7 +245,7 @@
             <input type="file" id="paymentproof" class="hidden" accept="file/*">
           </p>
         
-          <button class="mt-4 bg-white text-gray-700 font-semibold py-3 px-6 rounded-full shadow-md">
+          <button id="uploadButton" class="mt-4 bg-white text-gray-700 font-semibold py-3 px-6 rounded-full shadow-md">
             <i class="fas fa-upload mr-2"></i><span>Upload</span>
           </button>
         </div>
@@ -647,21 +647,19 @@
               }
             });
 
-            document.querySelector("button").addEventListener("click", function() {
+            document.getElementById("uploadButton").addEventListener("click", function() {
               const fileInput = document.getElementById("paymentproof");
               const file = fileInput.files[0];
 
-              // Mengambil transaction_id dari localStorage
               const transactionId = localStorage.getItem('transactionid');
-
               if (!transactionId) {
-                alert("Transaction ID tidak ditemukan di localStorage.");
-                return;
+                  alert("Transaction ID tidak ditemukan di localStorage.");
+                  return;
               }
 
               if (!file) {
-                alert("Silakan pilih file untuk diupload.");
-                return;
+                  alert("Silakan pilih file untuk diupload.");
+                  return;
               }
 
               const formData = new FormData();
@@ -669,22 +667,23 @@
 
               // Kirim request ke server untuk upload dan update transaksi
               fetch(`prooft_payment.php?transaction_id=${transactionId}`, {
-                method: "POST",
-                body: formData,
+                  method: "POST",
+                  body: formData,
               })
               .then(response => response.json())
               .then(data => {
-                if (data.success) {
-                  alert("Bukti pembayaran berhasil diupload dan transaksi diperbarui.");
-                } else {
-                  alert(data.error || "Terjadi kesalahan saat mengupload file.");
-                }
+                  if (data.success) {
+                      alert("Bukti pembayaran berhasil diupload dan transaksi diperbarui.");
+                  } else {
+                      alert(data.error || "Terjadi kesalahan saat mengupload file.");
+                  }
               })
               .catch(error => {
-                console.error("Error:", error);
-                alert("Terjadi kesalahan saat mengupload file.");
+                  console.error("Error:", error);
+                  alert("Terjadi kesalahan saat mengupload file.");
               });
-            });
+          });
+
     </script>
 
 </body>
