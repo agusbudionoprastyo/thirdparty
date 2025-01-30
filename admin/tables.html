@@ -254,6 +254,9 @@
                     // Create the table row
                     const row = document.createElement('tr');
                     const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'assets/img/user.png';
+                    const paymentProof = user.payment_prooft ? 
+                    `<i class="fas fa-file-alt"></i> ${user.payment_prooft}` : 
+                    'Proof unavailable';
                     // Create table cells for each user data
                     row.innerHTML = `
                         <td>
@@ -282,7 +285,7 @@
                             <span class="badge badge-sm ${user.badge_class}">${user.status}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">${user.payment_prooft}</span>
+                            <span class="text-secondary text-xs font-weight-bold">${paymentProof}</span>
                         </td>
 
                         <td class="align-middle">
