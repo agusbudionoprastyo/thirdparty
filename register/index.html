@@ -173,10 +173,10 @@
               <div class="w-1/2">
                 <label for="coupleGender" class="block text-gray-700">Gender</label>
                 <label>
-                  <input type="radio" name="coupleGender" value="male" id="coupleMale" class="mr-2"> Male
+                  <input type="radio" name="coupleGender" value="male" id="coupleMale" class="mr-2" required> Male
                 </label>
                 <label>
-                  <input type="radio" name="coupleGender" value="female" id="coupleFemale" class="mr-2"> Female
+                  <input type="radio" name="coupleGender" value="female" id="coupleFemale" class="mr-2" required> Female
                 </label>
               </div>
 
@@ -276,6 +276,9 @@
       const coupleContainer = document.getElementById('CoupleContainer');
       const coupleName = document.getElementById('coupleName');
       const coupleAge = document.getElementById('coupleage');
+
+      const coupleMale = document.getElementById('coupleMale');
+      const coupleFemale = document.getElementById('coupleFemale');
 
       const registerBtn = document.getElementById("registerBtn");
       const closeBtn = document.getElementById("closeBtn");
@@ -447,18 +450,10 @@
 
             const formData = new FormData();
 
-            // Ambil data dari input
-            const genderRadio = document.querySelector('input[name="gender"]:checked');
-            if (!genderRadio) {
-                alert('Gender harus dipilih');
-                return; // berhenti jika gender tidak dipilih
-            }
-            const gender = genderRadio.value;
-
             const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
             const username = document.getElementById('name').value;
             const age = document.getElementById('age').value;
-            // const gender = document.querySelector('input[name="gender"]:checked') ? 'male' : 'female';
+            const gender = document.querySelector('input[name="gender"]:checked').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
 
@@ -478,14 +473,7 @@
             if (registrationType === 'couple') {
                 const coupleUsername = document.getElementById('coupleName').value;
                 const coupleAge = document.getElementById('coupleage').value;
-                // const coupleGender = document.querySelector('input[name="coupleGender"]:checked') ? 'male' : 'female';
-                const coupleGenderRadio = document.querySelector('input[name="coupleGender"]:checked');
-                if (!coupleGenderRadio) {
-                    alert('Gender pasangan harus dipilih');
-                    return; // berhenti jika gender pasangan tidak dipilih
-                }
-                const coupleGender = coupleGenderRadio.value;
-
+                const coupleGender = document.querySelector('input[name="coupleGender"]:checked').value;
                 formData.append('coupleUsername', coupleUsername);
                 formData.append('coupleAge', coupleAge);
                 formData.append('coupleGender', coupleGender);
