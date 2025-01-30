@@ -455,16 +455,6 @@
             }
             const gender = genderRadio.value;
 
-            // Jika "couple" dipilih, validasi pasangan
-            if (registrationType === 'couple') {
-                const coupleGenderRadio = document.querySelector('input[name="coupleGender"]:checked');
-                if (!coupleGenderRadio) {
-                    alert('Gender pasangan harus dipilih');
-                    return; // berhenti jika gender pasangan tidak dipilih
-                }
-                const coupleGender = coupleGenderRadio.value;
-            }
-
             const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
             const username = document.getElementById('name').value;
             const age = document.getElementById('age').value;
@@ -488,7 +478,13 @@
             if (registrationType === 'couple') {
                 const coupleUsername = document.getElementById('coupleName').value;
                 const coupleAge = document.getElementById('coupleage').value;
-                const coupleGender = document.querySelector('input[name="coupleGender"]:checked') ? 'male' : 'female';
+                // const coupleGender = document.querySelector('input[name="coupleGender"]:checked') ? 'male' : 'female';
+                const coupleGenderRadio = document.querySelector('input[name="coupleGender"]:checked');
+                if (!coupleGenderRadio) {
+                    alert('Gender pasangan harus dipilih');
+                    return; // berhenti jika gender pasangan tidak dipilih
+                }
+                const coupleGender = coupleGenderRadio.value;
 
                 formData.append('coupleUsername', coupleUsername);
                 formData.append('coupleAge', coupleAge);
