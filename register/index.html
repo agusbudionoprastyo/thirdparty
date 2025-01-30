@@ -232,8 +232,8 @@
             </button>
           </div>     
         <p class="text-gray-700 text-xs">PT Dafam Mambo International</p>
-        <p class="mt-4 text-gray-500 text-xs text-center">Upload bukti pembayaran disini</p>
         <div class="mt-2 flex items-center space-x-2 border-dashed border-2 border-gray-400 p-4 rounded-lg">
+        <p class="mb-4 text-gray-500 text-xs text-center">Upload bukti pembayaran disini</p>
           <div id="file-info" class="w-1/4 mt-2 text-sm text-gray-500">
             <p id="file-name" class="font-medium"></p>
             <p id="file-size" class="text-xs"></p>
@@ -371,24 +371,24 @@
         }
 
         // Untuk menampilkan informasi foto tunggal
-        const fileInput = document.getElementById('paymentproof');
-        const fileName = document.getElementById('file-name');
-        const fileSize = document.getElementById('file-size');
+        const paymentInput = document.getElementById('paymentproof');
+        const paymentName = document.getElementById('file-name');
+        const paymentSize = document.getElementById('file-size');
 
-        fileInput.addEventListener('change', function () {
+        paymentInput.addEventListener('change', function () {
             const file = fileInput.files[0];
             if (file) {
                 // Nama file tanpa ekstensi dan batas 10 karakter
-                const fileName = formatFileName(file.name);
+                const paymentName = formatFileName(file.name);
                 // Ukuran file dalam KB atau MB
-                const fileSize = formatFileSize(file.size);
+                const paymentSize = formatFileSize(file.size);
                 
                 // Tampilkan nama file dan ukuran
-                fileName.textContent = fileName;
-                fileSize.textContent = `${fileSize}`;
+                paymentName.textContent = fileName;
+                paymentSize.textContent = `${fileSize}`;
             } else {
-                fileName.textContent = ''; // Clear if no file selected
-                fileSize.textContent = ''; // Clear if no file selected
+                paymentName.textContent = ''; // Clear if no file selected
+                paymentSize.textContent = ''; // Clear if no file selected
             }
         });
 
