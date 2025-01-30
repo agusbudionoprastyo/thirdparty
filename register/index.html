@@ -677,20 +677,45 @@
                   try {
                       const jsonData = JSON.parse(data);  // Lakukan parsing sendiri
                       if (jsonData.success) {
-                          alert("Bukti pembayaran berhasil diupload dan transaksi diperbarui.");
+                          // Tampilkan SweetAlert dengan timer auto-close
+                          Swal.fire({
+                              icon: 'success',
+                              title: 'Thank you for being a part of the third-party effect.',
+                              text: 'Your payment proof has been received. Please wait for confirmation.',
+                              timer: 3000,  // Waktu auto-close dalam milidetik (3 detik)
+                              timerProgressBar: true,
+                              willClose: () => {
+                                  const successModal = document.getElementById('successModal');
+                                  successModal.classList.remove('hidden');
+                                  localStorage.removeItem('transactionid');
+                              }
+                          });
                       } else {
-                          alert(jsonData.error || "Terjadi kesalahan saat mengupload file.");
+                          Swal.fire({
+                              icon: 'error',
+                              title: 'Error',
+                              text: jsonData.error || "Terjadi kesalahan saat mengupload file."
+                          });
                       }
                   } catch (error) {
                       console.error("Error parsing JSON:", error);
-                      alert("Terjadi kesalahan saat mengupload file.");
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: "Terjadi kesalahan saat mengupload file."
+                      });
                   }
               })
               .catch(error => {
                   console.error("Error:", error);
-                  alert("Terjadi kesalahan saat mengupload file.");
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Error',
+                      text: "Terjadi kesalahan saat mengupload file."
+                  });
               });
           });
+
 
     </script>
 
