@@ -51,10 +51,24 @@ function generateRandomPassword() {
 function generateUsername($name) {
     // Ambil 3 huruf pertama dari nama
     $usernameBase = substr($name, 0, 3);
+    // Ubah menjadi huruf kecil
+    $usernameBase = strtolower($usernameBase);
     // Tambahkan 3 angka acak
     $randomNumbers = rand(100, 999);
     return $usernameBase . $randomNumbers;
 }
+
+// Fungsi untuk generate username pasangan
+function generateCoupleUsername($coupleName) {
+    // Ambil 3 huruf pertama dari nama
+    $usernameBase = substr($coupleName, 0, 3);
+    // Ubah menjadi huruf kecil
+    $usernameBase = strtolower($usernameBase);
+    // Tambahkan 3 angka acak
+    $randomNumbers = rand(100, 999);
+    return $usernameBase . $randomNumbers;
+}
+
 
 // Mengambil data dari form
 $registrationType = $_POST['registrationType'];
@@ -66,6 +80,7 @@ $email = $_POST['email'];
 
 // Generate username
 $username = generateUsername($name);
+$coupleusername = generateCoupleUsername($coupleName);
 $password = generateRandomPassword();
 
 // Proses upload foto
@@ -91,9 +106,9 @@ $maleUserId = $stmt->insert_id; // ID pengguna pertama (male)
 // Jika tipe pendaftaran adalah pasangan, simpan data pasangan ke tabel 'users' dan buat relasi di tabel 'matches'
 if ($registrationType === 'couple') {
     // Simpan pasangan ke tabel 'users' dengan foto pasangan
-    $query = "INSERT INTO users (name, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO users (name, gender, age, phone, email, photo, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssissss", $coupleName, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $password);
+    $stmt->bind_param("ssisssss", $coupleName, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $coupleusername, $password);
     $stmt->execute();
     $femaleUserId = $stmt->insert_id; // ID pasangan (female)
 
