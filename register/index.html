@@ -691,9 +691,9 @@
                               timerProgressBar: true,
                               showConfirmButton: false,  // Hide the confirmation button
                               customClass: {
-                                  popup: 'rounded-[24px] text-white p-6 shadow-lg', // Tailwind CSS classes for popup
+                                  popup: 'rounded-[24px] text-gray-700 p-6 shadow-lg', // Tailwind CSS classes for popup
                                   title: 'text-xl font-semibold', // Tailwind classes for title
-                                  content: 'text-sm', // Tailwind classes for content
+                                  content: 'text-sm text-gray-500', // Tailwind classes for content
                               },
                               willClose: () => {
                                   localStorage.removeItem('transactionid');
