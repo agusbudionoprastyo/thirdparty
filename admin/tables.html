@@ -253,13 +253,13 @@
                 data.forEach(user => {
                     // Create the table row
                     const row = document.createElement('tr');
-    
+                    const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'https://i.pravatar.cc/300';
                     // Create table cells for each user data
                     row.innerHTML = `
                         <td>
                             <div class="d-flex px-2 py-1">
                                 <div>
-                                    <img src="../register/assets/users/${user.photo}" class="avatar avatar-sm me-3" alt="user">
+                                    <img src="${photoUrl}" class="avatar avatar-sm me-3" alt="user">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
                                     <h6 class="mb-0 text-sm">${user.name}</h6>
@@ -275,16 +275,16 @@
                             <p class="text-xs font-weight-bold mb-0">${user.total_amount}</p>
                             <p class="text-xs text-secondary mb-0">${user.transaction_id}</p>
                         </td>
-                        <td class="align-middle text-center">
+                        <td>
                             <span class="text-secondary text-xs font-weight-bold">${user.transaction_date}</span>
                         </td>
                         <td class="align-middle text-center text-sm">
                             <span class="badge badge-sm ${user.badge_class}">${user.status}</span>
                         </td>
                         <td>    
-                          <div>
-                              <img src="../register/assets/users/${user.photo}" class="avatar avatar-sm me-3" alt="user">
-                          </div>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">${user.payment_prooft}</span>
+                        </td>
                         </td>
 
                         <td class="align-middle">
