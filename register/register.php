@@ -47,14 +47,25 @@ function generateRandomPassword() {
     return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT); // Menghasilkan password 6 digit dengan padding jika kurang
 }
 
+// Fungsi untuk generate username
+function generateUsername($name) {
+    // Ambil 3 huruf pertama dari nama
+    $usernameBase = substr($name, 0, 3);
+    // Tambahkan 3 angka acak
+    $randomNumbers = rand(100, 999);
+    return $usernameBase . $randomNumbers;
+}
+
 // Mengambil data dari form
 $registrationType = $_POST['registrationType'];
-$username = $_POST['username'];
+$name = $_POST['username'];
 $age = $_POST['age'];
 $gender = $_POST['gender'];
 $phone = $_POST['phone'];
 $email = $_POST['email'];
 
+// Generate username
+$username = generateUsername($name);
 $password = generateRandomPassword();
 
 // Proses upload foto
@@ -62,7 +73,7 @@ $photoFileName = uploadPhoto('photo'); // Foto untuk peserta
 $couplePhotoFileName = null;
 
 if ($registrationType === 'couple') {
-    $coupleUsername = $_POST['coupleUsername'];
+    $coupleName = $_POST['coupleUsername'];
     $coupleAge = $_POST['coupleAge'];
     $coupleGender = $_POST['coupleGender'];
 
@@ -71,18 +82,18 @@ if ($registrationType === 'couple') {
 }
 
 // Proses penyimpanan data ke database
-$query = "INSERT INTO users (username, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO users (name, gender, age, phone, email, photo, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ssissss", $username, $gender, $age, $phone, $email, $photoFileName, $password);
+$stmt->bind_param("ssisssss", $name, $gender, $age, $phone, $email, $photoFileName, $username, $password);
 $stmt->execute();
 $maleUserId = $stmt->insert_id; // ID pengguna pertama (male)
 
 // Jika tipe pendaftaran adalah pasangan, simpan data pasangan ke tabel 'users' dan buat relasi di tabel 'matches'
 if ($registrationType === 'couple') {
     // Simpan pasangan ke tabel 'users' dengan foto pasangan
-    $query = "INSERT INTO users (username, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO users (name, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssissss", $coupleUsername, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $password);
+    $stmt->bind_param("ssissss", $coupleName, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $password);
     $stmt->execute();
     $femaleUserId = $stmt->insert_id; // ID pasangan (female)
 
