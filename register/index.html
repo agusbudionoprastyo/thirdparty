@@ -646,6 +646,45 @@
                 });
               }
             });
+
+            document.querySelector("button").addEventListener("click", function() {
+              const fileInput = document.getElementById("paymentproof");
+              const file = fileInput.files[0];
+
+              // Mengambil transaction_id dari localStorage
+              const transactionId = localStorage.getItem('transactionid');
+
+              if (!transactionId) {
+                alert("Transaction ID tidak ditemukan di localStorage.");
+                return;
+              }
+
+              if (!file) {
+                alert("Silakan pilih file untuk diupload.");
+                return;
+              }
+
+              const formData = new FormData();
+              formData.append("paymentproof", file);
+
+              // Kirim request ke server untuk upload dan update transaksi
+              fetch(`prooft_payment.php?transaction_id=${transactionId}`, {
+                method: "POST",
+                body: formData,
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert("Bukti pembayaran berhasil diupload dan transaksi diperbarui.");
+                } else {
+                  alert(data.error || "Terjadi kesalahan saat mengupload file.");
+                }
+              })
+              .catch(error => {
+                console.error("Error:", error);
+                alert("Terjadi kesalahan saat mengupload file.");
+              });
+            });
     </script>
 
 </body>
