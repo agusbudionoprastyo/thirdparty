@@ -274,35 +274,40 @@
       const singleRadio = document.getElementById('single');
       const coupleRadio = document.getElementById('couple');
       const CoupleContainer = document.getElementById('CoupleContainer');
-
-      if (coupleContainer.classList.contains('hidden')) {
-            coupleName.removeAttribute('required');
-            coupleAge.removeAttribute('required');
-            coupleMale.removeAttribute('required');
-            coupleFemale.removeAttribute('required');
-        } else {
-          coupleName.setAttribute('required', 'true');
-          coupleAge.setAttribute('required', 'true');
-          coupleMale.setAttribute('required', 'true');
-          coupleFemale.setAttribute('required', 'true');
-        } 
-
-      coupleRadio.addEventListener('change', function () {
-        if (this.checked) {
-          CoupleContainer.classList.remove('hidden');
-        }
-      });
-    
-      singleRadio.addEventListener('change', function () {
-        if (this.checked) {
-          CoupleContainer.classList.add('hidden'); 
-        }
-      });
-
       const registerBtn = document.getElementById("registerBtn");
       const closeBtn = document.getElementById("closeBtn");
       const box = document.getElementById("box");
       const signupContainer = document.getElementById("signup-container");
+
+      // Hide the Couple Section initially and remove required attributes
+      if (coupleContainer.classList.contains('hidden')) {
+        coupleName.removeAttribute('required');
+        coupleAge.removeAttribute('required');
+        coupleMale.removeAttribute('required');
+        coupleFemale.removeAttribute('required');
+      }
+
+      // Show Couple Section and add required attributes when "Couple" radio is checked
+      coupleRadio.addEventListener('change', function () {
+        if (this.checked) {
+          coupleContainer.classList.remove('hidden');
+          coupleName.setAttribute('required', 'true');
+          coupleAge.setAttribute('required', 'true');
+          coupleMale.setAttribute('required', 'true');
+          coupleFemale.setAttribute('required', 'true');
+        }
+      });
+
+      // Hide Couple Section and remove required attributes when "Single" radio is checked
+      singleRadio.addEventListener('change', function () {
+        if (this.checked) {
+          coupleContainer.classList.add('hidden');
+          coupleName.removeAttribute('required');
+          coupleAge.removeAttribute('required');
+          coupleMale.removeAttribute('required');
+          coupleFemale.removeAttribute('required');
+        }
+      });
 
       registerBtn.addEventListener("click", function() {
           box.classList.add("expanded");
