@@ -243,7 +243,7 @@
             <label for="paymentproof" class="cursor-pointer">
               <span class="text-[#ff005b]">Choose File</span>
             </label>
-            <input type="file" id="paymentproof" class="hidden" accept="file/*">
+            <input type="file" id="paymentproof" class="hidden" accept="application/pdf, image/*">
           </p>
         
           <button id="uploadButton" class="mt-4 bg-white text-gray-700 font-semibold py-3 px-6 rounded-full shadow-md">
@@ -275,16 +275,15 @@
       const coupleRadio = document.getElementById('couple');
       const CoupleContainer = document.getElementById('CoupleContainer');
 
-      // Event listener to handle the display of the Female Name field
       coupleRadio.addEventListener('change', function () {
         if (this.checked) {
-          CoupleContainer.classList.remove('hidden'); // Show Female Name field
+          CoupleContainer.classList.remove('hidden'); 
         }
       });
     
       singleRadio.addEventListener('change', function () {
         if (this.checked) {
-          CoupleContainer.classList.add('hidden'); // Hide Female Name field
+          CoupleContainer.classList.add('hidden'); 
         }
       });
 
@@ -301,7 +300,6 @@
           }, 200);
       });
 
-      // Event listener untuk tombol "Close"
       closeBtn.addEventListener("click", function() {
           box.classList.remove("expanded");
           registerBtn.classList.remove("hidden");
@@ -310,16 +308,12 @@
           }, 200);
       });
 
-      // Fungsi untuk memformat harga menjadi format yang lebih mudah dibaca
       function formatPrice(price) {
           if (price >= 1000000) {
-              // Untuk harga di atas 1 juta, tampilkan dalam format 'M' (misalnya 1.5M)
               return (price / 1000000).toFixed(1) + 'M';
           } else if (price >= 1000) {
-              // Untuk harga di atas 1000, tampilkan dalam format 'K' (misalnya 100K)
               return (price / 1000).toFixed(0) + 'K';
           } else {
-              // Untuk harga di bawah 1000, tampilkan langsung
               return price;
           }
       }
@@ -329,55 +323,42 @@
         .then(data => {
           const container = document.getElementById('items-container'); // Misalnya ada container untuk menampung data
           data.forEach(item => {
-            // Membuat elemen baru untuk setiap item
             const itemElement = document.createElement('div');
             
-            // Menambahkan nama item
             const descriptionElement = document.createElement('p');
             descriptionElement.className = 'helvetica text-gray-400 text-sm';
             descriptionElement.textContent = `${item.description}`;
             
-            // Menambahkan harga item, menggunakan fungsi formatPrice
             const priceElement = document.createElement('p');
             priceElement.className = 'helvetica text-[#ff005b] font-bold';
             priceElement.textContent = `IDR ${formatPrice(item.price)} / Person`;
             
-            // Menambahkan nama dan harga ke dalam itemElement
             itemElement.appendChild(descriptionElement);
             itemElement.appendChild(priceElement);
             
-            // Menambahkan itemElement ke dalam container
             container.appendChild(itemElement);
           });
         })
         .catch(error => console.error('Error:', error));
 
-        // Fungsi untuk memformat nama file menjadi maksimal 10 karakter tanpa ekstensi
         function formatFileName(fileName) {
-            // Menghapus ekstensi dari nama file
             const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.')) || fileName; // Menghapus ekstensi
             if (nameWithoutExt.length > 10) {
-                // Jika panjang nama file tanpa ekstensi lebih dari 10 karakter, potong dan tambahkan '...'
                 return nameWithoutExt.substring(0, 10) + '...';
             }
-            return nameWithoutExt; // Jika tidak, kembalikan nama file tanpa ekstensi
+            return nameWithoutExt; 
         }
 
-        // Fungsi untuk format ukuran file ke KB/MB
         function formatFileSize(size) {
             if (size >= 1000000) {
-                // Jika ukuran lebih dari 1MB, tampilkan dalam MB
                 return (size / 1000000).toFixed(2) + ' MB';
             } else if (size >= 1000) {
-                // Jika ukuran lebih dari 1KB, tampilkan dalam KB
                 return (size / 1000).toFixed(0) + ' KB';
             } else {
-                // Jika ukuran lebih kecil dari 1KB, tampilkan dalam byte
                 return size + ' bytes';
             }
         }
 
-        // Untuk menampilkan informasi foto tunggal
         const paymentInput = document.getElementById('paymentproof');
         const paymentName = document.getElementById('file-name');
         const paymentSize = document.getElementById('file-size');
@@ -385,12 +366,9 @@
         paymentInput.addEventListener('change', function () {
             const file = paymentInput.files[0];
             if (file) {
-                // Nama file tanpa ekstensi dan batas 10 karakter
                 const fileName = formatFileName(file.name);
-                // Ukuran file dalam KB atau MB
                 const fileSize = formatFileSize(file.size);
                 
-                // Tampilkan nama file dan ukuran
                 paymentName.textContent = fileName;
                 paymentSize.textContent = `${fileSize}`;
             } else {
@@ -399,7 +377,6 @@
             }
         });
 
-        // Untuk menampilkan informasi foto tunggal
         const photoInput = document.getElementById('photo');
         const photoName = document.getElementById('photo-name');
         const photoSize = document.getElementById('photo-size');
@@ -407,12 +384,9 @@
         photoInput.addEventListener('change', function () {
             const file = photoInput.files[0];
             if (file) {
-                // Nama file tanpa ekstensi dan batas 10 karakter
                 const fileName = formatFileName(file.name);
-                // Ukuran file dalam KB atau MB
                 const fileSize = formatFileSize(file.size);
                 
-                // Tampilkan nama file dan ukuran
                 photoName.textContent = fileName;
                 photoSize.textContent = `${fileSize}`;
             } else {
@@ -421,7 +395,6 @@
             }
         });
 
-        // Untuk menampilkan informasi foto pasangan
         const couplePhotoInput = document.getElementById('couplePhoto');
         const couplePhotoName = document.getElementById('couple-photo-name');
         const couplePhotoSize = document.getElementById('couple-photo-size');
@@ -429,12 +402,9 @@
         couplePhotoInput.addEventListener('change', function () {
             const file = couplePhotoInput.files[0];
             if (file) {
-                // Nama file tanpa ekstensi dan batas 10 karakter
                 const fileName = formatFileName(file.name);
-                // Ukuran file dalam KB atau MB
                 const fileSize = formatFileSize(file.size);
                 
-                // Tampilkan nama file dan ukuran
                 couplePhotoName.textContent = fileName;
                 couplePhotoSize.textContent = `${fileSize}`;
             } else {
@@ -443,7 +413,6 @@
             }
         });
 
-        // Generate transaction ID
         function generateTransactionId() {
             return 'TPE-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
         }
@@ -454,11 +423,10 @@
 
         const registrationForm = document.getElementById('registrationForm');
         registrationForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah submit standar
+            event.preventDefault(); 
 
             const formData = new FormData();
 
-            // Ambil data dari form
             const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
             const username = document.getElementById('name').value;
             const age = document.getElementById('age').value;
@@ -466,7 +434,6 @@
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
 
-            // Masukkan data ke dalam FormData
             formData.append('transactionid', generatedTransactionId);
             formData.append('registrationType', registrationType);
             formData.append('username', username);
@@ -475,13 +442,11 @@
             formData.append('phone', phone);
             formData.append('email', email);
 
-            // Ambil file foto jika ada
             const photoInput = document.getElementById('photo');
             if (photoInput.files.length > 0) {
-                formData.append('photo', photoInput.files[0]); // File foto
+                formData.append('photo', photoInput.files[0]); 
             }
 
-            // Jika tipe pendaftaran adalah pasangan, ambil data pasangan dan foto pasangan
             if (registrationType === 'couple') {
                 const coupleUsername = document.getElementById('coupleName').value;
                 const coupleAge = document.getElementById('coupleage').value;
@@ -493,39 +458,32 @@
 
                 const couplePhotoInput = document.getElementById('couplePhoto');
                 if (couplePhotoInput.files.length > 0) {
-                    formData.append('couplePhoto', couplePhotoInput.files[0]); // Foto pasangan
+                    formData.append('couplePhoto', couplePhotoInput.files[0]); 
                 }
             }
 
-            // Kirim data menggunakan FormData
             fetch('register.php', {
                 method: 'POST',
-                body: formData // Kirim FormData, tidak perlu JSON.stringify
+                body: formData 
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data); // Cek hasil dari server
+                console.log(data); 
                 if (data.status === 'success') {
-                  // Simpan status di localStorage agar tetap muncul meskipun di-reload
                   localStorage.setItem('registrationSuccess', 'true');
-                  // Simpan transactionid ke localStorage
                   localStorage.setItem('transactionid', generatedTransactionId);
 
-                  // Menutup form dan menampilkan modal
                   box.classList.remove("expanded");
                   registerBtn.classList.remove("hidden");
                   setTimeout(function() {
                       signupContainer.classList.add("hidden");
                   }, 200);
                   
-                  // Ambil transactionid dari localStorage
                   const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
 
-                  // Menampilkan modal
                   const successModal = document.getElementById('successModal');
                   successModal.classList.remove('hidden');
 
-                  // Tampilkan transaction_id di modal
                   const transactionIdDisplay = document.getElementById('transaction-id');
                   fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
                 .then(response => {
@@ -541,18 +499,15 @@
                     if (data.error) {
                         transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
                     } else {
-                        const totalAmount = parseFloat(data[0].total_amount); // Pastikan menjadi angka
+                        const totalAmount = parseFloat(data[0].total_amount); 
                         const transactionDate = data[0].transaction_date;
 
-                        // Format tanggal ke format yang lebih mudah dipahami oleh JavaScript
-                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  // Mengubah ' ' ke 'T' untuk ISO format
+                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  
 
-                        // Format total_amount ke IDR tanpa desimal
                         const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
-                          maximumFractionDigits: 0  // Tidak ada angka desimal
+                          maximumFractionDigits: 0 
                         }).format(totalAmount);
 
-                        // Menampilkan data transaksi
                         transactionDetailsContainer.innerHTML = `
                           <ul>
                               <li class="flex justify-between">
@@ -577,7 +532,6 @@
                     transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
                 });
                   
-                  // Reset form setelah sukses
                   registrationForm.reset();
               } else {
                     alert('Terjadi kesalahan, coba lagi.');
@@ -593,7 +547,6 @@
             if (localStorage.getItem('registrationSuccess') === 'true') {
                 const successModal = document.getElementById('successModal');
                 successModal.classList.remove('hidden');
-                // Ambil transactionid dari localStorage
                 const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
 
             fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
@@ -610,18 +563,15 @@
                     if (data.error) {
                         transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
                     } else {
-                        const totalAmount = parseFloat(data[0].total_amount); // Pastikan menjadi angka
+                        const totalAmount = parseFloat(data[0].total_amount);
                         const transactionDate = data[0].transaction_date;
 
-                        // Format tanggal ke format yang lebih mudah dipahami oleh JavaScript
-                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  // Mengubah ' ' ke 'T' untuk ISO format
+                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString(); 
 
-                        // Format total_amount ke IDR tanpa desimal
                         const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
-                          maximumFractionDigits: 0  // Tidak ada angka desimal
+                          maximumFractionDigits: 0 
                         }).format(totalAmount);
 
-                        // Menampilkan data transaksi
                         transactionDetailsContainer.innerHTML = `
                           <ul>
                               <li class="flex justify-between">
@@ -671,29 +621,27 @@
                   body: formData,
               })
               .then(response => {
-                  console.log('Response:', response); // Tambahkan log di sini
-                  return response.text();  // Coba ambil response sebagai text terlebih dahulu
+                  console.log('Response:', response);
+                  return response.text();
               })
               .then(data => {
                   try {
-                      const jsonData = JSON.parse(data);  // Lakukan parsing sendiri
+                      const jsonData = JSON.parse(data);
                       if (jsonData.success) {
-                          // Sebelum menampilkan SweetAlert, sembunyikan elemen dengan menambah class 'hidden'
                           const successModal = document.getElementById('successModal');
                           successModal.classList.add('hidden');
 
-                          // Tampilkan SweetAlert dengan timer auto-close
                           Swal.fire({
                               icon: 'success',
                               title: 'Thank you for being a part of the third-party effect.',
                               text: 'Your payment proof has been received. Please wait for confirmation.',
-                              timer: 10000,  // Auto-close after 5 seconds
+                              timer: 10000,
                               timerProgressBar: true,
-                              showConfirmButton: false,  // Hide the confirmation button
+                              showConfirmButton: false,
                               customClass: {
-                                  popup: 'rounded-[24px] text-gray-700 p-6 shadow-lg', // Tailwind CSS classes for popup
-                                  title: 'text-xl font-semibold', // Tailwind classes for title
-                                  content: 'text-sm text-gray-500', // Tailwind classes for content
+                                  popup: 'rounded-[24px] text-gray-700 p-6 shadow-lg',
+                                  title: 'text-lg font-semibold',
+                                  content: 'text-sm text-gray-500',
                               },
                               willClose: () => {
                                   localStorage.removeItem('transactionid');
