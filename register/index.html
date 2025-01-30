@@ -232,7 +232,14 @@
             </button>
           </div>     
           <p class="text-gray-700 text-xs">PT Dafam Mambo International</p>
-          <p class="mt-4 text-gray-500 text-xs text-left">Upload bukti pembayaran</p>
+          <p class="mt-4 text-gray-500 text-xs text-center">Upload bukti pembayaran disini</p>
+          <div class="mt-2 flex items-center space-x-2">
+            <label for="photo" class="cursor-pointer items-center justify-center w-full p-2 bg-white shadow-md rounded-full flex items-center space-x-2">
+              <i class="fas fa-camera text-[#ff005b]"></i>
+              <span class="text-[#ff005b]">File</span>
+            </label>
+            <input type="file" id="photo" class="hidden" accept="image/*">
+          </div>
       </div>
     </div>
 
@@ -241,10 +248,8 @@
   
     <script>
       function copyToClipboard() {
-        // Ambil elemen nomor rekening
         const rekNumber = document.getElementById('rek-number').innerText;
         
-        // Salin nomor rekening ke clipboard
         navigator.clipboard.writeText(rekNumber)
           .then(() => {
             alert('Nomor rekening berhasil disalin!');
