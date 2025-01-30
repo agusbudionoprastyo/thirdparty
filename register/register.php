@@ -43,6 +43,10 @@ function uploadPhoto($photoInputName) {
     return false; // Tidak ada file yang di-upload
 }
 
+function generateRandomPassword() {
+    return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT); // Menghasilkan password 6 digit dengan padding jika kurang
+}
+
 // Mengambil data dari form
 $registrationType = $_POST['registrationType'];
 $username = $_POST['username'];
@@ -50,6 +54,8 @@ $age = $_POST['age'];
 $gender = $_POST['gender'];
 $phone = $_POST['phone'];
 $email = $_POST['email'];
+
+$password = generateRandomPassword();
 
 // Proses upload foto
 $photoFileName = uploadPhoto('photo'); // Foto untuk peserta
@@ -65,18 +71,18 @@ if ($registrationType === 'couple') {
 }
 
 // Proses penyimpanan data ke database
-$query = "INSERT INTO users (username, gender, age, phone, email, photo) VALUES (?, ?, ?, ?, ?, ?)";
+$query = "INSERT INTO users (username, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ssisss", $username, $gender, $age, $phone, $email, $photoFileName);
+$stmt->bind_param("ssisss", $username, $gender, $age, $phone, $email, $photoFileName, $password);
 $stmt->execute();
 $maleUserId = $stmt->insert_id; // ID pengguna pertama (male)
 
 // Jika tipe pendaftaran adalah pasangan, simpan data pasangan ke tabel 'users' dan buat relasi di tabel 'matches'
 if ($registrationType === 'couple') {
     // Simpan pasangan ke tabel 'users' dengan foto pasangan
-    $query = "INSERT INTO users (username, gender, age, phone, email, photo) VALUES (?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO users (username, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssisss", $coupleUsername, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName);
+    $stmt->bind_param("ssisss", $coupleUsername, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $password);
     $stmt->execute();
     $femaleUserId = $stmt->insert_id; // ID pasangan (female)
 
