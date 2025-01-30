@@ -680,18 +680,22 @@
                       if (jsonData.success) {
                           // Tampilkan SweetAlert dengan timer auto-close
                           Swal.fire({
-                              icon: 'success',
-                              title: 'Thank you for being a part of the third-party effect.',
-                              text: 'Your payment proof has been received. Please wait for confirmation.',
-                              timer: 3000,  // Waktu auto-close dalam milidetik (3 detik)
-                              timerProgressBar: true,
-                              willClose: () => {
-                                  const successModal = document.getElementById('successModal');
-                                  successModal.classList.add('hidden');
-                                  localStorage.removeItem('transactionid');
-                                  localStorage.removeItem('registrationSuccess')
-                              }
-                          });
+                            icon: 'success',
+                            title: 'Thank you for being a part of the third-party effect.',
+                            text: 'Your payment proof has been received. Please wait for confirmation.',
+                            timer: 5000,  // Auto-close after 5 seconds
+                            timerProgressBar: true,
+                            showConfirmButton: false,  // Hide the confirmation button
+                            customClass: {
+                                popup: 'custom-popup',  // Add a custom class to the popup
+                            },
+                            willClose: () => {
+                                const successModal = document.getElementById('successModal');
+                                successModal.classList.add('hidden');
+                                localStorage.removeItem('transactionid');
+                                localStorage.removeItem('registrationSuccess');
+                            }
+                        });
                       } else {
                           Swal.fire({
                               icon: 'error',

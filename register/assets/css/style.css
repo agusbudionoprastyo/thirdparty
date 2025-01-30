@@ -123,3 +123,7 @@
     transform: translateX(-220%);
   }
 }
+
+.swal2-popup.custom-popup {
+  border-radius: 24px !important;  /* Apply border-radius to the popup */
+}
