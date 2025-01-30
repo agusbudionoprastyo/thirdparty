@@ -73,7 +73,7 @@ if ($registrationType === 'couple') {
 // Proses penyimpanan data ke database
 $query = "INSERT INTO users (username, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ssisss", $username, $gender, $age, $phone, $email, $photoFileName, $password);
+$stmt->bind_param("ssissss", $username, $gender, $age, $phone, $email, $photoFileName, $password);
 $stmt->execute();
 $maleUserId = $stmt->insert_id; // ID pengguna pertama (male)
 
@@ -82,7 +82,7 @@ if ($registrationType === 'couple') {
     // Simpan pasangan ke tabel 'users' dengan foto pasangan
     $query = "INSERT INTO users (username, gender, age, phone, email, photo, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssisss", $coupleUsername, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $password);
+    $stmt->bind_param("ssissss", $coupleUsername, $coupleGender, $coupleAge, $phone, $email, $couplePhotoFileName, $password);
     $stmt->execute();
     $femaleUserId = $stmt->insert_id; // ID pasangan (female)
 
