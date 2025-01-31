@@ -140,15 +140,6 @@
   </aside>
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-
-      <!-- Modal/Overlay -->
-      <div id="overlayModal" class="fixed inset-0 bg-black bg-opacity-75 hidden justify-center items-center z-50">
-        <div class="relative max-w-4xl max-h-4xl p-4 bg-white rounded-lg shadow-lg">
-            <span id="closeModalBtn" class="absolute top-2 right-2 text-3xl text-white cursor-pointer">&times;</span>
-            <img id="imageToShow" class="max-w-full max-h-[80vh] object-contain mx-auto" src="" alt="Image" />
-        </div>
-      </div>
-
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl position-sticky blur shadow-blur mt-4 left-auto top-1 z-index-sticky" id="navbarBlur" navbar-scroll="true">
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
@@ -243,6 +234,13 @@
       </footer>
     </div>
   </main>
+
+
+      <!-- Modal/Overlay -->
+      <div id="overlayModal" class="fixed inset-0 bg-black bg-opacity-75 hidden justify-center items-center z-50">
+            <span id="closeModalBtn" class="absolute top-2 right-2 text-3xl text-white cursor-pointer">&times;</span>
+            <img id="imageToShow" class="max-w-1/2 max-h-[30vh] object-contain mx-auto" src="" alt="Image" />
+      </div>
 
   <!--   Core JS Files   -->
   <script src="assets/js/core/popper.min.js"></script>
