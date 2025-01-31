@@ -14,13 +14,13 @@ if ($result->num_rows > 0) {
         // Dynamically set the badge class based on the transaction status
         switch ($row['status']) {
             case 'paid':
-                $row['badge_class'] = 'bg-gradient-success';
+                $row['badge_class'] = 'bg-gradient-info';
                 break;
             case 'pending':
                 $row['badge_class'] = 'bg-gradient-warning';
                 break;
             case 'confirm':
-                $row['badge_class'] = 'bg-gradient-info';
+                $row['badge_class'] = 'bg-gradient-success';
                 break;
             default:
                 $row['badge_class'] = 'bg-gradient-secondary';  // Fallback for any other status
