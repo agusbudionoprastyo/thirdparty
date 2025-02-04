@@ -237,12 +237,13 @@
 
   <div class="modal fade" id="overlayModal" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
     <div class="modal-dialog modal-danger modal-dialog-centered" role="document">
-      <img id="imageToShow" class="w-80 mx-auto" src="" alt="Image" />
-        <!-- <div class="modal-content">
-        </div> -->
+      <!-- Kontainer untuk gambar dan tombol -->
+      <div class="modal-content text-center">
+        <img id="imageToShow" class="w-80 mx-auto" src="" alt="Image" />
         <button type="button" class="btn btn-primary mt-4" data-user-id="${user.user_id}" data-status="${user.status}">Confirm</button>
+      </div>
     </div>
-  </div>
+  </div>  
 
   <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
     <span class="alert-icon"><i class="ni ni-like-2"></i></span>
