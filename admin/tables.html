@@ -374,6 +374,10 @@ function fetchUsers() {
                   </svg>
                 </button>`;
 
+                // Create the table row here
+                const row = document.createElement('tr'); // Create the row first
+
+                // Now, populate the row with the user's data
                 row.innerHTML = `
                     <td>
                         <div class="d-flex px-2 py-1">
@@ -406,6 +410,7 @@ function fetchUsers() {
                     </td>
                 `;
 
+                // Append the newly created row to the table body
                 tableBody.appendChild(row);
             });
 
