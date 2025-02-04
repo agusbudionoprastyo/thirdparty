@@ -237,13 +237,14 @@
 
   <div class="modal fade" id="overlayModal" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
     <div class="modal-dialog modal-danger modal-dialog-centered" role="document">
-      <div class="align-items-center text-center rounded-lg">
+      <div class="align-items-center text-center rounded-lg" style="position: relative;">
+        <!-- Tombol Confirm di atas overlay -->
+        <button id="confirmButton" type="button" class="w-80 btn bg-gradient-danger mt-4 z-index-50" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); z-index: 100;">Verified</button>
+        
         <img id="imageToShow" class="w-80 mx-auto img-fluid border-radius-lg" src="" alt="Image" />
-        <!-- Tombol Confirm ada di sini -->
-        <button id="confirmButton" type="button" class="w-80 btn bg-gradient-danger mt-4 z-index-50">Verified</button>
       </div>
     </div>
-  </div>    
+  </div>   
 
   <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
     <span class="alert-icon"><i class="ni ni-like-2"></i></span>
