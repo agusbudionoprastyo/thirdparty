@@ -19,7 +19,7 @@ if ($result->num_rows > 0) {
             case 'pending':
                 $row['badge_class'] = 'bg-gradient-warning';
                 break;
-            case 'confirm':
+            case 'verified':
                 $row['badge_class'] = 'bg-gradient-success';
                 break;
             default:
