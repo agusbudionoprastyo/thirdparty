@@ -243,6 +243,14 @@
     </div>
   </div>
 
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+    <span class="alert-text"><strong>Success!</strong> Transaction has been confirm</span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
   <!--   Core JS Files   -->
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap.min.js"></script>
@@ -263,84 +271,211 @@
   <script src="assets/js/soft-ui-dashboard.min.js?v=1.1.0"></script>
   <script>
     // Function to fetch users data and populate the table
-    function fetchUsers() {
-        fetch('get_user.php')  // The API endpoint you created
-            .then(response => response.json())
-            .then(data => {
-                // Get the table body element
-                const tableBody = document.getElementById('userTableBody');
-                tableBody.innerHTML = '';  // Clear any existing data
+    // function fetchUsers() {
+    //     fetch('get_user.php')  // The API endpoint you created
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Get the table body element
+    //             const tableBody = document.getElementById('userTableBody');
+    //             tableBody.innerHTML = '';  // Clear any existing data
 
-                // Iterate through each user and create a table row
-                data.forEach(user => {
-                    // Create the table row
-                    const row = document.createElement('tr');
-                    const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'assets/img/user.png';
-                    const paymentProof = user.payment_prooft ? 
-                    `<button type="button" class="btn bg-gradient-danger mt-4" data-payment-url="../users/paymentprooft/${user.payment_prooft}" data-bs-toggle="modal" data-bs-target="#overlayModal">
-                      <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
-                          <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
-                      </svg>
-                    </button>` 
-                    : 
-                    `<button type="button" class="btn btn-secondary mt-4" disabled>
-                      <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
-                          <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
-                      </svg>
-                    </button>`;
+    //             // Iterate through each user and create a table row
+    //             data.forEach(user => {
+    //                 // Create the table row
+    //                 const row = document.createElement('tr');
+    //                 const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'assets/img/user.png';
+    //                 const paymentProof = user.payment_prooft ? 
+    //                 `<button type="button" class="btn bg-gradient-danger mt-4" data-payment-url="../users/paymentprooft/${user.payment_prooft}" data-bs-toggle="modal" data-bs-target="#overlayModal">
+    //                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+    //                       <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
+    //                   </svg>
+    //                 </button>` 
+    //                 : 
+    //                 `<button type="button" class="btn btn-secondary mt-4" disabled>
+    //                   <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+    //                       <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
+    //                   </svg>
+    //                 </button>`;
 
-                    // Create table cells for each user data
-                    row.innerHTML = `
-                        <td>
-                            <div class="d-flex px-2 py-1">
-                                <div>
-                                    <img src="${photoUrl}" class="avatar avatar-sm me-3" alt="user">
-                                </div>
-                                <div class="d-flex flex-column justify-content-center">
-                                    <h6 class="mb-0 text-sm">${user.name}</h6>
-                                    <p class="text-xs text-secondary mb-0"><a href="https://wa.me/${user.phone}">${user.phone}</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <p class="text-xs font-weight-bold mb-0">${user.username}</p>
-                            <p class="text-xs text-secondary mb-0">${user.password}</p>
-                        </td>
-                        <td>
-                            <p class="text-xs font-weight-bold mb-0">Rp${user.total_amount}</p>
-                            <p class="text-xs text-secondary mb-0">${user.transaction_id}</p>
-                        </td>
-                        <td>
-                            <span class="text-secondary text-xs font-weight-bold">${user.transaction_date}</span>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                            <span class="badge badge-sm ${user.badge_class}">${user.status}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                            ${paymentProof}
-                            <button type="button" class="btn btn-primary mt-4">Confirm</button>
-                        </td>
-                      `;
+    //                 // Create table cells for each user data
+    //                 row.innerHTML = `
+    //                     <td>
+    //                         <div class="d-flex px-2 py-1">
+    //                             <div>
+    //                                 <img src="${photoUrl}" class="avatar avatar-sm me-3" alt="user">
+    //                             </div>
+    //                             <div class="d-flex flex-column justify-content-center">
+    //                                 <h6 class="mb-0 text-sm">${user.name}</h6>
+    //                                 <p class="text-xs text-secondary mb-0"><a href="https://wa.me/${user.phone}">${user.phone}</a></p>
+    //                             </div>
+    //                         </div>
+    //                     </td>
+    //                     <td>
+    //                         <p class="text-xs font-weight-bold mb-0">${user.username}</p>
+    //                         <p class="text-xs text-secondary mb-0">${user.password}</p>
+    //                     </td>
+    //                     <td>
+    //                         <p class="text-xs font-weight-bold mb-0">Rp${user.total_amount}</p>
+    //                         <p class="text-xs text-secondary mb-0">${user.transaction_id}</p>
+    //                     </td>
+    //                     <td>
+    //                         <span class="text-secondary text-xs font-weight-bold">${user.transaction_date}</span>
+    //                     </td>
+    //                     <td class="align-middle text-center text-sm">
+    //                         <span class="badge badge-sm ${user.badge_class}">${user.status}</span>
+    //                     </td>
+    //                     <td class="align-middle text-center">
+    //                         ${paymentProof}
+    //                         <button type="button" class="btn btn-primary mt-4">Confirm</button>
+    //                     </td>
+    //                   `;
 
-                    // Append the row to the table body
-                    tableBody.appendChild(row);
-                });
+    //                 // Append the row to the table body
+    //                 tableBody.appendChild(row);
+    //             });
 
-                // Add event listener to each button to show the image in the modal
-                const paymentButtons = document.querySelectorAll('button[data-payment-url]');
-                paymentButtons.forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const imageUrl = button.getAttribute('data-payment-url');
-                        document.getElementById('imageToShow').src = imageUrl;
-                    });
-                });
-            })
-            .catch(error => console.error('Error fetching users:', error));
-    }
+    //             // Add event listener to each button to show the image in the modal
+    //             const paymentButtons = document.querySelectorAll('button[data-payment-url]');
+    //             paymentButtons.forEach(button => {
+    //                 button.addEventListener('click', (event) => {
+    //                     const imageUrl = button.getAttribute('data-payment-url');
+    //                     document.getElementById('imageToShow').src = imageUrl;
+    //                 });
+    //             });
+    //         })
+    //         .catch(error => console.error('Error fetching users:', error));
+    // }
 
-    // Fetch the users when the page loads
-    document.addEventListener('DOMContentLoaded', fetchUsers);
+    // // Fetch the users when the page loads
+    // document.addEventListener('DOMContentLoaded', fetchUsers);
 </script>
+
+<script>
+  // Function to fetch users data and populate the table
+  function fetchUsers() {
+      fetch('get_user.php')  // The API endpoint you created
+          .then(response => response.json())
+          .then(data => {
+              // Get the table body element
+              const tableBody = document.getElementById('userTableBody');
+              tableBody.innerHTML = '';  // Clear any existing data
+
+              // Iterate through each user and create a table row
+              data.forEach(user => {
+                  // Create the table row
+                  const row = document.createElement('tr');
+                  const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'assets/img/user.png';
+                  const paymentProof = user.payment_prooft ? 
+                  `<button type="button" class="btn bg-gradient-danger mt-4" data-payment-url="../users/paymentprooft/${user.payment_prooft}" data-bs-toggle="modal" data-bs-target="#overlayModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+                        <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
+                    </svg>
+                  </button>` 
+                  : 
+                  `<button type="button" class="btn btn-secondary mt-4" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+                        <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
+                    </svg>
+                  </button>`;
+
+                  // Create table cells for each user data
+                  row.innerHTML = `
+                      <td>
+                          <div class="d-flex px-2 py-1">
+                              <div>
+                                  <img src="${photoUrl}" class="avatar avatar-sm me-3" alt="user">
+                              </div>
+                              <div class="d-flex flex-column justify-content-center">
+                                  <h6 class="mb-0 text-sm">${user.name}</h6>
+                                  <p class="text-xs text-secondary mb-0"><a href="https://wa.me/${user.phone}">${user.phone}</a></p>
+                              </div>
+                          </div>
+                      </td>
+                      <td>
+                          <p class="text-xs font-weight-bold mb-0">${user.username}</p>
+                          <p class="text-xs text-secondary mb-0">${user.password}</p>
+                      </td>
+                      <td>
+                          <p class="text-xs font-weight-bold mb-0">Rp${user.total_amount}</p>
+                          <p class="text-xs text-secondary mb-0">${user.transaction_id}</p>
+                      </td>
+                      <td>
+                          <span class="text-secondary text-xs font-weight-bold">${user.transaction_date}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                          <span class="badge badge-sm ${user.badge_class}">${user.status}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                          ${paymentProof}
+                          <button type="button" class="btn btn-primary mt-4" data-user-id="${user.id}" data-status="${user.status}">Confirm</button>
+                      </td>
+                    `;
+
+                  // Append the row to the table body
+                  tableBody.appendChild(row);
+              });
+
+              // Add event listener to each "Confirm" button
+              const confirmButtons = document.querySelectorAll('button[data-user-id]');
+              confirmButtons.forEach(button => {
+                  button.addEventListener('click', (event) => {
+                      const userId = button.getAttribute('data-user-id');
+                      const currentStatus = button.getAttribute('data-status');
+                      
+                      // Update the status if the current status is not "confirmed"
+                      if (currentStatus !== "confirmed") {
+                          updateUserStatus(userId, 'confirmed', button);
+                      }
+                  });
+              });
+
+              // Add event listener to each button to show the image in the modal
+              const paymentButtons = document.querySelectorAll('button[data-payment-url]');
+              paymentButtons.forEach(button => {
+                  button.addEventListener('click', (event) => {
+                      const imageUrl = button.getAttribute('data-payment-url');
+                      document.getElementById('imageToShow').src = imageUrl;
+                  });
+              });
+          })
+          .catch(error => console.error('Error fetching users:', error));
+  }
+
+  // Function to update user status
+  function updateUserStatus(userId, newStatus, button) {
+      fetch('update_user.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              user_id: userId,
+              status: newStatus
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              // Update the status badge in the table
+              const statusCell = button.closest('tr').querySelector('.badge');
+              statusCell.textContent = newStatus;
+              statusCell.classList.remove('badge-secondary');
+              statusCell.classList.add('badge-success');
+
+              // Disable the confirm button after updating the status
+              button.disabled = true;
+              button.classList.add('btn-secondary');
+          } else {
+              alert('Failed to update status');
+          }
+      })
+      .catch(error => console.error('Error updating status:', error));
+  }
+
+  // Fetch the users when the page loads
+  document.addEventListener('DOMContentLoaded', fetchUsers);
+</script>
+
 
 </body>
 
