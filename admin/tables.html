@@ -240,7 +240,7 @@
       <div class="modal-content text-center">
         <img id="imageToShow" class="w-80 mx-auto" src="" alt="Image" />
         <!-- Tombol Confirm ada di sini -->
-        <button id="confirmButton" type="button" class="btn btn-primary mt-4" data-user-id="" data-status="">Confirm</button>
+        <button id="confirmButton" type="button" class="btn btn-primary mt-4">Confirm</button>
       </div>
     </div>
   </div>    
@@ -458,35 +458,6 @@ function fetchUsers() {
                     document.getElementById('imageToShow').src = imageUrl;
                 });
             });
-
-            // Event listener for the "Confirm" buttons in the table
-            const confirmButtons = document.querySelectorAll('button[data-user-id]');
-            confirmButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const userId = button.getAttribute('data-user-id');
-                    const currentStatus = button.getAttribute('data-status');
-                    const confirmButton = document.getElementById('confirmButton');
-                    
-                    // Set the correct data attributes for the modal button
-                    confirmButton.setAttribute('data-user-id', userId);
-                    confirmButton.setAttribute('data-status', currentStatus);
-
-                    // Optionally update the modal content (e.g., reset image)
-                    document.getElementById('imageToShow').src = ''; // or set to some default
-                });
-            });
-
-            // Event listener for the confirm button in the modal
-            const confirmButton = document.getElementById('confirmButton');
-            confirmButton.addEventListener('click', (event) => {
-                const userId = confirmButton.getAttribute('data-user-id');
-                const currentStatus = confirmButton.getAttribute('data-status');
-
-                if (currentStatus !== 'confirm') {
-                    updateUserStatus(userId, 'confirm', confirmButton);
-                }
-            });
-
         })
         .catch(error => console.error('Error fetching users:', error));
 }
