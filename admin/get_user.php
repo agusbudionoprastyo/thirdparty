@@ -2,7 +2,7 @@
 include '../helper/db.php';
 
 // SQL query to fetch users data
-$sql = "SELECT u.name, u.email, u.phone, u.photo, u.username, u.password, t.transaction_id, t.total_amount, t.payment_method, t.payment_prooft, t.transaction_date, t.status 
+$sql = "SELECT u.name, u.email, u.phone, u.photo, u.username, u.password, t.user_id, t.transaction_id, t.total_amount, t.payment_method, t.payment_prooft, t.transaction_date, t.status 
         FROM users u
         JOIN transactions t ON u.id = t.user_id";
 $result = $conn->query($sql);
