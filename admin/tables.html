@@ -395,7 +395,7 @@
     // Function to fetch users data and populate the table
 // Function to fetch users data and populate the table
 function fetchUsers() {
-    fetch('get_user.php')  // The API endpoint you created
+    fetch('get_user.php')
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('userTableBody');
@@ -403,20 +403,22 @@ function fetchUsers() {
 
             data.forEach(user => {
                 const photoUrl = user.photo ? `../register/assets/users/${user.photo}` : 'assets/img/user.png';
-                const paymentProof = user.payment_prooft ?
-                `<button type="button" class="btn bg-gradient-danger mt-4" data-payment-url="../users/paymentprooft/${user.payment_prooft}" data-bs-toggle="modal" data-bs-target="#overlayModal">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
-                      <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
-                    </svg>
-                </button>` 
+                const user_id = user.user_id;  // Ambil user_id dari data user
+                const paymentProof = user.payment_prooft ? 
+                    `<button type="button" class="btn bg-gradient-danger mt-4" data-payment-url="../users/paymentprooft/${user.payment_prooft}" data-user-id="${user_id}" data-bs-toggle="modal" data-bs-target="#overlayModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+                            <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
+                        </svg>
+                    </button>` 
                 : 
-                `<button type="button" class="btn btn-secondary mt-4" disabled>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
-                      <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
-                  </svg>
-                </button>`;
+                    `<button type="button" class="btn btn-secondary mt-4" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+                            <path fill="#ffffff" d="M64 0C28.7 0 0 28.7 0 64L0 320l384 0 0-160-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM0 416l64 0 0-64L0 352l0 64zm288 32l-80 0 0 64 80 0 0-64zm-112 0l-80 0 0 64 80 0 0-64zM64 448L0 448c0 35.3 28.7 64 64 64l0-64zm256 0l0 64c35.3 0 64-28.7 64-64l-64 0zm64-32l0-64-64 0 0 64 64 0z"/>
+                        </svg>
+                    </button>`;
 
                 const row = document.createElement('tr');
+                row.setAttribute('data-user-id', user_id);  // Tambahkan atribut data-user-id di baris tabel
                 row.innerHTML = `
                     <td>
                         <div class="d-flex px-2 py-1">
@@ -455,15 +457,30 @@ function fetchUsers() {
             paymentButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
                     const imageUrl = button.getAttribute('data-payment-url');
+                    const userId = button.getAttribute('data-user-id');  // Ambil user_id dari tombol
                     document.getElementById('imageToShow').src = imageUrl;
+                    // Simpan userId ke dalam modal untuk digunakan saat confirm
+                    document.getElementById('confirmButton').setAttribute('data-user-id', userId);
                 });
             });
         })
         .catch(error => console.error('Error fetching users:', error));
 }
 
-// Function to update user status
-function updateUserStatus(userId, newStatus, button) {
+// Event listener untuk tombol confirm di modal
+document.getElementById('confirmButton').addEventListener('click', function() {
+    const userId = this.getAttribute('data-user-id');  // Ambil user_id yang disimpan di tombol
+    const newStatus = 'Verified';  // Status baru yang ingin diupdate
+
+    // Update status di backend
+    updateUserStatus(userId, newStatus);
+
+    // Tutup modal setelah update
+    $('#overlayModal').modal('hide');
+});
+
+// Fungsi untuk update status di tabel dan backend
+function updateUserStatus(userId, newStatus) {
     fetch('update_user.php', {
         method: 'POST',
         headers: {
@@ -477,22 +494,24 @@ function updateUserStatus(userId, newStatus, button) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            const statusCell = button.closest('tr').querySelector('.badge');
+            // Update status di tabel
+            const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+            const statusCell = row.querySelector('.badge');
             statusCell.textContent = newStatus;
             statusCell.classList.remove('bg-gradient-info');
             statusCell.classList.add('bg-gradient-success');
-            button.disabled = true;
-            button.classList.add('btn-secondary');
         } else {
-            alert('Failed to update status');
+            alert('Gagal memperbarui status');
         }
     })
-    .catch(error => console.error('Error updating status:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan dalam memperbarui status.');
+    });
 }
 
 // Fetch the users when the page loads
 document.addEventListener('DOMContentLoaded', fetchUsers);
-
 </script>
 
 </body>
