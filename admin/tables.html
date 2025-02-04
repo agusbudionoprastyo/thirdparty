@@ -326,7 +326,7 @@
                         </td>
                         <td class="align-middle text-center">
                             ${paymentProof}
-                            <button type="button" class="btn btn-primary mt-4">Confirm</button>
+                            <button type="button" class="btn btn-primary mt-4" data-user-id="${user.user_id}" data-status="${user.status}">Confirm</button>
                         </td>
                       `;
 
@@ -342,8 +342,50 @@
                         document.getElementById('imageToShow').src = imageUrl;
                     });
                 });
+                // Add event listener to each "Confirm" button
+                const confirmButtons = document.querySelectorAll('button[data-user-id]');
+                confirmButtons.forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const userId = button.getAttribute('data-user-id');
+                        const currentStatus = button.getAttribute('data-status');
+                        
+                        // Update the status if the current status is not "confirm"
+                        if (currentStatus !== "confirm") {
+                            updateUserStatus(userId, 'confirm', button);
+                        }
+                    });
+                });
             })
             .catch(error => console.error('Error fetching users:', error));
+    }
+
+    // Function to update user status
+    function updateUserStatus(userId, newStatus, button) {
+        fetch('update_user.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                status: newStatus
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const statusCell = button.closest('tr').querySelector('.badge');
+                statusCell.textContent = newStatus;
+                statusCell.classList.remove('bg-gradient-warning');
+                statusCell.classList.add('bg-gradient-success');
+
+                button.disabled = true;
+                button.classList.add('btn-secondary');
+            } else {
+                alert('Failed to update status');
+            }
+        })
+        .catch(error => console.error('Error updating status:', error));
     }
 
     // Fetch the users when the page loads
