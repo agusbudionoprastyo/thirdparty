@@ -250,27 +250,7 @@
     </div>
   </div>   
 
-<!-- <div class="modal fade" id="overlayModal" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <img id="imageToShow" class="w-80 mx-auto img-fluid border-radius-lg" src="" alt="Image" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="confirmButton type="button" class="btn bg-gradient-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-  <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
+  <div class="alert alert-success alert-dismissible fade show mx-4" role="alert" id="successAlert" style="display:none; position:fixed; top:20px; right:20px; z-index:9999;">
     <span class="alert-icon"><i class="ni ni-like-2"></i></span>
     <span class="alert-text"><strong>Success!</strong> Registration has been verified</span>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
@@ -404,6 +384,19 @@
                   statusCell.textContent = newStatus;
                   statusCell.classList.remove('bg-gradient-info');
                   statusCell.classList.add('bg-gradient-success');
+                  
+                  // Tutup modal
+                  const modal = bootstrap.Modal.getInstance(document.getElementById('overlayModal'));
+                  modal.hide();
+                  
+                  // Tampilkan alert
+                  const alert = document.getElementById('successAlert');
+                  alert.style.display = 'block';
+                  
+                  // Sembunyikan alert setelah 3 detik
+                  setTimeout(() => {
+                      alert.style.display = 'none';
+                  }, 3000);
               } else {
                   alert('Gagal memperbarui status');
               }
