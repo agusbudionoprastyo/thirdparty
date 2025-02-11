@@ -258,6 +258,115 @@
 </div>
   
     <script>
+
+document.getElementById('signUpBtn').addEventListener('click', function(event) {
+    event.preventDefault(); // Mencegah pengiriman formulir default
+
+    const gender = document.querySelector('input[name="gender"]:checked'); // Ambil gender yang dipilih
+
+    // Jika gender yang dipilih adalah female
+    if (gender && gender.value === 'female') {
+        const registrationForm = document.getElementById('registrationForm');
+        
+        // Cek jika form valid
+        if (registrationForm.checkValidity()) {
+            // Buat objek FormData
+            const formData = new FormData(registrationForm);
+            
+            // Menambahkan informasi untuk pendaftaran gender female (gratis)
+            formData.append('isFemale', true);
+            
+            // Kirim data ke server
+            fetch('register.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Tampilkan Swal Success jika registrasi berhasil
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Pendaftaran Berhasil!',
+                        text: 'Terima kasih sudah mendaftar.',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+
+                    // Reset form setelah sukses
+                    registrationForm.reset();
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Terjadi kesalahan, coba lagi.'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan saat mengirim data.'
+                });
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Formulir tidak valid!',
+                text: 'Harap lengkapi formulir terlebih dahulu.'
+            });
+        }
+    } else {
+        // Jalankan kode normal jika gender bukan female (misalnya, jika laki-laki atau belum dipilih)
+        const registrationForm = document.getElementById('registrationForm');
+        const formData = new FormData(registrationForm);
+
+        // Kirim data ke server dengan normal (termasuk upload bukti pembayaran jika ada)
+        fetch('register.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Tampilkan Swal Success jika registrasi berhasil
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pendaftaran Berhasil!',
+                    text: 'Terima kasih sudah mendaftar.',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+
+                // Reset form setelah sukses
+                registrationForm.reset();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Terjadi kesalahan, coba lagi.'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Terjadi kesalahan saat mengirim data.'
+            });
+        });
+    }
+});
+
+// Semua fungsionalitas lain, seperti mengatur radio button, file upload, dsb tetap dijaga
+
+// Tambahkan fungsionalitas lainnya yang Anda inginkan tanpa mengubah kode yang sudah ada...
+
       function copyToClipboard() {
         const rekNumber = document.getElementById('rek-number').innerText;
         
@@ -621,82 +730,82 @@
             });
 
             document.getElementById("uploadButton").addEventListener("click", function() {
-              const fileInput = document.getElementById("paymentproof");
-              const file = fileInput.files[0];
+            const fileInput = document.getElementById("paymentproof");
+            const file = fileInput.files[0];
 
-              const transactionId = localStorage.getItem('transactionid');
-              if (!transactionId) {
-                  alert("Transaction ID tidak ditemukan di localStorage.");
-                  return;
-              }
+            const transactionId = localStorage.getItem('transactionid');
+            if (!transactionId) {
+                alert("Transaction ID tidak ditemukan di localStorage.");
+                return;
+            }
 
-              if (!file) {
-                  alert("Silakan pilih file untuk diupload.");
-                  return;
-              }
+            if (!file) {
+                alert("Silakan pilih file untuk diupload.");
+                return;
+            }
 
-              const formData = new FormData();
-              formData.append("paymentproof", file);
+            const formData = new FormData();
+            formData.append("paymentproof", file);
 
-              fetch(`prooft_payment.php?transaction_id=${transactionId}`, {
-                  method: "POST",
-                  body: formData,
-              })
-              .then(response => {
-                  console.log('Response:', response);
-                  return response.text();
-              })
-              .then(data => {
-                  try {
-                      const jsonData = JSON.parse(data);
-                      if (jsonData.success) {
-                          const successModal = document.getElementById('successModal');
-                          successModal.classList.add('hidden');
+            fetch(`prooft_payment.php?transaction_id=${transactionId}`, {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => {
+                console.log('Response:', response);
+                return response.text();
+            })
+            .then(data => {
+                try {
+                    const jsonData = JSON.parse(data);
+                    if (jsonData.success) {
+                        const successModal = document.getElementById('successModal');
+                        successModal.classList.add('hidden');
 
-                          Swal.fire({
-                              icon: 'success',
-                              title: 'Thank you for being a part of the third-party effect.',
-                              text: 'Your payment proof has been received. Please wait for confirmation.',
-                              timer: 10000,
-                              timerProgressBar: true,
-                              showConfirmButton: false,
-                              customClass: {
-                                  popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
-                                  title: 'text-lg font-semibold',
-                                  content: 'text-sm text-gray-500',
-                              },
-                              willClose: () => {
-                                  localStorage.removeItem('transactionid');
-                                  localStorage.removeItem('registrationSuccess');
-                              }
-                          });
-                      } else {
-                          Swal.fire({
-                              icon: 'error',
-                              title: 'Error',
-                              text: jsonData.error || "Terjadi kesalahan saat mengupload file.",
-                              customClass: {
-                                  popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
-                                  title: 'text-lg font-semibold',
-                                  content: 'text-sm text-gray-500',
-                              }
-                          });
-                      }
-                  } catch (error) {
-                      console.error("Error parsing JSON:", error);
-                      Swal.fire({
-                          icon: 'error',
-                          title: 'Error',
-                          text: "Terjadi kesalahan saat mengupload file.",
-                          customClass: {
-                                  popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
-                                  title: 'text-lg font-semibold',
-                                  content: 'text-sm text-gray-500',
-                              }
-                          });
-                      }
-                  });
-              });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thank you for being a part of the third-party effect.',
+                            text: 'Your payment proof has been received. Please wait for confirmation.',
+                            timer: 60000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            customClass: {
+                                popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
+                                title: 'text-lg font-semibold',
+                                content: 'text-sm text-gray-500',
+                            },
+                            willClose: () => {
+                                localStorage.removeItem('transactionid');
+                                localStorage.removeItem('registrationSuccess');
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: jsonData.error || "Terjadi kesalahan saat mengupload file.",
+                            customClass: {
+                                popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
+                                title: 'text-lg font-semibold',
+                                content: 'text-sm text-gray-500',
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: "Terjadi kesalahan saat mengupload file.",
+                        customClass: {
+                                popup: 'rounded-[24px] text-left text-gray-700 p-6 shadow-lg',
+                                title: 'text-lg font-semibold',
+                                content: 'text-sm text-gray-500',
+                            }
+                        });
+                    }
+                });
+            });
     </script>
 
 </body>
