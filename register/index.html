@@ -258,115 +258,6 @@
 </div>
   
     <script>
-
-document.getElementById('signUpBtn').addEventListener('click', function(event) {
-    event.preventDefault(); // Mencegah pengiriman formulir default
-
-    const gender = document.querySelector('input[name="gender"]:checked'); // Ambil gender yang dipilih
-
-    // Jika gender yang dipilih adalah female
-    if (gender && gender.value === 'female') {
-        const registrationForm = document.getElementById('registrationForm');
-        
-        // Cek jika form valid
-        if (registrationForm.checkValidity()) {
-            // Buat objek FormData
-            const formData = new FormData(registrationForm);
-            
-            // Menambahkan informasi untuk pendaftaran gender female (gratis)
-            formData.append('isFemale', true);
-            
-            // Kirim data ke server
-            fetch('register.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // Tampilkan Swal Success jika registrasi berhasil
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Pendaftaran Berhasil!',
-                        text: 'Terima kasih sudah mendaftar.',
-                        timer: 3000,
-                        timerProgressBar: true,
-                        showConfirmButton: false
-                    });
-
-                    // Reset form setelah sukses
-                    registrationForm.reset();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Terjadi kesalahan, coba lagi.'
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Terjadi kesalahan saat mengirim data.'
-                });
-            });
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Formulir tidak valid!',
-                text: 'Harap lengkapi formulir terlebih dahulu.'
-            });
-        }
-    } else {
-        // Jalankan kode normal jika gender bukan female (misalnya, jika laki-laki atau belum dipilih)
-        const registrationForm = document.getElementById('registrationForm');
-        const formData = new FormData(registrationForm);
-
-        // Kirim data ke server dengan normal (termasuk upload bukti pembayaran jika ada)
-        fetch('register.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                // Tampilkan Swal Success jika registrasi berhasil
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Pendaftaran Berhasil!',
-                    text: 'Terima kasih sudah mendaftar.',
-                    timer: 3000,
-                    timerProgressBar: true,
-                    showConfirmButton: false
-                });
-
-                // Reset form setelah sukses
-                registrationForm.reset();
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Terjadi kesalahan, coba lagi.'
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Terjadi kesalahan saat mengirim data.'
-            });
-        });
-    }
-});
-
-// Semua fungsionalitas lain, seperti mengatur radio button, file upload, dsb tetap dijaga
-
-// Tambahkan fungsionalitas lainnya yang Anda inginkan tanpa mengubah kode yang sudah ada...
-
       function copyToClipboard() {
         const rekNumber = document.getElementById('rek-number').innerText;
         
@@ -553,7 +444,129 @@ document.getElementById('signUpBtn').addEventListener('click', function(event) {
         const generatedTransactionId = generateTransactionId();
         transactionIdInput.value = generatedTransactionId;
 
-        const registrationForm = document.getElementById('registrationForm');
+        // const registrationForm = document.getElementById('registrationForm');
+        // registrationForm.addEventListener('submit', function(event) {
+        //     event.preventDefault(); 
+
+        //     const formData = new FormData();
+
+        //     const registrationType = document.querySelector('input[name="registrationType"]:checked').value;
+        //     const username = document.getElementById('name').value;
+        //     const age = document.getElementById('age').value;
+        //     const gender = document.querySelector('input[name="gender"]:checked').value;
+        //     const phone = document.getElementById('phone').value;
+        //     const email = document.getElementById('email').value;
+
+        //     formData.append('transactionid', generatedTransactionId);
+        //     formData.append('registrationType', registrationType);
+        //     formData.append('username', username);
+        //     formData.append('age', age);
+        //     formData.append('gender', gender);
+        //     formData.append('phone', phone);
+        //     formData.append('email', email);
+
+        //     const photoInput = document.getElementById('photo');
+        //     if (photoInput.files.length > 0) {
+        //         formData.append('photo', photoInput.files[0]); 
+        //     }
+
+        //     if (registrationType === 'couple') {
+        //         const coupleUsername = document.getElementById('coupleName').value;
+        //         const coupleAge = document.getElementById('coupleage').value;
+        //         const coupleGender = document.querySelector('input[name="coupleGender"]:checked').value;
+        //         formData.append('coupleUsername', coupleUsername);
+        //         formData.append('coupleAge', coupleAge);
+        //         formData.append('coupleGender', coupleGender);
+
+        //         const couplePhotoInput = document.getElementById('couplePhoto');
+        //         if (couplePhotoInput.files.length > 0) {
+        //             formData.append('couplePhoto', couplePhotoInput.files[0]); 
+        //         }
+        //     }
+
+        //     fetch('register.php', {
+        //         method: 'POST',
+        //         body: formData 
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log(data); 
+        //         if (data.status === 'success') {
+        //           localStorage.setItem('registrationSuccess', 'true');
+        //           localStorage.setItem('transactionid', generatedTransactionId);
+
+        //           box.classList.remove("expanded");
+        //           registerBtn.classList.remove("hidden");
+        //           setTimeout(function() {
+        //               signupContainer.classList.add("hidden");
+        //           }, 200);
+                  
+        //           const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
+
+        //           const successModal = document.getElementById('successModal');
+        //           successModal.classList.remove('hidden');
+
+        //           const transactionIdDisplay = document.getElementById('transaction-id');
+        //           fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok ' + response.statusText);
+        //             }
+        //             return response.json();
+        //         })
+        //         .then(data => {
+        //             console.log('Transaction Details:', data);
+
+        //             const transactionDetailsContainer = document.getElementById('transaction-details-container');
+        //             if (data.error) {
+        //                 transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
+        //             } else {
+        //                 const totalAmount = parseFloat(data[0].total_amount); 
+        //                 const transactionDate = data[0].transaction_date;
+
+        //                 const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  
+
+        //                 const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
+        //                   maximumFractionDigits: 0 
+        //                 }).format(totalAmount);
+
+        //                 transactionDetailsContainer.innerHTML = `
+        //                   <ul>
+        //                       <li class="flex justify-between">
+        //                           <span><strong>Transaction ID</strong></span>
+        //                           <span class="text-rigth">${transactionIdFromLocalStorage}</span>
+        //                       </li>
+        //                       <li class="flex justify-between">
+        //                           <span><strong>Total Amount</strong></span>
+        //                           <span class="text-rigth"><strong>${formattedAmount}</strong></span>
+        //                       </li>
+        //                       <li class="flex justify-between">
+        //                           <span><strong>Transaction Date</strong></span>
+        //                           <span class="text-right">${formattedDate}</span>
+        //                       </li>
+        //                   </ul>
+        //                 `;
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error fetching transaction details:', error);
+        //             const transactionDetailsContainer = document.getElementById('transaction-details-container');
+        //             transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
+        //         });
+                  
+        //           registrationForm.reset();
+        //       } else {
+        //             alert('Terjadi kesalahan, coba lagi.');
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //         alert('Terjadi kesalahan saat mengirim data.');
+        //     });
+        // });
+
+        //===========================================================
+
         registrationForm.addEventListener('submit', function(event) {
             event.preventDefault(); 
 
@@ -601,70 +614,73 @@ document.getElementById('signUpBtn').addEventListener('click', function(event) {
             .then(data => {
                 console.log(data); 
                 if (data.status === 'success') {
-                  localStorage.setItem('registrationSuccess', 'true');
-                  localStorage.setItem('transactionid', generatedTransactionId);
-
-                  box.classList.remove("expanded");
-                  registerBtn.classList.remove("hidden");
-                  setTimeout(function() {
-                      signupContainer.classList.add("hidden");
-                  }, 200);
-                  
-                  const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
-
-                  const successModal = document.getElementById('successModal');
-                  successModal.classList.remove('hidden');
-
-                  const transactionIdDisplay = document.getElementById('transaction-id');
-                  fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
+                    // Only set to localStorage if the gender is not 'female'
+                    if (gender !== 'female') {
+                        localStorage.setItem('registrationSuccess', 'true');
+                        localStorage.setItem('transactionid', generatedTransactionId);
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Transaction Details:', data);
 
-                    const transactionDetailsContainer = document.getElementById('transaction-details-container');
-                    if (data.error) {
-                        transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
-                    } else {
-                        const totalAmount = parseFloat(data[0].total_amount); 
-                        const transactionDate = data[0].transaction_date;
+                    box.classList.remove("expanded");
+                    registerBtn.classList.remove("hidden");
+                    setTimeout(function() {
+                        signupContainer.classList.add("hidden");
+                    }, 200);
+                    
+                    const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
 
-                        const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  
+                    const successModal = document.getElementById('successModal');
+                    successModal.classList.remove('hidden');
 
-                        const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
-                          maximumFractionDigits: 0 
-                        }).format(totalAmount);
+                    const transactionIdDisplay = document.getElementById('transaction-id');
+                    fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Transaction Details:', data);
 
-                        transactionDetailsContainer.innerHTML = `
-                          <ul>
-                              <li class="flex justify-between">
-                                  <span><strong>Transaction ID</strong></span>
-                                  <span class="text-rigth">${transactionIdFromLocalStorage}</span>
-                              </li>
-                              <li class="flex justify-between">
-                                  <span><strong>Total Amount</strong></span>
-                                  <span class="text-rigth"><strong>${formattedAmount}</strong></span>
-                              </li>
-                              <li class="flex justify-between">
-                                  <span><strong>Transaction Date</strong></span>
-                                  <span class="text-right">${formattedDate}</span>
-                              </li>
-                          </ul>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching transaction details:', error);
-                    const transactionDetailsContainer = document.getElementById('transaction-details-container');
-                    transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
-                });
-                  
-                  registrationForm.reset();
-              } else {
+                        const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                        if (data.error) {
+                            transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
+                        } else {
+                            const totalAmount = parseFloat(data[0].total_amount); 
+                            const transactionDate = data[0].transaction_date;
+
+                            const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  
+
+                            const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
+                              maximumFractionDigits: 0 
+                            }).format(totalAmount);
+
+                            transactionDetailsContainer.innerHTML = `
+                              <ul>
+                                  <li class="flex justify-between">
+                                      <span><strong>Transaction ID</strong></span>
+                                      <span class="text-rigth">${transactionIdFromLocalStorage}</span>
+                                  </li>
+                                  <li class="flex justify-between">
+                                      <span><strong>Total Amount</strong></span>
+                                      <span class="text-rigth"><strong>${formattedAmount}</strong></span>
+                                  </li>
+                                  <li class="flex justify-between">
+                                      <span><strong>Transaction Date</strong></span>
+                                      <span class="text-right">${formattedDate}</span>
+                                  </li>
+                              </ul>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching transaction details:', error);
+                        const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                        transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
+                    });
+                    
+                    registrationForm.reset();
+                } else {
                     alert('Terjadi kesalahan, coba lagi.');
                 }
             })
@@ -673,6 +689,8 @@ document.getElementById('signUpBtn').addEventListener('click', function(event) {
                 alert('Terjadi kesalahan saat mengirim data.');
             });
         });
+
+        //===========================================================
 
         window.addEventListener('load', function() {
             if (localStorage.getItem('registrationSuccess') === 'true') {
