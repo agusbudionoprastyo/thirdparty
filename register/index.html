@@ -628,57 +628,60 @@
                     
                     const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
 
-                    const successModal = document.getElementById('successModal');
-                    successModal.classList.remove('hidden');
+                    // Show success modal only if the gender is male
+                    if (gender === 'male') {
+                        const successModal = document.getElementById('successModal');
+                        successModal.classList.remove('hidden');
 
-                    const transactionIdDisplay = document.getElementById('transaction-id');
-                    fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Transaction Details:', data);
+                        const transactionIdDisplay = document.getElementById('transaction-id');
+                        fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Transaction Details:', data);
 
-                        const transactionDetailsContainer = document.getElementById('transaction-details-container');
-                        if (data.error) {
-                            transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
-                        } else {
-                            const totalAmount = parseFloat(data[0].total_amount); 
-                            const transactionDate = data[0].transaction_date;
+                            const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                            if (data.error) {
+                                transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">${data.error}</p>`;
+                            } else {
+                                const totalAmount = parseFloat(data[0].total_amount); 
+                                const transactionDate = data[0].transaction_date;
 
-                            const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  
+                                const formattedDate = new Date(transactionDate.replace(' ', 'T')).toLocaleString();  
 
-                            const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
-                              maximumFractionDigits: 0 
-                            }).format(totalAmount);
+                                const formattedAmount = 'Rp' + new Intl.NumberFormat('id-ID', {
+                                  maximumFractionDigits: 0 
+                                }).format(totalAmount);
 
-                            transactionDetailsContainer.innerHTML = `
-                              <ul>
-                                  <li class="flex justify-between">
-                                      <span><strong>Transaction ID</strong></span>
-                                      <span class="text-rigth">${transactionIdFromLocalStorage}</span>
-                                  </li>
-                                  <li class="flex justify-between">
-                                      <span><strong>Total Amount</strong></span>
-                                      <span class="text-rigth"><strong>${formattedAmount}</strong></span>
-                                  </li>
-                                  <li class="flex justify-between">
-                                      <span><strong>Transaction Date</strong></span>
-                                      <span class="text-right">${formattedDate}</span>
-                                  </li>
-                              </ul>
-                            `;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching transaction details:', error);
-                        const transactionDetailsContainer = document.getElementById('transaction-details-container');
-                        transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
-                    });
-                    
+                                transactionDetailsContainer.innerHTML = `
+                                  <ul>
+                                      <li class="flex justify-between">
+                                          <span><strong>Transaction ID</strong></span>
+                                          <span class="text-rigth">${transactionIdFromLocalStorage}</span>
+                                      </li>
+                                      <li class="flex justify-between">
+                                          <span><strong>Total Amount</strong></span>
+                                          <span class="text-rigth"><strong>${formattedAmount}</strong></span>
+                                      </li>
+                                      <li class="flex justify-between">
+                                          <span><strong>Transaction Date</strong></span>
+                                          <span class="text-right">${formattedDate}</span>
+                                      </li>
+                                  </ul>
+                                `;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching transaction details:', error);
+                            const transactionDetailsContainer = document.getElementById('transaction-details-container');
+                            transactionDetailsContainer.innerHTML = `<p class="text-center text-red-500">Terjadi kesalahan saat mengambil detail transaksi.</p>`;
+                        });
+                    }
+
                     registrationForm.reset();
                 } else {
                     alert('Terjadi kesalahan, coba lagi.');
