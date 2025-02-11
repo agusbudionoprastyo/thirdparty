@@ -618,17 +618,18 @@
                     if (gender !== 'female') {
                         localStorage.setItem('registrationSuccess', 'true');
                         localStorage.setItem('transactionid', generatedTransactionId);
-                        successModal.classList.remove('hidden');
                     }
-
-                    const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
-                    const successModal = document.getElementById('successModal');
 
                     box.classList.remove("expanded");
                     registerBtn.classList.remove("hidden");
                     setTimeout(function() {
                         signupContainer.classList.add("hidden");
                     }, 200);
+                    
+                    const transactionIdFromLocalStorage = localStorage.getItem('transactionid');
+
+                    const successModal = document.getElementById('successModal');
+                    successModal.classList.remove('hidden');
 
                     const transactionIdDisplay = document.getElementById('transaction-id');
                     fetch(`get_transaction.php?transaction_id=${transactionIdFromLocalStorage}`)
